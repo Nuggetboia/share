@@ -1160,10 +1160,17 @@
                     
                     // FIXED: Create peer connection to receive their stream
                     if (id !== socket.id) {
-                        createPeerConnection(id, false);
+                        console.log('User started sharing, requesting their stream');
+                        // Request the stream by creating a peer connection
+                        setTimeout(() => {
+                            const pc = createPeerConnection(id, false);
+                            // Send a signal to request offer
+                            socket.emit('request-stream', { roomId, targetId: id });
+                        }, 100);
+                        
                         // Automatically view the first person who starts sharing
                         if (sharingUsers.size === 1 && !currentlyViewing) {
-                            viewUserStream(id);
+                            setTimeout(() => viewUserStream(id), 200);
                         }
                     }
                 } else {
@@ -1177,6 +1184,7 @@
                         screenVideo.style.display = 'none';
                         videoContainer.querySelector('.placeholder').style.display = 'block';
                         currentlyViewing = null;
+                        hideConnectionStatus();
                     }
                 }
             });
@@ -1185,41 +1193,82 @@
                 console.log(`Room ${roomId} has ${userCount} user(s)`);
             });
 
-            // FIXED: WebRTC signaling handlers
-            socket.on('webrtc-offer', async ({ fromId, offer }) => {
-                console.log('Received WebRTC offer from:', fromId);
-                const pc = peerConnections.get(fromId) || createPeerConnection(fromId, false);
-                await pc.setRemoteDescription(new RTCSessionDescription(offer));
-                
-                // Add our screen stream if we're sharing
-                if (screenStream) {
-                    screenStream.getTracks().forEach(track => {
-                        pc.addTrack(track, screenStream);
-                    });
+            // FIXED: WebRTC signaling handlers with better flow
+            socket.on('stream-requested', ({ fromId }) => {
+                console.log('Stream requested by:', fromId);
+                // If we're sharing, create offer for the requester
+                if (isSharing && screenStream) {
+                    createPeerConnection(fromId, true);
                 }
+            });
+
+            socket.on('webrtc-offer', async ({ fromId, offer }) => {
+                console.log('📥 Received WebRTC offer from:', fromId);
+                updateConnectionProgress(50, 'Received offer, creating answer...');
                 
-                const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
-                socket.emit('webrtc-answer', {
-                    roomId,
-                    targetId: fromId,
-                    answer
-                });
+                try {
+                    let pc = peerConnections.get(fromId);
+                    if (!pc) {
+                        pc = createPeerConnection(fromId, false);
+                    }
+                    
+                    await pc.setRemoteDescription(new RTCSessionDescription(offer));
+                    console.log('✅ Set remote description');
+                    
+                    // Add our screen stream if we're sharing
+                    if (screenStream) {
+                        screenStream.getTracks().forEach(track => {
+                            const senders = pc.getSenders();
+                            const trackExists = senders.some(sender => sender.track === track);
+                            if (!trackExists) {
+                                pc.addTrack(track, screenStream);
+                                console.log('Added our track to answer');
+                            }
+                        });
+                    }
+                    
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    console.log('📤 Sending answer back');
+                    updateConnectionProgress(60, 'Sending answer...');
+                    
+                    socket.emit('webrtc-answer', {
+                        roomId,
+                        targetId: fromId,
+                        answer
+                    });
+                } catch (error) {
+                    console.error('Error handling offer:', error);
+                    hideConnectionStatus();
+                    addSystemMessage('Error establishing connection');
+                }
             });
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
-                console.log('Received WebRTC answer from:', fromId);
-                const pc = peerConnections.get(fromId);
-                if (pc) {
-                    await pc.setRemoteDescription(new RTCSessionDescription(answer));
+                console.log('📥 Received WebRTC answer from:', fromId);
+                updateConnectionProgress(70, 'Received answer, connecting...');
+                
+                try {
+                    const pc = peerConnections.get(fromId);
+                    if (pc && pc.signalingState !== 'stable') {
+                        await pc.setRemoteDescription(new RTCSessionDescription(answer));
+                        console.log('✅ Set remote description from answer');
+                    }
+                } catch (error) {
+                    console.error('Error handling answer:', error);
                 }
             });
 
             socket.on('webrtc-ice-candidate', async ({ fromId, candidate }) => {
-                console.log('Received ICE candidate from:', fromId);
+                console.log('📥 Received ICE candidate from:', fromId);
                 const pc = peerConnections.get(fromId);
                 if (pc && candidate) {
-                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                    try {
+                        await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                        console.log('✅ Added ICE candidate');
+                    } catch (error) {
+                        console.error('Error adding ICE candidate:', error);
+                    }
                 }
             });
 
@@ -1230,136 +1279,79 @@
         }
 
         // FIXED: Create WebRTC peer connection with proper stream handling
+        // FIXED: Simplified WebRTC peer connection - INSTANT CONNECTION
         function createPeerConnection(userId, isInitiator) {
+            // Close existing if not working
             if (peerConnections.has(userId)) {
-                const existingPc = peerConnections.get(userId);
-                if (existingPc.connectionState === 'connected' || existingPc.connectionState === 'connecting') {
-                    console.log('Peer connection already exists and is', existingPc.connectionState);
-                    return existingPc;
-                } else {
-                    // Close old connection
-                    console.log('Closing old peer connection in state:', existingPc.connectionState);
-                    existingPc.close();
-                    peerConnections.delete(userId);
+                const old = peerConnections.get(userId);
+                if (old.hasReceivedTrack && old.connectionState === 'connected') {
+                    console.log('✅ Reusing existing connection');
+                    return old;
                 }
+                console.log('Closing old connection');
+                old.close();
+                peerConnections.delete(userId);
             }
 
-            console.log('Creating peer connection with:', userId, 'as initiator:', isInitiator);
+            console.log('🔄 NEW peer connection:', userId, 'initiator:', isInitiator);
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
             pc.userId = userId;
             pc.hasReceivedTrack = false;
 
-            // FIXED: Add our stream tracks if we're the initiator (sharer)
+            // Add OUR stream if we're sharing
             if (isInitiator && screenStream) {
+                console.log('📤 Adding OUR tracks');
                 screenStream.getTracks().forEach(track => {
-                    console.log('Adding track to peer connection:', track.kind);
                     pc.addTrack(track, screenStream);
                 });
             }
 
-            // Handle ICE candidates
-            pc.onicecandidate = (event) => {
-                if (event.candidate) {
-                    console.log('Sending ICE candidate to', userId);
+            // RECEIVE stream - THIS IS THE MAGIC
+            pc.ontrack = (e) => {
+                console.log('🎉 GOT TRACK:', e.track.kind);
+                pc.hasReceivedTrack = true;
+                pc.remoteStream = e.streams[0];
+                
+                if (currentlyViewing === userId) {
+                    console.log('🎥 SHOWING VIDEO NOW');
+                    screenVideo.srcObject = e.streams[0];
+                    screenVideo.style.display = 'block';
+                    videoContainer.querySelector('.placeholder').style.display = 'none';
+                    screenVideo.play();
+                    updateConnectionProgress(100, 'Connected!');
+                    setTimeout(hideConnectionStatus, 500);
+                }
+            };
+
+            // Send ICE candidates
+            pc.onicecandidate = (e) => {
+                if (e.candidate) {
                     socket.emit('webrtc-ice-candidate', {
-                        roomId,
-                        targetId: userId,
-                        candidate: event.candidate
+                        roomId, targetId: userId, candidate: e.candidate
                     });
                 }
             };
 
-            pc.oniceconnectionstatechange = () => {
-                console.log('ICE connection state with', userId, ':', pc.iceConnectionState);
-                if (pc.iceConnectionState === 'connected') {
-                    updateConnectionProgress(100, 'Connected!');
-                    setTimeout(hideConnectionStatus, 1000);
-                } else if (pc.iceConnectionState === 'failed') {
-                    console.error('ICE connection failed for', userId);
-                    updateConnectionProgress(0, 'Connection failed. Retrying...');
-                    // Try to restart ICE
-                    pc.restartIce();
-                }
-            };
-
-            // FIXED: Handle incoming stream - THIS IS CRITICAL FOR VIEWERS
-            pc.ontrack = (event) => {
-                console.log('✅ Received remote track from:', userId, 'kind:', event.track.kind);
-                pc.hasReceivedTrack = true;
-                
-                // Store the stream on the peer connection
-                if (!pc.remoteStream) {
-                    pc.remoteStream = event.streams[0];
-                    console.log('Stored remote stream for user:', userId);
-                    
-                    updateConnectionProgress(80, 'Stream received!');
-                    
-                    // If this is the user we're viewing, display it immediately
-                    if (currentlyViewing === userId) {
-                        console.log('Displaying stream for currently viewed user:', userId);
-                        screenVideo.srcObject = pc.remoteStream;
-                        screenVideo.style.display = 'block';
-                        videoContainer.querySelector('.placeholder').style.display = 'none';
-                        
-                        // Wait for video to start playing
-                        screenVideo.onloadedmetadata = () => {
-                            screenVideo.play().then(() => {
-                                console.log('Video is playing');
-                                updateConnectionProgress(100, 'Connected!');
-                                setTimeout(hideConnectionStatus, 1000);
-                            }).catch(err => console.error('Error playing video:', err));
-                        };
-                    }
-                }
-            };
-
+            // Monitor connection
             pc.onconnectionstatechange = () => {
-                console.log('Connection state with', userId, ':', pc.connectionState);
-                
-                if (pc.connectionState === 'connected') {
-                    updateConnectionProgress(90, 'Waiting for video...');
-                } else if (pc.connectionState === 'disconnected') {
-                    console.log('Peer connection disconnected:', userId);
-                    if (currentlyViewing === userId) {
-                        updateConnectionProgress(0, 'Connection lost. Reconnecting...');
-                    }
-                } else if (pc.connectionState === 'failed') {
-                    console.error('Peer connection failed for', userId);
+                console.log('State:', pc.connectionState);
+                if (pc.connectionState === 'failed') {
+                    console.error('❌ FAILED');
                     peerConnections.delete(userId);
-                    if (currentlyViewing === userId) {
-                        hideConnectionStatus();
-                        addSystemMessage('Connection failed. Please try again.');
-                        screenVideo.style.display = 'none';
-                        videoContainer.querySelector('.placeholder').style.display = 'block';
-                        currentlyViewing = null;
-                        updateSharingUsersList();
-                    }
+                    hideConnectionStatus();
+                    addSystemMessage('Connection failed. Click to retry.');
                 }
             };
 
-            // FIXED: If we're the initiator, create and send offer
+            // CREATE OFFER if initiator
             if (isInitiator) {
-                updateConnectionProgress(20, 'Creating offer...');
-                pc.createOffer()
-                    .then(offer => {
-                        console.log('Created offer for:', userId);
-                        updateConnectionProgress(30, 'Setting local description...');
-                        return pc.setLocalDescription(offer);
-                    })
+                pc.createOffer({ offerToReceiveVideo: true })
+                    .then(o => pc.setLocalDescription(o))
                     .then(() => {
-                        console.log('Sending offer to:', userId);
-                        updateConnectionProgress(40, 'Sending offer...');
                         socket.emit('webrtc-offer', {
-                            roomId,
-                            targetId: userId,
-                            offer: pc.localDescription
+                            roomId, targetId: userId, offer: pc.localDescription
                         });
-                    })
-                    .catch(err => {
-                        console.error('Error creating offer:', err);
-                        hideConnectionStatus();
-                        addSystemMessage('Error creating connection');
                     });
             }
 
