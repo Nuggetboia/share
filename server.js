@@ -167,6 +167,16 @@ io.on('connection', (socket) => {
         }
     });
     
+    // Handle stream request from viewers
+    socket.on('request-stream', (data) => {
+        const { targetId } = data;
+        console.log(`User ${socket.id} requesting stream from ${targetId}`);
+        // Notify the target that someone wants their stream
+        io.to(targetId).emit('stream-requested', {
+            fromId: socket.id
+        });
+    });
+    
     // Handle screen sharing stop
     socket.on('stop-sharing', (data) => {
         const { roomId } = data;
