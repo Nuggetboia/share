@@ -567,6 +567,60 @@
             object-fit: cover;
         }
 
+        .connection-status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .connection-status h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .connection-status p {
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #0071e3;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .cancel-connection {
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .cancel-connection:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -613,6 +667,16 @@
                     <p>Click "Start Sharing" to begin screen sharing</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
+                
+                <!-- Connection Status -->
+                <div class="connection-status" id="connectionStatus" style="display: none;">
+                    <h3>Connecting to stream...</h3>
+                    <p id="connectionMessage">Establishing connection</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                    <button class="cancel-connection" id="cancelConnection">Cancel</button>
+                </div>
                 
                 <!-- Sharing Users List -->
                 <div class="sharing-users" id="sharingUsers" style="display: none;">
@@ -720,6 +784,10 @@
         let sharingUsers = new Map(); // Map of userId -> username who are sharing
         let currentlyViewing = null; // ID of user whose stream we're viewing
         let isAuthMode = 'login'; // 'login' or 'register'
+        let connectionTimeout = null;
+        let connectionProgress = 0;
+        let connectionInterval = null;
+        let pendingConnection = null;
 
         // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
@@ -768,6 +836,10 @@
         const saveProfile = document.getElementById('saveProfile');
         const logoutBtn = document.getElementById('logoutBtn');
         const guestBtn = document.getElementById('guestBtn');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectionMessage = document.getElementById('connectionMessage');
+        const progressFill = document.getElementById('progressFill');
+        const cancelConnection = document.getElementById('cancelConnection');
 
         // Check if user is logged in
         function checkAuth() {
@@ -1000,11 +1072,39 @@
 
         // Initialize Socket.IO connection
         function initSocket() {
-            socket = io();
+            if (socket && socket.connected) {
+                console.log('Socket already connected');
+                return;
+            }
+            
+            socket = io({
+                reconnection: true,
+                reconnectionDelay: 1000,
+                reconnectionDelayMax: 5000,
+                reconnectionAttempts: Infinity
+            });
 
             socket.on('connect', () => {
                 console.log('Connected to server');
                 socket.emit('join-room', { roomId, username });
+                
+                // Save room state for persistence
+                localStorage.setItem('lastRoom', roomId);
+            });
+
+            socket.on('reconnect', (attemptNumber) => {
+                console.log('Reconnected after', attemptNumber, 'attempts');
+                addSystemMessage('Reconnected to server');
+                // Rejoin the room
+                socket.emit('join-room', { roomId, username });
+            });
+
+            socket.on('disconnect', (reason) => {
+                console.log('Disconnected:', reason);
+                if (reason === 'io server disconnect') {
+                    // Server disconnected us, try to reconnect
+                    socket.connect();
+                }
             });
 
             socket.on('existing-users', (users) => {
@@ -1132,12 +1232,23 @@
         // FIXED: Create WebRTC peer connection with proper stream handling
         function createPeerConnection(userId, isInitiator) {
             if (peerConnections.has(userId)) {
-                return peerConnections.get(userId);
+                const existingPc = peerConnections.get(userId);
+                if (existingPc.connectionState === 'connected' || existingPc.connectionState === 'connecting') {
+                    console.log('Peer connection already exists and is', existingPc.connectionState);
+                    return existingPc;
+                } else {
+                    // Close old connection
+                    console.log('Closing old peer connection in state:', existingPc.connectionState);
+                    existingPc.close();
+                    peerConnections.delete(userId);
+                }
             }
 
-            console.log('Creating peer connection with:', userId, 'isInitiator:', isInitiator);
+            console.log('Creating peer connection with:', userId, 'as initiator:', isInitiator);
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
+            pc.userId = userId;
+            pc.hasReceivedTrack = false;
 
             // FIXED: Add our stream tracks if we're the initiator (sharer)
             if (isInitiator && screenStream) {
@@ -1150,6 +1261,7 @@
             // Handle ICE candidates
             pc.onicecandidate = (event) => {
                 if (event.candidate) {
+                    console.log('Sending ICE candidate to', userId);
                     socket.emit('webrtc-ice-candidate', {
                         roomId,
                         targetId: userId,
@@ -1158,13 +1270,30 @@
                 }
             };
 
+            pc.oniceconnectionstatechange = () => {
+                console.log('ICE connection state with', userId, ':', pc.iceConnectionState);
+                if (pc.iceConnectionState === 'connected') {
+                    updateConnectionProgress(100, 'Connected!');
+                    setTimeout(hideConnectionStatus, 1000);
+                } else if (pc.iceConnectionState === 'failed') {
+                    console.error('ICE connection failed for', userId);
+                    updateConnectionProgress(0, 'Connection failed. Retrying...');
+                    // Try to restart ICE
+                    pc.restartIce();
+                }
+            };
+
             // FIXED: Handle incoming stream - THIS IS CRITICAL FOR VIEWERS
             pc.ontrack = (event) => {
-                console.log('Received remote track from:', userId, 'kind:', event.track.kind);
+                console.log('✅ Received remote track from:', userId, 'kind:', event.track.kind);
+                pc.hasReceivedTrack = true;
+                
                 // Store the stream on the peer connection
                 if (!pc.remoteStream) {
                     pc.remoteStream = event.streams[0];
                     console.log('Stored remote stream for user:', userId);
+                    
+                    updateConnectionProgress(80, 'Stream received!');
                     
                     // If this is the user we're viewing, display it immediately
                     if (currentlyViewing === userId) {
@@ -1172,33 +1301,66 @@
                         screenVideo.srcObject = pc.remoteStream;
                         screenVideo.style.display = 'block';
                         videoContainer.querySelector('.placeholder').style.display = 'none';
+                        
+                        // Wait for video to start playing
+                        screenVideo.onloadedmetadata = () => {
+                            screenVideo.play().then(() => {
+                                console.log('Video is playing');
+                                updateConnectionProgress(100, 'Connected!');
+                                setTimeout(hideConnectionStatus, 1000);
+                            }).catch(err => console.error('Error playing video:', err));
+                        };
                     }
                 }
             };
 
             pc.onconnectionstatechange = () => {
                 console.log('Connection state with', userId, ':', pc.connectionState);
-                if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+                
+                if (pc.connectionState === 'connected') {
+                    updateConnectionProgress(90, 'Waiting for video...');
+                } else if (pc.connectionState === 'disconnected') {
+                    console.log('Peer connection disconnected:', userId);
+                    if (currentlyViewing === userId) {
+                        updateConnectionProgress(0, 'Connection lost. Reconnecting...');
+                    }
+                } else if (pc.connectionState === 'failed') {
+                    console.error('Peer connection failed for', userId);
                     peerConnections.delete(userId);
+                    if (currentlyViewing === userId) {
+                        hideConnectionStatus();
+                        addSystemMessage('Connection failed. Please try again.');
+                        screenVideo.style.display = 'none';
+                        videoContainer.querySelector('.placeholder').style.display = 'block';
+                        currentlyViewing = null;
+                        updateSharingUsersList();
+                    }
                 }
             };
 
             // FIXED: If we're the initiator, create and send offer
             if (isInitiator) {
+                updateConnectionProgress(20, 'Creating offer...');
                 pc.createOffer()
                     .then(offer => {
                         console.log('Created offer for:', userId);
+                        updateConnectionProgress(30, 'Setting local description...');
                         return pc.setLocalDescription(offer);
                     })
                     .then(() => {
                         console.log('Sending offer to:', userId);
+                        updateConnectionProgress(40, 'Sending offer...');
                         socket.emit('webrtc-offer', {
                             roomId,
                             targetId: userId,
                             offer: pc.localDescription
                         });
                     })
-                    .catch(err => console.error('Error creating offer:', err));
+                    .catch(err => {
+                        console.error('Error creating offer:', err);
+                        hideConnectionStatus();
+                        addSystemMessage('Error creating connection');
+                    });
             }
 
             return pc;
@@ -1433,26 +1595,97 @@
             });
         }
         
+        // Update connection progress
+        function updateConnectionProgress(percent, message) {
+            connectionStatus.style.display = 'block';
+            connectionMessage.textContent = message;
+            progressFill.style.width = percent + '%';
+        }
+
+        // Hide connection status
+        function hideConnectionStatus() {
+            connectionStatus.style.display = 'none';
+            if (connectionTimeout) {
+                clearTimeout(connectionTimeout);
+                connectionTimeout = null;
+            }
+            if (connectionInterval) {
+                clearInterval(connectionInterval);
+                connectionInterval = null;
+            }
+            connectionProgress = 0;
+            progressFill.style.width = '0%';
+        }
+
+        // Cancel connection button
+        cancelConnection.addEventListener('click', () => {
+            if (pendingConnection) {
+                const pc = peerConnections.get(pendingConnection);
+                if (pc) {
+                    pc.close();
+                    peerConnections.delete(pendingConnection);
+                }
+                pendingConnection = null;
+            }
+            hideConnectionStatus();
+            addSystemMessage('Connection cancelled');
+        });
+        
         // Switch to viewing a specific user's stream
         function viewUserStream(userId) {
             console.log('Switching to view stream from:', userId);
             currentlyViewing = userId;
+            pendingConnection = userId;
             
             const pc = peerConnections.get(userId);
             if (pc) {
-                console.log('Found peer connection for user:', userId);
+                console.log('Found peer connection for user:', userId, 'state:', pc.connectionState);
                 if (pc.remoteStream) {
                     console.log('Found remote stream, displaying it');
+                    updateConnectionProgress(70, 'Loading video...');
                     screenVideo.srcObject = pc.remoteStream;
                     screenVideo.style.display = 'block';
                     videoContainer.querySelector('.placeholder').style.display = 'none';
+                    
+                    screenVideo.onloadedmetadata = () => {
+                        screenVideo.play().then(() => {
+                            updateConnectionProgress(100, 'Connected!');
+                            setTimeout(hideConnectionStatus, 1000);
+                        });
+                    };
                 } else {
-                    console.log('Peer connection exists but no remote stream yet, waiting...');
-                    addSystemMessage('Connecting to stream...');
+                    console.log('Peer connection exists but no remote stream yet');
+                    updateConnectionProgress(10, 'Establishing connection...');
+                    
+                    // Set a timeout for the connection
+                    connectionTimeout = setTimeout(() => {
+                        if (!pc.hasReceivedTrack) {
+                            console.error('Connection timeout - no track received');
+                            hideConnectionStatus();
+                            addSystemMessage('Connection timeout. The user may not be sharing anymore.');
+                            currentlyViewing = null;
+                            pendingConnection = null;
+                            updateSharingUsersList();
+                        }
+                    }, 15000); // 15 second timeout
                 }
             } else {
-                console.log('No peer connection found for user:', userId);
-                addSystemMessage('No connection to this user yet');
+                console.log('No peer connection found for user:', userId, 'creating one...');
+                updateConnectionProgress(5, 'Initiating connection...');
+                createPeerConnection(userId, false);
+                
+                // Set timeout
+                connectionTimeout = setTimeout(() => {
+                    const newPc = peerConnections.get(userId);
+                    if (!newPc || !newPc.hasReceivedTrack) {
+                        console.error('Connection timeout - failed to establish');
+                        hideConnectionStatus();
+                        addSystemMessage('Unable to connect. Please try again.');
+                        currentlyViewing = null;
+                        pendingConnection = null;
+                        updateSharingUsersList();
+                    }
+                }, 15000);
             }
             
             // Update active state in list
