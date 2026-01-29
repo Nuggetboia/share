@@ -1,171 +1,117 @@
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
-const io = require('socket.io')(http, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
+const io = require('socket.io')(http);
 const path = require('path');
 
-// Store active rooms and their participants
+const PORT = process.env.PORT || 3000;
+
+// Store active rooms and their users
 const rooms = new Map();
 
 // Serve static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Handle root route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Socket.IO connection handling
+// Handle room routes
+app.get('/:roomId', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
-
-    // Join a room
-    socket.on('join-room', ({ roomId, username }) => {
+    
+    socket.on('join-room', (roomId, userId) => {
+        console.log(`User ${userId} joining room ${roomId}`);
         socket.join(roomId);
         
         // Initialize room if it doesn't exist
         if (!rooms.has(roomId)) {
-            rooms.set(roomId, new Map());
+            rooms.set(roomId, new Set());
         }
         
-        // Add user to room
-        const room = rooms.get(roomId);
-        room.set(socket.id, { username, isSharing: false });
+        rooms.get(roomId).add(socket.id);
         
-        console.log(`${username} (${socket.id}) joined room ${roomId}`);
-        
-        // Get list of other users in the room
-        const otherUsers = Array.from(room.entries())
-            .filter(([id]) => id !== socket.id)
-            .map(([id, data]) => ({ id, username: data.username, isSharing: data.isSharing }));
+        // Notify others in the room
+        socket.to(roomId).emit('user-connected', userId);
         
         // Send list of existing users to the new user
-        socket.emit('existing-users', otherUsers);
+        const existingUsers = Array.from(rooms.get(roomId)).filter(id => id !== socket.id);
+        socket.emit('existing-users', existingUsers);
         
-        // Notify other users about the new user
-        socket.to(roomId).emit('user-joined', {
-            id: socket.id,
-            username: username
-        });
-        
-        // Send current room info
-        socket.emit('room-info', {
-            roomId,
-            userCount: room.size
-        });
-        
-        socket.to(roomId).emit('room-info', {
-            roomId,
-            userCount: room.size
+        console.log(`Room ${roomId} now has ${rooms.get(roomId).size} users`);
+    });
+    
+    // Handle screen sharing start
+    socket.on('start-sharing', (roomId) => {
+        console.log(`User ${socket.id} started sharing in room ${roomId}`);
+        socket.to(roomId).emit('user-started-sharing', socket.id);
+    });
+    
+    // Handle screen sharing stop
+    socket.on('stop-sharing', (roomId) => {
+        console.log(`User ${socket.id} stopped sharing in room ${roomId}`);
+        socket.to(roomId).emit('user-stopped-sharing', socket.id);
+    });
+    
+    // WebRTC signaling
+    socket.on('offer', (data) => {
+        console.log(`Sending offer from ${socket.id} to ${data.to}`);
+        io.to(data.to).emit('offer', {
+            offer: data.offer,
+            from: socket.id
         });
     });
-
-    // Handle chat messages
-    socket.on('chat-message', ({ roomId, message, username }) => {
-        console.log(`Chat message in ${roomId} from ${username}: ${message}`);
-        
-        // Broadcast message to all users in the room including sender
-        io.to(roomId).emit('chat-message', {
-            id: socket.id,
-            username,
-            message,
+    
+    socket.on('answer', (data) => {
+        console.log(`Sending answer from ${socket.id} to ${data.to}`);
+        io.to(data.to).emit('answer', {
+            answer: data.answer,
+            from: socket.id
+        });
+    });
+    
+    socket.on('ice-candidate', (data) => {
+        console.log(`Sending ICE candidate from ${socket.id} to ${data.to}`);
+        io.to(data.to).emit('ice-candidate', {
+            candidate: data.candidate,
+            from: socket.id
+        });
+    });
+    
+    // Chat messages
+    socket.on('chat-message', (data) => {
+        console.log(`Chat message in room ${data.roomId}: ${data.message}`);
+        io.to(data.roomId).emit('chat-message', {
+            message: data.message,
+            sender: data.sender,
             timestamp: Date.now()
         });
     });
-
-    // Handle screen sharing start
-    socket.on('start-sharing', ({ roomId }) => {
-        const room = rooms.get(roomId);
-        if (room && room.has(socket.id)) {
-            const user = room.get(socket.id);
-            user.isSharing = true;
-            
-            // Notify all users in the room
-            io.to(roomId).emit('user-sharing', {
-                id: socket.id,
-                username: user.username,
-                isSharing: true
-            });
-        }
-    });
-
-    // Handle screen sharing stop
-    socket.on('stop-sharing', ({ roomId }) => {
-        const room = rooms.get(roomId);
-        if (room && room.has(socket.id)) {
-            const user = room.get(socket.id);
-            user.isSharing = false;
-            
-            // Notify all users in the room
-            io.to(roomId).emit('user-sharing', {
-                id: socket.id,
-                username: user.username,
-                isSharing: false
-            });
-        }
-    });
-
-    // WebRTC signaling
-    socket.on('webrtc-offer', ({ roomId, targetId, offer }) => {
-        console.log(`WebRTC offer from ${socket.id} to ${targetId}`);
-        io.to(targetId).emit('webrtc-offer', {
-            fromId: socket.id,
-            offer
-        });
-    });
-
-    socket.on('webrtc-answer', ({ roomId, targetId, answer }) => {
-        console.log(`WebRTC answer from ${socket.id} to ${targetId}`);
-        io.to(targetId).emit('webrtc-answer', {
-            fromId: socket.id,
-            answer
-        });
-    });
-
-    socket.on('webrtc-ice-candidate', ({ roomId, targetId, candidate }) => {
-        io.to(targetId).emit('webrtc-ice-candidate', {
-            fromId: socket.id,
-            candidate
-        });
-    });
-
-    // Handle disconnection
+    
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
         
         // Remove user from all rooms
-        rooms.forEach((room, roomId) => {
-            if (room.has(socket.id)) {
-                const user = room.get(socket.id);
-                room.delete(socket.id);
-                
-                // Notify other users
-                socket.to(roomId).emit('user-left', {
-                    id: socket.id,
-                    username: user.username
-                });
-                
-                socket.to(roomId).emit('room-info', {
-                    roomId,
-                    userCount: room.size
-                });
+        rooms.forEach((users, roomId) => {
+            if (users.has(socket.id)) {
+                users.delete(socket.id);
+                socket.to(roomId).emit('user-disconnected', socket.id);
                 
                 // Clean up empty rooms
-                if (room.size === 0) {
+                if (users.size === 0) {
                     rooms.delete(roomId);
-                    console.log(`Room ${roomId} deleted (empty)`);
                 }
             }
         });
     });
 });
 
-const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Open http://localhost:${PORT} in your browser`);
+    console.log(`Visit http://localhost:${PORT} to start sharing`);
 });
