@@ -513,6 +513,11 @@
             socket.on('user-joined', (user) => {
                 console.log('User joined:', user);
                 addSystemMessage(`${user.username} joined the room`);
+                
+                // FIXED: If we're sharing, create peer connection for new user
+                if (isSharing && screenStream) {
+                    createPeerConnection(user.id, true);
+                }
             });
 
             socket.on('user-left', (user) => {
@@ -531,15 +536,20 @@
                 addMessage(message, username, isSent);
             });
 
-            socket.on('user-sharing', ({ id, username, isSharing }) => {
-                if (isSharing) {
+            socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
+                if (userIsSharing) {
                     addSystemMessage(`${username} started sharing their screen`);
+                    // FIXED: Create peer connection to receive their stream
                     if (id !== socket.id) {
-                        // Request WebRTC connection to view their screen
-                        createPeerConnection(id, true);
+                        createPeerConnection(id, false);
                     }
                 } else {
                     addSystemMessage(`${username} stopped sharing`);
+                    // Hide video when sharing stops
+                    if (id !== socket.id) {
+                        screenVideo.style.display = 'none';
+                        videoContainer.querySelector('.placeholder').style.display = 'block';
+                    }
                 }
             });
 
@@ -547,10 +557,10 @@
                 console.log(`Room ${roomId} has ${userCount} user(s)`);
             });
 
-            // WebRTC signaling handlers
+            // FIXED: WebRTC signaling handlers
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
                 console.log('Received WebRTC offer from:', fromId);
-                const pc = createPeerConnection(fromId, false);
+                const pc = peerConnections.get(fromId) || createPeerConnection(fromId, false);
                 await pc.setRemoteDescription(new RTCSessionDescription(offer));
                 
                 // Add our screen stream if we're sharing
@@ -578,6 +588,7 @@
             });
 
             socket.on('webrtc-ice-candidate', async ({ fromId, candidate }) => {
+                console.log('Received ICE candidate from:', fromId);
                 const pc = peerConnections.get(fromId);
                 if (pc && candidate) {
                     await pc.addIceCandidate(new RTCIceCandidate(candidate));
@@ -590,14 +601,22 @@
             });
         }
 
-        // Create WebRTC peer connection
+        // FIXED: Create WebRTC peer connection with proper stream handling
         function createPeerConnection(userId, isInitiator) {
             if (peerConnections.has(userId)) {
                 return peerConnections.get(userId);
             }
 
+            console.log('Creating peer connection with:', userId, 'isInitiator:', isInitiator);
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
+
+            // FIXED: Add our stream tracks if we're the initiator (sharer)
+            if (isInitiator && screenStream) {
+                screenStream.getTracks().forEach(track => {
+                    pc.addTrack(track, screenStream);
+                });
+            }
 
             // Handle ICE candidates
             pc.onicecandidate = (event) => {
@@ -610,7 +629,7 @@
                 }
             };
 
-            // Handle incoming stream
+            // FIXED: Handle incoming stream - THIS IS CRITICAL FOR VIEWERS
             pc.ontrack = (event) => {
                 console.log('Received remote stream from:', userId);
                 screenVideo.srcObject = event.streams[0];
@@ -619,13 +638,13 @@
             };
 
             pc.onconnectionstatechange = () => {
-                console.log('Connection state:', pc.connectionState);
+                console.log('Connection state with', userId, ':', pc.connectionState);
                 if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
                     peerConnections.delete(userId);
                 }
             };
 
-            // If we're the initiator, create and send offer
+            // FIXED: If we're the initiator, create and send offer
             if (isInitiator) {
                 pc.createOffer()
                     .then(offer => pc.setLocalDescription(offer))
@@ -635,7 +654,8 @@
                             targetId: userId,
                             offer: pc.localDescription
                         });
-                    });
+                    })
+                    .catch(err => console.error('Error creating offer:', err));
             }
 
             return pc;
@@ -712,7 +732,7 @@
                 // Notify server
                 socket.emit('start-sharing', { roomId });
 
-                // Add stream to all existing peer connections
+                // FIXED: Add stream to all existing peer connections
                 peerConnections.forEach((pc, userId) => {
                     screenStream.getTracks().forEach(track => {
                         pc.addTrack(track, screenStream);
@@ -746,6 +766,10 @@
             startShareBtn.style.display = 'inline-block';
             stopShareBtn.style.display = 'none';
             isSharing = false;
+            
+            // Close all peer connections
+            peerConnections.forEach(pc => pc.close());
+            peerConnections.clear();
             
             // Notify server
             socket.emit('stop-sharing', { roomId });
