@@ -456,6 +456,117 @@
             border-radius: 4px;
         }
 
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+        }
+
+        .profile-picture {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .login-modal .modal-content {
+            max-width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        body.dark-theme .form-group input {
+            background: #3a3a3c;
+            border-color: #48484a;
+            color: #f5f5f7;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        .error-message {
+            color: #ff3b30;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .profile-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .profile-picture-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-picture-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .profile-picture-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -474,6 +585,12 @@
             <div class="header">
                 <div class="logo">ShareView</div>
                 <div class="controls">
+                    <button class="btn-secondary profile-btn" id="profileBtn">
+                        <div class="profile-picture" id="headerProfilePic">
+                            <span id="headerInitial">?</span>
+                        </div>
+                        <span id="headerUsername">Guest</span>
+                    </button>
                     <button class="btn-icon" id="themeToggle" title="Toggle Theme">
                         <svg id="themeIcon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
@@ -534,6 +651,52 @@
         </div>
     </div>
 
+    <div class="modal login-modal" id="loginModal">
+        <div class="modal-content">
+            <h2 id="authTitle">Login</h2>
+            <p id="authSubtitle">Sign in to your account</p>
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="authUsername">Username</label>
+                    <input type="text" id="authUsername" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="authPassword">Password</label>
+                    <input type="password" id="authPassword" required autocomplete="current-password">
+                </div>
+                <div id="authError" class="error-message" style="display: none;"></div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="authSubmit">Login</button>
+                    <button type="button" class="btn-secondary" id="authToggle">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <h2>Profile Settings</h2>
+            <div class="profile-settings">
+                <div class="profile-picture-upload">
+                    <div class="profile-picture-large" id="profilePicLarge">
+                        <span id="profileInitial">?</span>
+                    </div>
+                    <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                    <button class="btn-secondary" onclick="document.getElementById('profilePicInput').click()">Change Picture</button>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="profileUsername" disabled>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="saveProfile">Save Changes</button>
+                    <button class="btn-secondary" id="logoutBtn">Logout</button>
+                </div>
+                <button class="btn-secondary" style="width: 100%;" onclick="document.getElementById('profileModal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
         // Configuration
@@ -549,11 +712,13 @@
         let isChatOpen = false;
         let screenStream = null;
         let roomId = null;
-        let username = 'User' + Math.floor(Math.random() * 1000);
+        let username = null;
+        let userProfile = null; // { username, profilePicture, theme }
         let socket = null;
         let peerConnections = new Map(); // Map of userId -> RTCPeerConnection
         let sharingUsers = new Map(); // Map of userId -> username who are sharing
         let currentlyViewing = null; // ID of user whose stream we're viewing
+        let isAuthMode = 'login'; // 'login' or 'register'
 
         // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
@@ -579,6 +744,195 @@
         const copyLinkBtn = document.getElementById('copyLink');
         const sharingUsersPanel = document.getElementById('sharingUsers');
         const sharingUsersList = document.getElementById('sharingUsersList');
+        
+        // Profile elements
+        const profileBtn = document.getElementById('profileBtn');
+        const headerUsername = document.getElementById('headerUsername');
+        const headerProfilePic = document.getElementById('headerProfilePic');
+        const headerInitial = document.getElementById('headerInitial');
+        const loginModal = document.getElementById('loginModal');
+        const profileModal = document.getElementById('profileModal');
+        const authForm = document.getElementById('authForm');
+        const authTitle = document.getElementById('authTitle');
+        const authSubtitle = document.getElementById('authSubtitle');
+        const authUsername = document.getElementById('authUsername');
+        const authPassword = document.getElementById('authPassword');
+        const authSubmit = document.getElementById('authSubmit');
+        const authToggle = document.getElementById('authToggle');
+        const authError = document.getElementById('authError');
+        const profileUsername = document.getElementById('profileUsername');
+        const profilePicLarge = document.getElementById('profilePicLarge');
+        const profileInitial = document.getElementById('profileInitial');
+        const profilePicInput = document.getElementById('profilePicInput');
+        const saveProfile = document.getElementById('saveProfile');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Check if user is logged in
+        function checkAuth() {
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                userProfile = JSON.parse(savedProfile);
+                username = userProfile.username;
+                updateProfileUI();
+                initSocket();
+            } else {
+                // Show login modal
+                loginModal.classList.add('active');
+            }
+        }
+
+        // Update profile UI
+        function updateProfileUI() {
+            if (userProfile) {
+                headerUsername.textContent = userProfile.username;
+                const initial = userProfile.username.charAt(0).toUpperCase();
+                headerInitial.textContent = initial;
+                profileInitial.textContent = initial;
+                profileUsername.value = userProfile.username;
+                
+                if (userProfile.profilePicture) {
+                    headerProfilePic.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
+                    profilePicLarge.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
+                }
+                
+                // Apply theme
+                if (userProfile.theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    updateThemeIcon(true);
+                }
+            }
+        }
+
+        // Profile button click
+        profileBtn.addEventListener('click', () => {
+            if (userProfile) {
+                profileModal.classList.add('active');
+            } else {
+                loginModal.classList.add('active');
+            }
+        });
+
+        // Auth form toggle
+        authToggle.addEventListener('click', () => {
+            isAuthMode = isAuthMode === 'login' ? 'register' : 'login';
+            if (isAuthMode === 'login') {
+                authTitle.textContent = 'Login';
+                authSubtitle.textContent = 'Sign in to your account';
+                authSubmit.textContent = 'Login';
+                authToggle.textContent = 'Register';
+            } else {
+                authTitle.textContent = 'Register';
+                authSubtitle.textContent = 'Create a new account';
+                authSubmit.textContent = 'Register';
+                authToggle.textContent = 'Login';
+            }
+            authError.style.display = 'none';
+        });
+
+        // Auth form submit
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authError.style.display = 'none';
+            
+            const user = authUsername.value.trim();
+            const pass = authPassword.value;
+            
+            if (!user || !pass) {
+                authError.textContent = 'Please fill in all fields';
+                authError.style.display = 'block';
+                return;
+            }
+            
+            const endpoint = isAuthMode === 'login' ? '/api/login' : '/api/register';
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (isAuthMode === 'register') {
+                        // After registration, log them in
+                        userProfile = {
+                            username: user,
+                            profilePicture: null,
+                            theme: 'light'
+                        };
+                    } else {
+                        userProfile = data.profile;
+                    }
+                    
+                    username = userProfile.username;
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                    loginModal.classList.remove('active');
+                    updateProfileUI();
+                    initSocket();
+                    authForm.reset();
+                } else {
+                    authError.textContent = data.error;
+                    authError.style.display = 'block';
+                }
+            } catch (error) {
+                authError.textContent = 'Connection error. Please try again.';
+                authError.style.display = 'block';
+            }
+        });
+
+        // Profile picture upload
+        profilePicInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const dataUrl = event.target.result;
+                    userProfile.profilePicture = dataUrl;
+                    headerProfilePic.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
+                    profilePicLarge.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save profile
+        saveProfile.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/update-profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: userProfile.username,
+                        profilePicture: userProfile.profilePicture,
+                        theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light'
+                    })
+                });
+                
+                if (response.ok) {
+                    userProfile.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                    alert('Profile updated!');
+                }
+            } catch (error) {
+                alert('Error updating profile');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('userProfile');
+            userProfile = null;
+            username = null;
+            profileModal.classList.remove('active');
+            
+            // Disconnect and reload
+            if (socket) {
+                socket.disconnect();
+            }
+            window.location.reload();
+        });
 
         // Initialize Socket.IO connection
         function initSocket() {
@@ -724,6 +1078,7 @@
             // FIXED: Add our stream tracks if we're the initiator (sharer)
             if (isInitiator && screenStream) {
                 screenStream.getTracks().forEach(track => {
+                    console.log('Adding track to peer connection:', track.kind);
                     pc.addTrack(track, screenStream);
                 });
             }
@@ -741,13 +1096,19 @@
 
             // FIXED: Handle incoming stream - THIS IS CRITICAL FOR VIEWERS
             pc.ontrack = (event) => {
-                console.log('Received remote stream from:', userId);
-                // Store the stream but only display if we're viewing this user
-                pc.remoteStream = event.streams[0];
-                if (currentlyViewing === userId) {
-                    screenVideo.srcObject = event.streams[0];
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
+                console.log('Received remote track from:', userId, 'kind:', event.track.kind);
+                // Store the stream on the peer connection
+                if (!pc.remoteStream) {
+                    pc.remoteStream = event.streams[0];
+                    console.log('Stored remote stream for user:', userId);
+                    
+                    // If this is the user we're viewing, display it immediately
+                    if (currentlyViewing === userId) {
+                        console.log('Displaying stream for currently viewed user:', userId);
+                        screenVideo.srcObject = pc.remoteStream;
+                        screenVideo.style.display = 'block';
+                        videoContainer.querySelector('.placeholder').style.display = 'none';
+                    }
                 }
             };
 
@@ -761,8 +1122,12 @@
             // FIXED: If we're the initiator, create and send offer
             if (isInitiator) {
                 pc.createOffer()
-                    .then(offer => pc.setLocalDescription(offer))
+                    .then(offer => {
+                        console.log('Created offer for:', userId);
+                        return pc.setLocalDescription(offer);
+                    })
                     .then(() => {
+                        console.log('Sending offer to:', userId);
                         socket.emit('webrtc-offer', {
                             roomId,
                             targetId: userId,
@@ -1010,12 +1375,20 @@
             currentlyViewing = userId;
             
             const pc = peerConnections.get(userId);
-            if (pc && pc.remoteStream) {
-                screenVideo.srcObject = pc.remoteStream;
-                screenVideo.style.display = 'block';
-                videoContainer.querySelector('.placeholder').style.display = 'none';
+            if (pc) {
+                console.log('Found peer connection for user:', userId);
+                if (pc.remoteStream) {
+                    console.log('Found remote stream, displaying it');
+                    screenVideo.srcObject = pc.remoteStream;
+                    screenVideo.style.display = 'block';
+                    videoContainer.querySelector('.placeholder').style.display = 'none';
+                } else {
+                    console.log('Peer connection exists but no remote stream yet, waiting...');
+                    addSystemMessage('Connecting to stream...');
+                }
             } else {
-                console.log('No stream available yet for user:', userId);
+                console.log('No peer connection found for user:', userId);
+                addSystemMessage('No connection to this user yet');
             }
             
             // Update active state in list
@@ -1026,8 +1399,8 @@
         addSystemMessage('Room ID: ' + roomId);
         addSystemMessage('Connecting to server...');
 
-        // Initialize connection
-        initSocket();
+        // Check authentication and initialize
+        checkAuth();
     </script>
 </body>
 </html>
