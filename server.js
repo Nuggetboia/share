@@ -106,11 +106,24 @@ app.get('/:roomId', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
+    let currentRoom = null;
+    let currentUsername = null;
     
     socket.on('join-room', (data) => {
         const { roomId, username } = data;
         console.log(`User ${username} (${socket.id}) joining room ${roomId}`);
+        
+        // Leave previous room if any
+        if (currentRoom && currentRoom !== roomId) {
+            socket.leave(currentRoom);
+            if (rooms.has(currentRoom) && rooms.get(currentRoom).has(socket.id)) {
+                rooms.get(currentRoom).delete(socket.id);
+            }
+        }
+        
         socket.join(roomId);
+        currentRoom = roomId;
+        currentUsername = username;
         
         // Initialize room if it doesn't exist
         if (!rooms.has(roomId)) {
