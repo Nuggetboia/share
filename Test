@@ -1,0 +1,69 @@
+#!/bin/bash
+
+echo "🔍 ShareView Connection Tester"
+echo "================================"
+echo ""
+
+# Check if files exist
+echo "📁 Checking file structure..."
+if [ ! -f "server.js" ]; then
+    echo "❌ server.js not found in current directory"
+    exit 1
+fi
+
+if [ ! -f "package.json" ]; then
+    echo "❌ package.json not found"
+    exit 1
+fi
+
+if [ ! -d "public" ]; then
+    echo "❌ public/ folder not found - creating it..."
+    mkdir public
+fi
+
+if [ ! -f "public/index.html" ]; then
+    echo "❌ public/index.html not found"
+    echo "   Make sure index.html is INSIDE the public/ folder!"
+    exit 1
+fi
+
+echo "✅ All files found"
+echo ""
+
+# Check if dependencies are installed
+echo "📦 Checking dependencies..."
+if [ ! -d "node_modules" ]; then
+    echo "❌ node_modules not found - run 'npm install' first"
+    exit 1
+fi
+
+echo "✅ Dependencies installed"
+echo ""
+
+# Check if port 3000 is available
+echo "🔌 Checking if port 3000 is available..."
+if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null ; then
+    echo "⚠️  Port 3000 is already in use"
+    echo "   Kill the process or change the port in server.js"
+    echo "   To kill: lsof -ti:3000 | xargs kill -9"
+else
+    echo "✅ Port 3000 is available"
+fi
+
+echo ""
+echo "🎯 Setup looks good! To start:"
+echo "   npm start"
+echo ""
+echo "📝 Testing checklist:"
+echo "   1. Open http://localhost:3000 in TWO browser tabs"
+echo "   2. Tab 1: Continue as Guest → Start Sharing"
+echo "   3. Tab 2: Continue as Guest"
+echo "   4. Tab 2: Click on Guest's name in 'Sharing Now' list"
+echo "   5. You should see Tab 1's screen in Tab 2"
+echo ""
+echo "🐛 If it doesn't work, check browser console (F12)"
+echo "   Look for these messages:"
+echo "   - '🔄 NEW peer connection'"
+echo "   - '🎉 GOT TRACK: video'"
+echo "   - '🎥 SHOWING VIDEO NOW'"
+echo ""
