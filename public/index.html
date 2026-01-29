@@ -380,6 +380,82 @@
             background: #ff3b30;
         }
 
+        .sharing-users {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            padding: 16px;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        body.dark-theme .sharing-users {
+            background: #2c2c2e;
+        }
+
+        .sharing-users h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        body.dark-theme .sharing-users h4 {
+            color: #f5f5f7;
+        }
+
+        .sharing-user-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        body.dark-theme .sharing-user-item {
+            background: #3a3a3c;
+        }
+
+        .sharing-user-item:hover {
+            background: #e8e8ed;
+            transform: translateX(-2px);
+        }
+
+        body.dark-theme .sharing-user-item:hover {
+            background: #48484a;
+        }
+
+        .sharing-user-item.active {
+            background: #0071e3;
+            color: white;
+        }
+
+        body.dark-theme .sharing-user-item.active {
+            background: #0071e3;
+        }
+
+        .sharing-user-name {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sharing-badge {
+            font-size: 11px;
+            background: #34c759;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -420,6 +496,12 @@
                     <p>Click "Start Sharing" to begin screen sharing</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
+                
+                <!-- Sharing Users List -->
+                <div class="sharing-users" id="sharingUsers" style="display: none;">
+                    <h4>Sharing Now</h4>
+                    <div id="sharingUsersList"></div>
+                </div>
             </div>
         </div>
 
@@ -470,6 +552,8 @@
         let username = 'User' + Math.floor(Math.random() * 1000);
         let socket = null;
         let peerConnections = new Map(); // Map of userId -> RTCPeerConnection
+        let sharingUsers = new Map(); // Map of userId -> username who are sharing
+        let currentlyViewing = null; // ID of user whose stream we're viewing
 
         // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
@@ -493,6 +577,8 @@
         const linkModal = document.getElementById('linkModal');
         const shareableLink = document.getElementById('shareableLink');
         const copyLinkBtn = document.getElementById('copyLink');
+        const sharingUsersPanel = document.getElementById('sharingUsers');
+        const sharingUsersList = document.getElementById('sharingUsersList');
 
         // Initialize Socket.IO connection
         function initSocket() {
@@ -524,10 +610,21 @@
                 console.log('User left:', user);
                 addSystemMessage(`${user.username} left the room`);
                 
+                // Remove from sharing users if they were sharing
+                sharingUsers.delete(user.id);
+                updateSharingUsersList();
+                
                 // Clean up peer connection
                 if (peerConnections.has(user.id)) {
                     peerConnections.get(user.id).close();
                     peerConnections.delete(user.id);
+                }
+                
+                // If we were viewing this user, clear the video
+                if (currentlyViewing === user.id) {
+                    screenVideo.style.display = 'none';
+                    videoContainer.querySelector('.placeholder').style.display = 'block';
+                    currentlyViewing = null;
                 }
             });
 
@@ -539,16 +636,29 @@
             socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
                 if (userIsSharing) {
                     addSystemMessage(`${username} started sharing their screen`);
+                    // Track this user as sharing
+                    sharingUsers.set(id, username);
+                    updateSharingUsersList();
+                    
                     // FIXED: Create peer connection to receive their stream
                     if (id !== socket.id) {
                         createPeerConnection(id, false);
+                        // Automatically view the first person who starts sharing
+                        if (sharingUsers.size === 1 && !currentlyViewing) {
+                            viewUserStream(id);
+                        }
                     }
                 } else {
                     addSystemMessage(`${username} stopped sharing`);
+                    // Remove from sharing users
+                    sharingUsers.delete(id);
+                    updateSharingUsersList();
+                    
                     // Hide video when sharing stops
-                    if (id !== socket.id) {
+                    if (id !== socket.id && currentlyViewing === id) {
                         screenVideo.style.display = 'none';
                         videoContainer.querySelector('.placeholder').style.display = 'block';
+                        currentlyViewing = null;
                     }
                 }
             });
@@ -632,9 +742,13 @@
             // FIXED: Handle incoming stream - THIS IS CRITICAL FOR VIEWERS
             pc.ontrack = (event) => {
                 console.log('Received remote stream from:', userId);
-                screenVideo.srcObject = event.streams[0];
-                screenVideo.style.display = 'block';
-                videoContainer.querySelector('.placeholder').style.display = 'none';
+                // Store the stream but only display if we're viewing this user
+                pc.remoteStream = event.streams[0];
+                if (currentlyViewing === userId) {
+                    screenVideo.srcObject = event.streams[0];
+                    screenVideo.style.display = 'block';
+                    videoContainer.querySelector('.placeholder').style.display = 'none';
+                }
             };
 
             pc.onconnectionstatechange = () => {
@@ -734,6 +848,10 @@
                 stopShareBtn.style.display = 'inline-block';
                 isSharing = true;
 
+                // Add ourselves to sharing users
+                sharingUsers.set(socket.id, username);
+                updateSharingUsersList();
+
                 // Notify server
                 socket.emit('start-sharing', { roomId });
 
@@ -771,6 +889,10 @@
             startShareBtn.style.display = 'inline-block';
             stopShareBtn.style.display = 'none';
             isSharing = false;
+            
+            // Remove ourselves from sharing users
+            sharingUsers.delete(socket.id);
+            updateSharingUsersList();
             
             // Close all peer connections
             peerConnections.forEach(pc => pc.close());
@@ -846,6 +968,59 @@
                 sendMessageBtn.click();
             }
         });
+
+        // Update the sharing users list UI
+        function updateSharingUsersList() {
+            if (sharingUsers.size === 0) {
+                sharingUsersPanel.style.display = 'none';
+                return;
+            }
+            
+            sharingUsersPanel.style.display = 'block';
+            sharingUsersList.innerHTML = '';
+            
+            sharingUsers.forEach((username, userId) => {
+                const userItem = document.createElement('div');
+                userItem.className = 'sharing-user-item';
+                if (currentlyViewing === userId) {
+                    userItem.classList.add('active');
+                }
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'sharing-user-name';
+                nameDiv.innerHTML = `
+                    <span>${username}</span>
+                    ${userId === socket.id ? '<span class="sharing-badge">You</span>' : ''}
+                `;
+                
+                userItem.appendChild(nameDiv);
+                
+                // Only add click handler for other users' streams
+                if (userId !== socket.id) {
+                    userItem.addEventListener('click', () => viewUserStream(userId));
+                }
+                
+                sharingUsersList.appendChild(userItem);
+            });
+        }
+        
+        // Switch to viewing a specific user's stream
+        function viewUserStream(userId) {
+            console.log('Switching to view stream from:', userId);
+            currentlyViewing = userId;
+            
+            const pc = peerConnections.get(userId);
+            if (pc && pc.remoteStream) {
+                screenVideo.srcObject = pc.remoteStream;
+                screenVideo.style.display = 'block';
+                videoContainer.querySelector('.placeholder').style.display = 'none';
+            } else {
+                console.log('No stream available yet for user:', userId);
+            }
+            
+            // Update active state in list
+            updateSharingUsersList();
+        }
 
         // Initial system message
         addSystemMessage('Room ID: ' + roomId);
