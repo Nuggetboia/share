@@ -9,8 +9,82 @@ const PORT = process.env.PORT || 3000;
 // Store active rooms and their users with metadata
 const rooms = new Map();
 
+// Store user profiles (username -> {password, profilePicture, theme})
+// In production, use a real database and hash passwords!
+const userProfiles = new Map();
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+// API endpoint to register user
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password required' });
+    }
+    
+    if (userProfiles.has(username)) {
+        return res.status(409).json({ error: 'Username already taken' });
+    }
+    
+    // In production: hash the password with bcrypt!
+    userProfiles.set(username, {
+        password: password, // INSECURE: hash this in production!
+        profilePicture: null,
+        theme: 'light',
+        createdAt: Date.now()
+    });
+    
+    res.json({ success: true, message: 'User registered successfully' });
+});
+
+// API endpoint to login
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password required' });
+    }
+    
+    const user = userProfiles.get(username);
+    if (!user || user.password !== password) {
+        return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    
+    res.json({
+        success: true,
+        profile: {
+            username,
+            profilePicture: user.profilePicture,
+            theme: user.theme
+        }
+    });
+});
+
+// API endpoint to update profile
+app.post('/api/update-profile', (req, res) => {
+    const { username, profilePicture, theme } = req.body;
+    
+    if (!username) {
+        return res.status(400).json({ error: 'Username required' });
+    }
+    
+    const user = userProfiles.get(username);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (profilePicture !== undefined) {
+        user.profilePicture = profilePicture;
+    }
+    if (theme !== undefined) {
+        user.theme = theme;
+    }
+    
+    res.json({ success: true, message: 'Profile updated' });
+});
 
 // Handle root route
 app.get('/', (req, res) => {
