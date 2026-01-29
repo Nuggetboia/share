@@ -669,6 +669,7 @@
                     <button type="submit" class="btn-primary" id="authSubmit">Login</button>
                     <button type="button" class="btn-secondary" id="authToggle">Register</button>
                 </div>
+                <button type="button" class="btn-secondary" id="guestBtn" style="width: 100%; margin-top: 12px;">Continue as Guest</button>
             </form>
         </div>
     </div>
@@ -766,20 +767,48 @@
         const profilePicInput = document.getElementById('profilePicInput');
         const saveProfile = document.getElementById('saveProfile');
         const logoutBtn = document.getElementById('logoutBtn');
+        const guestBtn = document.getElementById('guestBtn');
 
         // Check if user is logged in
         function checkAuth() {
             const savedProfile = localStorage.getItem('userProfile');
             if (savedProfile) {
-                userProfile = JSON.parse(savedProfile);
-                username = userProfile.username;
-                updateProfileUI();
-                initSocket();
+                try {
+                    userProfile = JSON.parse(savedProfile);
+                    username = userProfile.username;
+                    updateProfileUI();
+                    initSocket();
+                } catch (e) {
+                    // Invalid saved profile, show login
+                    localStorage.removeItem('userProfile');
+                    loginModal.classList.add('active');
+                }
             } else {
                 // Show login modal
                 loginModal.classList.add('active');
             }
         }
+
+        // Continue as guest
+        function continueAsGuest() {
+            const guestName = 'Guest' + Math.floor(Math.random() * 10000);
+            userProfile = {
+                username: guestName,
+                profilePicture: null,
+                theme: 'light',
+                isGuest: true
+            };
+            username = guestName;
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            loginModal.classList.remove('active');
+            updateProfileUI();
+            initSocket();
+        }
+
+        // Guest button click
+        guestBtn.addEventListener('click', () => {
+            continueAsGuest();
+        });
 
         // Update profile UI
         function updateProfileUI() {
@@ -793,6 +822,9 @@
                 if (userProfile.profilePicture) {
                     headerProfilePic.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
                     profilePicLarge.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
+                } else {
+                    headerProfilePic.innerHTML = `<span id="headerInitial">${initial}</span>`;
+                    profilePicLarge.innerHTML = `<span id="profileInitial">${initial}</span>`;
                 }
                 
                 // Apply theme
@@ -806,7 +838,12 @@
         // Profile button click
         profileBtn.addEventListener('click', () => {
             if (userProfile) {
-                profileModal.classList.add('active');
+                if (userProfile.isGuest) {
+                    // Guests see login modal to create account
+                    loginModal.classList.add('active');
+                } else {
+                    profileModal.classList.add('active');
+                }
             } else {
                 loginModal.classList.add('active');
             }
@@ -844,15 +881,23 @@
             }
             
             const endpoint = isAuthMode === 'login' ? '/api/login' : '/api/register';
+            authSubmit.disabled = true;
+            authSubmit.textContent = 'Please wait...';
             
             try {
+                console.log('Attempting', isAuthMode, 'for user:', user);
                 const response = await fetch(endpoint, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ username: user, password: pass })
                 });
                 
+                console.log('Response status:', response.status);
                 const data = await response.json();
+                console.log('Response data:', data);
                 
                 if (response.ok) {
                     if (isAuthMode === 'register') {
@@ -860,25 +905,36 @@
                         userProfile = {
                             username: user,
                             profilePicture: null,
-                            theme: 'light'
+                            theme: 'light',
+                            isGuest: false
                         };
                     } else {
                         userProfile = data.profile;
+                        userProfile.isGuest = false;
                     }
                     
                     username = userProfile.username;
                     localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     loginModal.classList.remove('active');
                     updateProfileUI();
-                    initSocket();
+                    
+                    // Initialize socket if not already connected
+                    if (!socket || !socket.connected) {
+                        initSocket();
+                    }
+                    
                     authForm.reset();
                 } else {
-                    authError.textContent = data.error;
+                    authError.textContent = data.error || 'An error occurred';
                     authError.style.display = 'block';
                 }
             } catch (error) {
-                authError.textContent = 'Connection error. Please try again.';
+                console.error('Fetch error:', error);
+                authError.textContent = 'Server connection error. Make sure the server is running.';
                 authError.style.display = 'block';
+            } finally {
+                authSubmit.disabled = false;
+                authSubmit.textContent = isAuthMode === 'login' ? 'Login' : 'Register';
             }
         });
 
@@ -899,6 +955,11 @@
 
         // Save profile
         saveProfile.addEventListener('click', async () => {
+            if (userProfile.isGuest) {
+                alert('Guest users cannot save profiles. Please create an account.');
+                return;
+            }
+            
             try {
                 const response = await fetch('/api/update-profile', {
                     method: 'POST',
@@ -914,9 +975,12 @@
                     userProfile.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
                     localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     alert('Profile updated!');
+                } else {
+                    alert('Error updating profile');
                 }
             } catch (error) {
-                alert('Error updating profile');
+                console.error('Profile update error:', error);
+                alert('Error updating profile. Make sure the server is running.');
             }
         });
 
