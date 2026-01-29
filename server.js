@@ -13,50 +13,56 @@ const rooms = new Map();
 // In production, use a real database and hash passwords!
 const userProfiles = new Map();
 
-// Serve static files
+// Middleware
+app.use(express.json({ limit: '10mb' })); // Increased limit for profile pictures
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
 
 // API endpoint to register user
 app.post('/api/register', (req, res) => {
+    console.log('Register request:', req.body);
     const { username, password } = req.body;
     
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password required' });
     }
     
-    if (userProfiles.has(username)) {
+    if (userProfiles.has(username.toLowerCase())) {
         return res.status(409).json({ error: 'Username already taken' });
     }
     
     // In production: hash the password with bcrypt!
-    userProfiles.set(username, {
+    userProfiles.set(username.toLowerCase(), {
+        username: username, // Store original case
         password: password, // INSECURE: hash this in production!
         profilePicture: null,
         theme: 'light',
         createdAt: Date.now()
     });
     
+    console.log('User registered:', username);
     res.json({ success: true, message: 'User registered successfully' });
 });
 
 // API endpoint to login
 app.post('/api/login', (req, res) => {
+    console.log('Login request:', req.body);
     const { username, password } = req.body;
     
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password required' });
     }
     
-    const user = userProfiles.get(username);
+    const user = userProfiles.get(username.toLowerCase());
     if (!user || user.password !== password) {
         return res.status(401).json({ error: 'Invalid username or password' });
     }
     
+    console.log('User logged in:', username);
     res.json({
         success: true,
         profile: {
-            username,
+            username: user.username,
             profilePicture: user.profilePicture,
             theme: user.theme
         }
@@ -65,13 +71,14 @@ app.post('/api/login', (req, res) => {
 
 // API endpoint to update profile
 app.post('/api/update-profile', (req, res) => {
+    console.log('Update profile request');
     const { username, profilePicture, theme } = req.body;
     
     if (!username) {
         return res.status(400).json({ error: 'Username required' });
     }
     
-    const user = userProfiles.get(username);
+    const user = userProfiles.get(username.toLowerCase());
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
     }
@@ -83,6 +90,7 @@ app.post('/api/update-profile', (req, res) => {
         user.theme = theme;
     }
     
+    console.log('Profile updated:', username);
     res.json({ success: true, message: 'Profile updated' });
 });
 
