@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareView - Screen Sharing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f7;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-theme {
+            background: #1c1c1e;
+        }
+
+        body.dark-theme .header {
+            background: #2c2c2e;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .logo {
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .btn-secondary {
+            background: #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .btn-secondary:hover {
+            background: #48484a;
+        }
+
+        body.dark-theme .btn-icon {
+            background: #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .btn-icon:hover {
+            background: #48484a;
+        }
+
+        body.dark-theme .placeholder h2 {
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .placeholder p {
+            color: #98989d;
+        }
+
+        body.dark-theme .chat-panel {
+            background: #2c2c2e;
+        }
+
+        body.dark-theme .chat-header {
+            border-bottom-color: #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .message-received {
+            background: #3a3a3c;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .chat-input-container {
+            border-top-color: #3a3a3c;
+        }
+
+        body.dark-theme .chat-input {
+            background: #3a3a3c;
+            border-color: #48484a;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .modal {
+            background: rgba(0,0,0,0.7);
+        }
+
+        body.dark-theme .modal-content {
+            background: #2c2c2e;
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .modal-content p {
+            color: #98989d;
+        }
+
+        body.dark-theme .link-input {
+            background: #3a3a3c;
+            border-color: #48484a;
+            color: #f5f5f7;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: margin-right 0.3s ease;
+        }
+
+        .main-content.chat-open {
+            margin-right: 320px;
+        }
+
+        .header {
+            background: white;
+            padding: 16px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #0071e3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0077ed;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8ed;
+        }
+
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff453a;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .btn-icon:hover {
+            background: #e8e8ed;
+        }
+
+        .video-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+        }
+
+        video {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background: #000;
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #86868b;
+        }
+
+        .placeholder h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        .placeholder p {
+            font-size: 16px;
+        }
+
+        .chat-panel {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-panel.open {
+            right: 0;
+        }
+
+        .chat-header {
+            padding: 16px;
+            border-bottom: 1px solid #e5e5e7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            padding: 10px 12px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message-sent {
+            background: #0071e3;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message-received {
+            background: #f5f5f7;
+            color: #1d1d1f;
+            align-self: flex-start;
+        }
+
+        .message-sender {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-container {
+            padding: 16px;
+            border-top: 1px solid #e5e5e7;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #0071e3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 16px;
+            font-size: 22px;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #86868b;
+        }
+
+        .link-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .link-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #f5f5f7;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-live {
+            background: #34c759;
+        }
+
+        .status-offline {
+            background: #ff3b30;
+        }
+
+        @media (max-width: 768px) {
+            .chat-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .main-content.chat-open {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content" id="mainContent">
+            <div class="header">
+                <div class="logo">ShareView</div>
+                <div class="controls">
+                    <button class="btn-icon" id="themeToggle" title="Toggle Theme">
+                        <svg id="themeIcon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="chatToggle" title="Toggle Chat">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2h-3l-3 3-3-3H4a2 2 0 01-2-2V5z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-secondary" id="shareLink">Share Link</button>
+                    <button class="btn-primary" id="startShare">Start Sharing</button>
+                    <button class="btn-danger" id="stopShare" style="display: none;">Stop Sharing</button>
+                </div>
+            </div>
+
+            <div class="video-container" id="videoContainer">
+                <div class="placeholder">
+                    <h2>Ready to Share</h2>
+                    <p>Click "Start Sharing" to begin screen sharing</p>
+                </div>
+                <video id="screenVideo" autoplay playsinline style="display: none;"></video>
+            </div>
+        </div>
+
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <h3>Chat</h3>
+                <button class="btn-icon" id="closeChat">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
+                <button class="btn-primary" id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <h2>Share this link</h2>
+            <p>Anyone with this link can join your screen sharing session</p>
+            <div class="link-box">
+                <input type="text" class="link-input" id="shareableLink" readonly>
+                <button class="btn-primary" id="copyLink">Copy</button>
+            </div>
+            <button class="btn-secondary" style="width: 100%;" onclick="document.getElementById('linkModal').classList.remove('active')">Close</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Configuration
+        const ICE_SERVERS = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ]
+        };
+
+        // App State
+        let isSharing = false;
+        let isChatOpen = false;
+        let screenStream = null;
+        let roomId = null;
+        let username = 'User' + Math.floor(Math.random() * 1000);
+        let socket = null;
+        let peerConnections = new Map(); // Map of userId -> RTCPeerConnection
+
+        // Initialize room ID from URL or create new one
+        const urlParams = new URLSearchParams(window.location.search);
+        roomId = urlParams.get('room') || generateRoomId();
+
+        // DOM Elements
+        const mainContent = document.getElementById('mainContent');
+        const chatPanel = document.getElementById('chatPanel');
+        const chatToggle = document.getElementById('chatToggle');
+        const closeChat = document.getElementById('closeChat');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const startShareBtn = document.getElementById('startShare');
+        const stopShareBtn = document.getElementById('stopShare');
+        const shareLinkBtn = document.getElementById('shareLink');
+        const screenVideo = document.getElementById('screenVideo');
+        const videoContainer = document.getElementById('videoContainer');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const linkModal = document.getElementById('linkModal');
+        const shareableLink = document.getElementById('shareableLink');
+        const copyLinkBtn = document.getElementById('copyLink');
+
+        // Initialize Socket.IO connection
+        function initSocket() {
+            socket = io();
+
+            socket.on('connect', () => {
+                console.log('Connected to server');
+                socket.emit('join-room', { roomId, username });
+            });
+
+            socket.on('existing-users', (users) => {
+                console.log('Existing users:', users);
+                users.forEach(user => {
+                    addSystemMessage(`${user.username} is in the room`);
+                });
+            });
+
+            socket.on('user-joined', (user) => {
+                console.log('User joined:', user);
+                addSystemMessage(`${user.username} joined the room`);
+            });
+
+            socket.on('user-left', (user) => {
+                console.log('User left:', user);
+                addSystemMessage(`${user.username} left the room`);
+                
+                // Clean up peer connection
+                if (peerConnections.has(user.id)) {
+                    peerConnections.get(user.id).close();
+                    peerConnections.delete(user.id);
+                }
+            });
+
+            socket.on('chat-message', ({ id, username, message, timestamp }) => {
+                const isSent = id === socket.id;
+                addMessage(message, username, isSent);
+            });
+
+            socket.on('user-sharing', ({ id, username, isSharing }) => {
+                if (isSharing) {
+                    addSystemMessage(`${username} started sharing their screen`);
+                    if (id !== socket.id) {
+                        // Request WebRTC connection to view their screen
+                        createPeerConnection(id, true);
+                    }
+                } else {
+                    addSystemMessage(`${username} stopped sharing`);
+                }
+            });
+
+            socket.on('room-info', ({ roomId, userCount }) => {
+                console.log(`Room ${roomId} has ${userCount} user(s)`);
+            });
+
+            // WebRTC signaling handlers
+            socket.on('webrtc-offer', async ({ fromId, offer }) => {
+                console.log('Received WebRTC offer from:', fromId);
+                const pc = createPeerConnection(fromId, false);
+                await pc.setRemoteDescription(new RTCSessionDescription(offer));
+                
+                // Add our screen stream if we're sharing
+                if (screenStream) {
+                    screenStream.getTracks().forEach(track => {
+                        pc.addTrack(track, screenStream);
+                    });
+                }
+                
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                socket.emit('webrtc-answer', {
+                    roomId,
+                    targetId: fromId,
+                    answer
+                });
+            });
+
+            socket.on('webrtc-answer', async ({ fromId, answer }) => {
+                console.log('Received WebRTC answer from:', fromId);
+                const pc = peerConnections.get(fromId);
+                if (pc) {
+                    await pc.setRemoteDescription(new RTCSessionDescription(answer));
+                }
+            });
+
+            socket.on('webrtc-ice-candidate', async ({ fromId, candidate }) => {
+                const pc = peerConnections.get(fromId);
+                if (pc && candidate) {
+                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                }
+            });
+
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+                addSystemMessage('Disconnected from server');
+            });
+        }
+
+        // Create WebRTC peer connection
+        function createPeerConnection(userId, isInitiator) {
+            if (peerConnections.has(userId)) {
+                return peerConnections.get(userId);
+            }
+
+            const pc = new RTCPeerConnection(ICE_SERVERS);
+            peerConnections.set(userId, pc);
+
+            // Handle ICE candidates
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    socket.emit('webrtc-ice-candidate', {
+                        roomId,
+                        targetId: userId,
+                        candidate: event.candidate
+                    });
+                }
+            };
+
+            // Handle incoming stream
+            pc.ontrack = (event) => {
+                console.log('Received remote stream from:', userId);
+                screenVideo.srcObject = event.streams[0];
+                screenVideo.style.display = 'block';
+                videoContainer.querySelector('.placeholder').style.display = 'none';
+            };
+
+            pc.onconnectionstatechange = () => {
+                console.log('Connection state:', pc.connectionState);
+                if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+                    peerConnections.delete(userId);
+                }
+            };
+
+            // If we're the initiator, create and send offer
+            if (isInitiator) {
+                pc.createOffer()
+                    .then(offer => pc.setLocalDescription(offer))
+                    .then(() => {
+                        socket.emit('webrtc-offer', {
+                            roomId,
+                            targetId: userId,
+                            offer: pc.localDescription
+                        });
+                    });
+            }
+
+            return pc;
+        }
+
+        // Theme Toggle
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            updateThemeIcon(true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        });
+
+        function updateThemeIcon(isDark) {
+            if (isDark) {
+                themeIcon.innerHTML = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>';
+            } else {
+                themeIcon.innerHTML = '<path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>';
+            }
+        }
+
+        // Generate Room ID
+        function generateRoomId() {
+            return Math.random().toString(36).substring(2, 10);
+        }
+
+        // Update URL with room ID
+        function updateURL() {
+            const newURL = window.location.origin + window.location.pathname + '?room=' + roomId;
+            window.history.replaceState({}, '', newURL);
+        }
+
+        updateURL();
+
+        // Chat Toggle
+        chatToggle.addEventListener('click', () => {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatPanel.classList.add('open');
+                mainContent.classList.add('chat-open');
+            } else {
+                chatPanel.classList.remove('open');
+                mainContent.classList.remove('chat-open');
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            isChatOpen = false;
+            chatPanel.classList.remove('open');
+            mainContent.classList.remove('chat-open');
+        });
+
+        // Screen Sharing
+        startShareBtn.addEventListener('click', async () => {
+            try {
+                screenStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { mediaSource: 'screen' },
+                    audio: false
+                });
+
+                screenVideo.srcObject = screenStream;
+                screenVideo.style.display = 'block';
+                videoContainer.querySelector('.placeholder').style.display = 'none';
+                
+                startShareBtn.style.display = 'none';
+                stopShareBtn.style.display = 'inline-block';
+                isSharing = true;
+
+                // Notify server
+                socket.emit('start-sharing', { roomId });
+
+                // Add stream to all existing peer connections
+                peerConnections.forEach((pc, userId) => {
+                    screenStream.getTracks().forEach(track => {
+                        pc.addTrack(track, screenStream);
+                    });
+                });
+
+                // Handle stream end
+                screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    stopSharing();
+                });
+
+                addSystemMessage('Screen sharing started');
+            } catch (err) {
+                console.error('Error starting screen share:', err);
+                addSystemMessage('Failed to start screen sharing');
+            }
+        });
+
+        stopShareBtn.addEventListener('click', () => {
+            stopSharing();
+        });
+
+        function stopSharing() {
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => track.stop());
+                screenStream = null;
+            }
+            screenVideo.srcObject = null;
+            screenVideo.style.display = 'none';
+            videoContainer.querySelector('.placeholder').style.display = 'block';
+            startShareBtn.style.display = 'inline-block';
+            stopShareBtn.style.display = 'none';
+            isSharing = false;
+            
+            // Notify server
+            socket.emit('stop-sharing', { roomId });
+            
+            addSystemMessage('Screen sharing stopped');
+        }
+
+        // Share Link
+        shareLinkBtn.addEventListener('click', () => {
+            const link = window.location.origin + window.location.pathname + '?room=' + roomId;
+            shareableLink.value = link;
+            linkModal.classList.add('active');
+        });
+
+        copyLinkBtn.addEventListener('click', () => {
+            shareableLink.select();
+            document.execCommand('copy');
+            copyLinkBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyLinkBtn.textContent = 'Copy';
+            }, 2000);
+        });
+
+        // Chat functionality
+        function addMessage(text, sender, isSent = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + (isSent ? 'message-sent' : 'message-received');
+            
+            if (!isSent) {
+                const senderDiv = document.createElement('div');
+                senderDiv.className = 'message-sender';
+                senderDiv.textContent = sender;
+                messageDiv.appendChild(senderDiv);
+            }
+            
+            const textDiv = document.createElement('div');
+            textDiv.textContent = text;
+            messageDiv.appendChild(textDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.textAlign = 'center';
+            messageDiv.style.fontSize = '12px';
+            messageDiv.style.color = '#86868b';
+            messageDiv.style.margin = '8px 0';
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        sendMessageBtn.addEventListener('click', () => {
+            const text = chatInput.value.trim();
+            if (text && socket) {
+                socket.emit('chat-message', {
+                    roomId,
+                    message: text,
+                    username
+                });
+                chatInput.value = '';
+            }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessageBtn.click();
+            }
+        });
+
+        // Initial system message
+        addSystemMessage('Room ID: ' + roomId);
+        addSystemMessage('Connecting to server...');
+
+        // Initialize connection
+        initSocket();
+    </script>
+</body>
+</html>
