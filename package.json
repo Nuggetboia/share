@@ -1,7 +1,7 @@
 {
-  "name": "shareview-app",
+  "name": "shareview-screen-sharing",
   "version": "1.0.0",
-  "description": "Screen sharing web application with real-time chat",
+  "description": "Real-time screen sharing application with WebRTC",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -20,6 +20,9 @@
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
