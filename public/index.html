@@ -11,94 +11,55 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f7;
-            height: 100vh;
-            overflow: hidden;
-            transition: background-color 0.3s ease;
+        :root {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --border-color: #e5e5e7;
+            --accent-color: #0071e3;
+            --accent-hover: #0077ed;
+            --danger-color: #ff3b30;
+            --danger-hover: #ff453a;
+            --success-color: #34c759;
+            --shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
 
         body.dark-theme {
-            background: #1c1c1e;
+            --bg-primary: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-tertiary: #2c2c2e;
+            --text-primary: #f5f5f7;
+            --text-secondary: #98989d;
+            --border-color: #3a3a3c;
+            --accent-color: #0a84ff;
+            --accent-hover: #409cff;
+            --shadow: 0 4px 16px rgba(0,0,0,0.4);
         }
 
-        body.dark-theme .header {
-            background: #2c2c2e;
-            color: #f5f5f7;
+        body.pink-theme {
+            --bg-primary: #fff0f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #ffe4ec;
+            --text-primary: #2d1b2e;
+            --text-secondary: #8e7c8f;
+            --border-color: #f5d7e3;
+            --accent-color: #ff6b9d;
+            --accent-hover: #ff85ad;
+            --danger-color: #e91e63;
+            --danger-hover: #f06292;
+            --success-color: #ff69b4;
+            --shadow: 0 4px 16px rgba(255,107,157,0.15);
         }
 
-        body.dark-theme .logo {
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .btn-secondary {
-            background: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .btn-secondary:hover {
-            background: #48484a;
-        }
-
-        body.dark-theme .btn-icon {
-            background: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .btn-icon:hover {
-            background: #48484a;
-        }
-
-        body.dark-theme .placeholder h2 {
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .placeholder p {
-            color: #98989d;
-        }
-
-        body.dark-theme .chat-panel {
-            background: #2c2c2e;
-        }
-
-        body.dark-theme .chat-header {
-            border-bottom-color: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .message-received {
-            background: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .chat-input-container {
-            border-top-color: #3a3a3c;
-        }
-
-        body.dark-theme .chat-input {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .modal {
-            background: rgba(0,0,0,0.7);
-        }
-
-        body.dark-theme .modal-content {
-            background: #2c2c2e;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .modal-content p {
-            color: #98989d;
-        }
-
-        body.dark-theme .link-input {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            height: 100vh;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
         }
 
         .container {
@@ -118,21 +79,27 @@
         }
 
         .header {
-            background: white;
+            background: var(--bg-secondary);
             padding: 16px 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
             font-size: 20px;
             font-weight: 600;
-            color: #1d1d1f;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 24px;
         }
 
         .controls {
@@ -144,58 +111,108 @@
         button {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
 
         .btn-primary {
-            background: #0071e3;
+            background: var(--accent-color);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #0077ed;
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-primary:disabled {
-            background: #ccc;
+            background: var(--text-secondary);
             cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
-            background: #f5f5f7;
-            color: #1d1d1f;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background: #e8e8ed;
+            background: var(--border-color);
+            transform: translateY(-1px);
         }
 
         .btn-danger {
-            background: #ff3b30;
+            background: var(--danger-color);
             color: white;
         }
 
         .btn-danger:hover {
-            background: #ff453a;
+            background: var(--danger-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255,59,48,0.3);
         }
 
         .btn-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #f5f5f7;
+            background: var(--bg-tertiary);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0;
+            border: 1px solid var(--border-color);
+            position: relative;
         }
 
         .btn-icon:hover {
-            background: #e8e8ed;
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+
+        .theme-selector {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: var(--shadow);
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 1000;
+        }
+
+        .theme-selector.active {
+            display: flex;
+        }
+
+        .theme-option {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .theme-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .theme-option.active {
+            background: var(--accent-color);
+            color: white;
         }
 
         .video-container {
@@ -210,24 +227,27 @@
         video {
             max-width: 100%;
             max-height: 100%;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             background: #000;
         }
 
         .placeholder {
             text-align: center;
-            color: #86868b;
+            color: var(--text-secondary);
         }
 
         .placeholder h2 {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 12px;
-            color: #1d1d1f;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .placeholder p {
             font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .chat-panel {
@@ -236,11 +256,12 @@
             top: 0;
             width: 320px;
             height: 100vh;
-            background: white;
-            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            background: var(--bg-secondary);
+            box-shadow: -2px 0 16px rgba(0,0,0,0.1);
             transition: right 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-left: 1px solid var(--border-color);
         }
 
         .chat-panel.open {
@@ -248,66 +269,113 @@
         }
 
         .chat-header {
-            padding: 16px;
-            border-bottom: 1px solid #e5e5e7;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .chat-header h3 {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
+            color: var(--text-primary);
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
         }
 
         .message {
-            margin-bottom: 12px;
             max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            word-wrap: break-word;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message-sent {
-            margin-left: auto;
-            background: #0071e3;
+            background: var(--accent-color);
             color: white;
-            padding: 10px 14px;
-            border-radius: 16px 16px 4px 16px;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
         }
 
         .message-received {
-            margin-right: auto;
-            background: #f5f5f7;
-            color: #1d1d1f;
-            padding: 10px 14px;
-            border-radius: 16px 16px 16px 4px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
         }
 
         .message-sender {
             font-size: 11px;
-            font-weight: 600;
+            opacity: 0.8;
             margin-bottom: 4px;
-            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        .system-message {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin: 8px 0;
+            font-style: italic;
         }
 
         .chat-input-container {
-            padding: 16px;
-            border-top: 1px solid #e5e5e7;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
             display: flex;
             gap: 8px;
         }
 
         .chat-input {
             flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #d2d2d7;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             font-size: 14px;
+            font-family: inherit;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
             outline: none;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
         }
 
         .modal {
@@ -315,12 +383,19 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal.active {
@@ -328,27 +403,40 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 32px;
-            border-radius: 16px;
-            max-width: 400px;
+            background: var(--bg-secondary);
+            padding: 36px;
+            border-radius: 20px;
+            max-width: 450px;
             width: 90%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-content h2 {
-            margin-bottom: 8px;
-            font-size: 22px;
+            margin-bottom: 12px;
+            font-size: 24px;
+            color: var(--text-primary);
         }
 
         .modal-content p {
-            margin-bottom: 20px;
-            color: #86868b;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .input-group label {
@@ -356,66 +444,81 @@
             margin-bottom: 8px;
             font-weight: 500;
             font-size: 14px;
+            color: var(--text-primary);
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             font-size: 14px;
+            font-family: inherit;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
             outline: none;
+            transition: all 0.2s;
         }
 
         .input-group input:focus {
-            border-color: #0071e3;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
         }
 
         .link-input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             font-size: 14px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         .sharing-users-panel {
             position: fixed;
-            left: 20px;
-            top: 80px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            padding: 16px;
-            min-width: 200px;
+            left: 24px;
+            top: 90px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            min-width: 220px;
             max-width: 300px;
             display: none;
+            border: 1px solid var(--border-color);
         }
 
         .sharing-users-panel h4 {
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 12px;
-            color: #1d1d1f;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .sharing-user-item {
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin-bottom: 6px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
             cursor: pointer;
-            transition: background 0.2s;
-            background: #f5f5f7;
+            transition: all 0.2s;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
         }
 
         .sharing-user-item:hover {
-            background: #e8e8ed;
+            background: var(--accent-color);
+            color: white;
+            transform: translateX(4px);
         }
 
         .sharing-user-item.active {
-            background: #0071e3;
+            background: var(--accent-color);
             color: white;
+            border-color: var(--accent-color);
         }
 
         .sharing-user-name {
@@ -423,13 +526,16 @@
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
+            font-weight: 500;
         }
 
         .sharing-badge {
-            font-size: 11px;
-            background: rgba(0,0,0,0.1);
-            padding: 2px 8px;
+            font-size: 10px;
+            background: var(--success-color);
+            color: white;
+            padding: 3px 8px;
             border-radius: 10px;
+            font-weight: 600;
         }
 
         .connection-status {
@@ -437,14 +543,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            background: var(--bg-secondary);
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             text-align: center;
-            min-width: 300px;
+            min-width: 320px;
             display: none;
-            z-index: 100;
+            z-index: 1500;
+            border: 1px solid var(--border-color);
         }
 
         .connection-status.active {
@@ -452,45 +559,59 @@
         }
 
         .connection-message {
-            margin-bottom: 16px;
-            font-size: 14px;
-            color: #1d1d1f;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
         .progress-bar {
             width: 100%;
-            height: 4px;
-            background: #e5e5e7;
-            border-radius: 2px;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .progress-fill {
             height: 100%;
-            background: #0071e3;
+            background: linear-gradient(90deg, var(--accent-color), var(--success-color));
             width: 0%;
             transition: width 0.3s ease;
+            border-radius: 3px;
         }
 
         .mode-indicator {
             position: fixed;
-            top: 80px;
+            top: 90px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,113,227,0.95);
+            background: var(--accent-color);
             color: white;
             padding: 12px 24px;
             border-radius: 24px;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow);
             display: none;
-            z-index: 50;
+            z-index: 100;
         }
 
         .mode-indicator.active {
             display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -10px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
         }
 
         .canvas-container {
@@ -517,13 +638,14 @@
 
         .drawing-tools {
             position: absolute;
-            top: 100px;
-            right: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            padding: 12px;
+            top: 110px;
+            right: 24px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 16px;
             display: none;
+            border: 1px solid var(--border-color);
         }
 
         .drawing-tools.active {
@@ -531,7 +653,7 @@
         }
 
         .tool-group {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .tool-group:last-child {
@@ -540,56 +662,114 @@
 
         .tool-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            margin-bottom: 6px;
-            color: #1d1d1f;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .tool-buttons {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .tool-btn {
-            width: 36px;
-            height: 36px;
-            border: 2px solid #e5e5e7;
-            border-radius: 8px;
-            background: white;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-tertiary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            font-size: 18px;
         }
 
         .tool-btn.active {
-            border-color: #0071e3;
-            background: #e8f4ff;
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: white;
         }
 
         .tool-btn:hover {
-            border-color: #0071e3;
+            border-color: var(--accent-color);
+            transform: scale(1.05);
         }
 
         .color-option {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 0 1px #e5e5e7;
+            border: 2px solid var(--bg-secondary);
+            box-shadow: 0 0 0 1px var(--border-color);
             cursor: pointer;
             transition: transform 0.2s;
         }
 
         .color-option.active {
             transform: scale(1.2);
-            box-shadow: 0 0 0 2px #0071e3;
+            box-shadow: 0 0 0 2px var(--accent-color);
         }
 
         .size-slider {
             width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-tertiary);
+            outline: none;
+        }
+
+        .size-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .size-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .chat-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .main-content.chat-open {
+                margin-right: 0;
+            }
+
+            .controls {
+                gap: 6px;
+            }
+
+            .controls button:not(.btn-icon) span {
+                display: none;
+            }
+
+            .sharing-users-panel {
+                left: 12px;
+                top: 80px;
+            }
+
+            .drawing-tools {
+                right: 12px;
+                top: 80px;
+            }
         }
     </style>
 </head>
@@ -598,35 +778,40 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <div class="logo">
-                    <span>📺</span>
+                    <span class="logo-icon">📺</span>
                     <span>ShareView</span>
                 </div>
                 <div class="controls">
                     <button id="drawingModeBtn" class="btn-secondary" style="display: none;">
-                        ✏️ Drawing Mode
+                        <span>✏️ Drawing Mode</span>
                     </button>
                     <button id="startShareBtn" class="btn-primary">
-                        Share Screen
+                        <span>Share Screen</span>
                     </button>
                     <button id="stopShareBtn" class="btn-danger" style="display: none;">
-                        Stop Sharing
+                        <span>Stop Sharing</span>
                     </button>
                     <button id="shareLinkBtn" class="btn-secondary">
-                        📎 Share Link
+                        <span>📎 Share Link</span>
                     </button>
-                    <button id="chatToggleBtn" class="btn-icon">
+                    <button id="chatToggleBtn" class="btn-icon" title="Toggle Chat">
                         💬
                     </button>
-                    <button id="themeToggleBtn" class="btn-icon">
-                        🌙
+                    <button id="themeToggleBtn" class="btn-icon" title="Change Theme">
+                        🎨
+                        <div class="theme-selector" id="themeSelector">
+                            <div class="theme-option" data-theme="light">☀️ Light</div>
+                            <div class="theme-option" data-theme="dark">🌙 Dark</div>
+                            <div class="theme-option" data-theme="pink">💖 Pink</div>
+                        </div>
                     </button>
                 </div>
             </div>
 
             <div class="video-container" id="videoContainer">
                 <div class="placeholder">
-                    <h2>Welcome to ShareView</h2>
-                    <p>Click "Share Screen" to start sharing or wait for others to share</p>
+                    <h2>✨ Welcome to ShareView</h2>
+                    <p>Click "Share Screen" to start sharing or wait for others to share their screen</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
                 
@@ -652,7 +837,7 @@
     </div>
 
     <div class="sharing-users-panel" id="sharingUsersPanel">
-        <h4>Available Streams</h4>
+        <h4>🔴 Live Now</h4>
         <div id="sharingUsersList"></div>
     </div>
 
@@ -664,7 +849,7 @@
         <button id="cancelConnection" class="btn-secondary">Cancel</button>
     </div>
 
-    <div class="mode-indicator" id="modeIndicator"></div>
+    <div class="mode-indicator" id="modeIndicator">✏️ Drawing Mode Active</div>
 
     <div class="drawing-tools" id="drawingTools">
         <div class="tool-group">
@@ -695,7 +880,7 @@
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
-            <h2>Join Room</h2>
+            <h2>👋 Join Room</h2>
             <p>Enter your name to start</p>
             <div class="input-group">
                 <label>Your Name</label>
@@ -708,7 +893,7 @@
     <!-- Share Link Modal -->
     <div class="modal" id="linkModal">
         <div class="modal-content">
-            <h2>Share This Link</h2>
+            <h2>📎 Share This Link</h2>
             <p>Send this link to others to join your room</p>
             <input type="text" class="link-input" id="shareableLink" readonly>
             <div style="display: flex; gap: 8px;">
@@ -750,6 +935,7 @@
         const videoContainer = document.getElementById('videoContainer');
         const screenVideo = document.getElementById('screenVideo');
         const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeSelector = document.getElementById('themeSelector');
         const sharingUsersPanel = document.getElementById('sharingUsersPanel');
         const sharingUsersList = document.getElementById('sharingUsersList');
         const connectionStatus = document.getElementById('connectionStatus');
@@ -793,15 +979,42 @@
             ]
         };
 
+        // Theme management
+        const savedTheme = localStorage.getItem('shareview-theme') || 'light';
+        document.body.className = savedTheme === 'light' ? '' : savedTheme + '-theme';
+        updateThemeSelector();
+
+        themeToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeSelector.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!themeToggleBtn.contains(e.target) && !themeSelector.contains(e.target)) {
+                themeSelector.classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const theme = option.dataset.theme;
+                document.body.className = theme === 'light' ? '' : theme + '-theme';
+                localStorage.setItem('shareview-theme', theme);
+                updateThemeSelector();
+                themeSelector.classList.remove('active');
+            });
+        });
+
+        function updateThemeSelector() {
+            const currentTheme = localStorage.getItem('shareview-theme') || 'light';
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.theme === currentTheme);
+            });
+        }
+
         // Close modals
         closeLinkModalBtn.addEventListener('click', () => {
             linkModal.classList.remove('active');
-        });
-
-        // Theme toggle
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            themeToggleBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
         });
 
         // Chat toggle
@@ -822,10 +1035,9 @@
             if (isDrawingMode) {
                 canvasContainer.classList.add('active');
                 drawingTools.classList.add('active');
-                drawingModeBtn.textContent = '❌ Exit Drawing';
+                drawingModeBtn.innerHTML = '<span>❌ Exit Drawing</span>';
                 drawingModeBtn.classList.remove('btn-secondary');
                 drawingModeBtn.classList.add('btn-danger');
-                modeIndicator.textContent = '✏️ Drawing Mode Active';
                 modeIndicator.classList.add('active');
                 
                 socket.emit('drawing-mode-start', { roomId });
@@ -833,7 +1045,7 @@
             } else {
                 canvasContainer.classList.remove('active');
                 drawingTools.classList.remove('active');
-                drawingModeBtn.textContent = '✏️ Drawing Mode';
+                drawingModeBtn.innerHTML = '<span>✏️ Drawing Mode</span>';
                 drawingModeBtn.classList.remove('btn-danger');
                 drawingModeBtn.classList.add('btn-secondary');
                 modeIndicator.classList.remove('active');
@@ -1326,10 +1538,7 @@
 
         function addSystemMessage(text) {
             const messageDiv = document.createElement('div');
-            messageDiv.style.textAlign = 'center';
-            messageDiv.style.fontSize = '12px';
-            messageDiv.style.color = '#86868b';
-            messageDiv.style.margin = '8px 0';
+            messageDiv.className = 'system-message';
             messageDiv.textContent = text;
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -1387,13 +1596,13 @@
         }
 
         function updateConnectionProgress(percent, message) {
-            connectionStatus.style.display = 'block';
+            connectionStatus.classList.add('active');
             connectionMessage.textContent = message;
             progressFill.style.width = percent + '%';
         }
 
         function hideConnectionStatus() {
-            connectionStatus.style.display = 'none';
+            connectionStatus.classList.remove('active');
             if (connectionTimeout) {
                 clearTimeout(connectionTimeout);
                 connectionTimeout = null;
