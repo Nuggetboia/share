@@ -90,16 +90,13 @@ io.on('connection', (socket) => {
         });
     });
 
-    // Handle chat messages
-    socket.on('chat-message', ({ roomId, message, username }) => {
-        console.log(`Chat message in ${roomId} from ${username}: ${message}`);
-        
-        // Broadcast message to all users in the room including sender
-        io.to(roomId).emit('chat-message', {
-            id: socket.id,
-            username,
-            message,
-            timestamp: Date.now()
+    // Handle stream request from viewers
+    socket.on('request-stream', (data) => {
+        const { targetId } = data;
+        console.log(`User ${socket.id} requesting stream from ${targetId}`);
+        // Notify the target that someone wants their stream
+        io.to(targetId).emit('stream-requested', {
+            fromId: socket.id
         });
     });
 
@@ -110,6 +107,8 @@ io.on('connection', (socket) => {
             const user = room.get(socket.id);
             user.isSharing = true;
             
+            console.log(`User ${socket.id} started sharing in room ${roomId}`);
+            
             // Notify all users in the room
             io.to(roomId).emit('user-sharing', {
                 id: socket.id,
@@ -118,15 +117,18 @@ io.on('connection', (socket) => {
             });
         }
     });
-
+    
     // Handle screen sharing stop
-    socket.on('stop-sharing', ({ roomId }) => {
-        const room = rooms.get(roomId);
-        if (room && room.has(socket.id)) {
-            const user = room.get(socket.id);
+    socket.on('stop-sharing', (data) => {
+        const { roomId } = data;
+        console.log(`User ${socket.id} stopped sharing in room ${roomId}`);
+        
+        // Update user's sharing status
+        if (rooms.has(roomId) && rooms.get(roomId).has(socket.id)) {
+            const user = rooms.get(roomId).get(socket.id);
             user.isSharing = false;
             
-            // Notify all users in the room
+            // Notify all users in room
             io.to(roomId).emit('user-sharing', {
                 id: socket.id,
                 username: user.username,
@@ -135,57 +137,42 @@ io.on('connection', (socket) => {
         }
     });
 
-    // WebRTC signaling
-    socket.on('webrtc-offer', ({ roomId, targetId, offer }) => {
-        console.log(`WebRTC offer from ${socket.id} to ${targetId}`);
+    // WebRTC signaling - updated to match frontend
+    socket.on('webrtc-offer', (data) => {
+        const { targetId, offer } = data;
+        console.log(`Sending offer from ${socket.id} to ${targetId}`);
         io.to(targetId).emit('webrtc-offer', {
             fromId: socket.id,
-            offer
+            offer: offer
         });
     });
 
-    socket.on('webrtc-answer', ({ roomId, targetId, answer }) => {
-        console.log(`WebRTC answer from ${socket.id} to ${targetId}`);
+    socket.on('webrtc-answer', (data) => {
+        const { targetId, answer } = data;
+        console.log(`Sending answer from ${socket.id} to ${targetId}`);
         io.to(targetId).emit('webrtc-answer', {
             fromId: socket.id,
-            answer
+            answer: answer
         });
     });
 
-    socket.on('webrtc-ice-candidate', ({ roomId, targetId, candidate }) => {
+    socket.on('webrtc-ice-candidate', (data) => {
+        const { targetId, candidate } = data;
+        console.log(`Sending ICE candidate from ${socket.id} to ${targetId}`);
         io.to(targetId).emit('webrtc-ice-candidate', {
             fromId: socket.id,
-            candidate
+            candidate: candidate
         });
     });
 
-    // Handle disconnection
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-        
-        // Remove user from all rooms
-        rooms.forEach((room, roomId) => {
-            if (room.has(socket.id)) {
-                const user = room.get(socket.id);
-                room.delete(socket.id);
-                
-                // Notify other users
-                socket.to(roomId).emit('user-left', {
-                    id: socket.id,
-                    username: user.username
-                });
-                
-                socket.to(roomId).emit('room-info', {
-                    roomId,
-                    userCount: room.size
-                });
-                
-                // Clean up empty rooms
-                if (room.size === 0) {
-                    rooms.delete(roomId);
-                    console.log(`Room ${roomId} deleted (empty)`);
-                }
-            }
+    // Chat messages
+    socket.on('chat-message', (data) => {
+        console.log(`Chat message in room ${data.roomId}: ${data.message}`);
+        io.to(data.roomId).emit('chat-message', {
+            id: socket.id,
+            username: data.username,
+            message: data.message,
+            timestamp: Date.now()
         });
     });
 
@@ -223,10 +210,41 @@ io.on('connection', (socket) => {
             });
         }
     });
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+        
+        // Remove user from all rooms
+        rooms.forEach((users, roomId) => {
+            if (users.has(socket.id)) {
+                const user = users.get(socket.id);
+                users.delete(socket.id);
+                
+                // Notify others
+                io.to(roomId).emit('user-left', { 
+                    id: socket.id, 
+                    username: user.username 
+                });
+                
+                // Update room info
+                io.to(roomId).emit('room-info', {
+                    roomId,
+                    userCount: users.size
+                });
+                
+                // Clean up empty rooms
+                if (users.size === 0) {
+                    rooms.delete(roomId);
+                    console.log(`Room ${roomId} deleted (empty)`);
+                }
+            }
+        });
+    });
 });
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Open http://localhost:${PORT} in your browser`);
+    console.log(`Visit http://localhost:${PORT} to start sharing`);
 });
