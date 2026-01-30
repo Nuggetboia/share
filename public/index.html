@@ -1557,11 +1557,16 @@
             });
 
             socket.on('user-joined', (user) => {
-                console.log('User joined:', user);
+                console.log('👤 User joined:', user.username);
                 addSystemMessage(`${user.username} joined the room`);
 
+                // CRITICAL: If we're currently sharing, immediately create peer connection for the new user
                 if (isSharing && screenStream) {
-                    createPeerConnection(user.id, true);
+                    console.log('📤 We are sharing! Creating peer for new user:', user.id);
+                    // Small delay to ensure they're ready
+                    setTimeout(() => {
+                        createPeerConnection(user.id, true);
+                    }, 500);
                 }
             });
 
@@ -1590,20 +1595,29 @@
             });
 
             socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
+                console.log('📢 User sharing event:', username, 'sharing:', userIsSharing);
+                
                 if (userIsSharing) {
                     addSystemMessage(`${username} started sharing their screen`);
                     sharingUsers.set(id, username);
                     updateSharingUsersList();
 
+                    // If it's NOT us sharing, prepare to receive their stream
                     if (id !== socket.id) {
-                        console.log('User started sharing, requesting their stream');
+                        console.log('👀 Someone else is sharing, will receive their stream');
+                        
+                        // Wait a bit for them to set up, then request stream
                         setTimeout(() => {
-                            const pc = createPeerConnection(id, false);
+                            console.log('📞 Requesting stream from:', id);
                             socket.emit('request-stream', { roomId, targetId: id });
-                        }, 100);
+                        }, 300);
 
-                        if (sharingUsers.size === 1 && !currentlyViewing) {
-                            setTimeout(() => viewUserStream(id), 200);
+                        // Auto-view the first person who shares
+                        if (sharingUsers.size === 1 && !currentlyViewing && !isSharing) {
+                            console.log('🎯 Auto-viewing first sharer');
+                            setTimeout(() => {
+                                viewUserStream(id);
+                            }, 500);
                         }
                     }
                 } else {
@@ -1611,11 +1625,19 @@
                     sharingUsers.delete(id);
                     updateSharingUsersList();
 
+                    // If we were viewing this user, clear the video
                     if (id !== socket.id && currentlyViewing === id) {
+                        console.log('❌ User we were viewing stopped sharing');
                         screenVideo.style.display = 'none';
                         videoContainer.querySelector('.placeholder').style.display = 'block';
                         currentlyViewing = null;
                         hideConnectionStatus();
+                    }
+
+                    // Clean up peer connection
+                    if (peerConnections.has(id)) {
+                        peerConnections.get(id).close();
+                        peerConnections.delete(id);
                     }
                 }
             });
@@ -1638,60 +1660,91 @@
             });
 
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
-                console.log('📥 Received WebRTC offer from:', fromId);
+                console.log('📥 Received offer from:', fromId);
+                console.log('   Offer type:', offer?.type);
                 updateConnectionProgress(50, 'Received offer, creating answer...');
 
                 try {
                     let pc = peerConnections.get(fromId);
+                    
                     if (!pc) {
-                        console.log('   Creating new peer connection for offer');
+                        console.log('   Creating new peer connection for incoming offer');
                         pc = createPeerConnection(fromId, false);
                     }
 
+                    console.log('   Current signaling state:', pc.signalingState);
+                    
+                    // Set remote description
                     await pc.setRemoteDescription(new RTCSessionDescription(offer));
+                    console.log('   ✅ Remote description set');
 
-                    if (screenStream) {
+                    // If we're sharing, add our tracks to the answer
+                    if (screenStream && isSharing) {
+                        console.log('   📤 Adding our stream to answer');
                         screenStream.getTracks().forEach(track => {
                             const senders = pc.getSenders();
                             const trackExists = senders.some(sender => sender.track === track);
                             if (!trackExists) {
-                                pc.addTrack(track, screenStream);
+                                try {
+                                    pc.addTrack(track, screenStream);
+                                    console.log('     ✅ Added', track.kind, 'track');
+                                } catch (e) {
+                                    console.error('     ❌ Error adding track:', e);
+                                }
                             }
                         });
                     }
 
+                    // Create answer
+                    console.log('   Creating answer...');
                     const answer = await pc.createAnswer();
+                    console.log('   ✅ Answer created');
+                    
                     await pc.setLocalDescription(answer);
+                    console.log('   ✅ Local description set');
+                    
                     updateConnectionProgress(60, 'Sending answer...');
 
+                    // Send answer back
                     socket.emit('webrtc-answer', {
                         roomId,
                         targetId: fromId,
-                        answer
+                        answer: pc.localDescription
                     });
+                    console.log('   📤 Answer sent');
+
                 } catch (error) {
-                    console.error('Error handling offer:', error);
+                    console.error('❌ Error handling offer:', error);
                     hideConnectionStatus();
-                    addSystemMessage('Error establishing connection');
+                    addSystemMessage('Error establishing connection: ' + error.message);
                 }
             });
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
-                console.log('📥 Received WebRTC answer from:', fromId);
+                console.log('📥 Received answer from:', fromId);
+                console.log('   Answer type:', answer?.type);
                 updateConnectionProgress(70, 'Received answer, connecting...');
 
                 try {
                     const pc = peerConnections.get(fromId);
+                    
                     if (!pc) {
                         console.error('   ❌ No peer connection found for', fromId);
                         return;
                     }
                     
-                    if (pc.signalingState !== 'stable') {
+                    console.log('   Current signaling state:', pc.signalingState);
+                    
+                    // Only set remote description if we're in the right state
+                    if (pc.signalingState === 'have-local-offer') {
                         await pc.setRemoteDescription(new RTCSessionDescription(answer));
+                        console.log('   ✅ Remote description set from answer');
+                    } else {
+                        console.warn('   ⚠️  Unexpected signaling state:', pc.signalingState);
                     }
+                    
                 } catch (error) {
-                    console.error('Error handling answer:', error);
+                    console.error('❌ Error handling answer:', error);
                 }
             });
 
@@ -1748,69 +1801,127 @@
         }
 
         function createPeerConnection(userId, isInitiator) {
+            // Check if connection already exists and is working
             if (peerConnections.has(userId)) {
-                const old = peerConnections.get(userId);
-                if (old.hasReceivedTrack && old.connectionState === 'connected') {
-                    return old;
+                const existing = peerConnections.get(userId);
+                if (existing.connectionState === 'connected' || existing.connectionState === 'connecting') {
+                    console.log('✅ Reusing existing peer connection:', userId);
+                    return existing;
                 }
-                old.close();
+                // Close broken connection
+                console.log('🔄 Closing old connection for:', userId);
+                existing.close();
                 peerConnections.delete(userId);
             }
 
-            console.log('🔄 NEW peer connection:', userId, 'initiator:', isInitiator);
+            console.log('🆕 Creating NEW peer connection:', userId, 'initiator:', isInitiator);
+            
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
             pc.userId = userId;
             pc.hasReceivedTrack = false;
 
-            if (isInitiator && screenStream) {
-                console.log('📤 Adding OUR tracks');
+            // If we're sharing, add OUR stream immediately
+            if (isSharing && screenStream) {
+                console.log('📤 Adding OUR stream to peer:', userId);
+                const senders = [];
                 screenStream.getTracks().forEach(track => {
-                    pc.addTrack(track, screenStream);
+                    try {
+                        const sender = pc.addTrack(track, screenStream);
+                        senders.push(sender);
+                        console.log('  ✅ Added', track.kind, 'track');
+                    } catch (e) {
+                        console.error('  ❌ Failed to add track:', e);
+                    }
                 });
+                pc.senders = senders;
             }
 
-            pc.ontrack = (e) => {
-                console.log('🎉 GOT TRACK:', e.track.kind);
+            // Handle INCOMING stream (when viewing others)
+            pc.ontrack = (event) => {
+                console.log('🎉 RECEIVED TRACK from', userId, ':', event.track.kind);
                 pc.hasReceivedTrack = true;
-                pc.remoteStream = e.streams[0];
+                
+                if (event.streams && event.streams[0]) {
+                    pc.remoteStream = event.streams[0];
+                    console.log('  📺 Got remote stream');
 
-                if (currentlyViewing === userId) {
-                    console.log('🎥 SHOWING VIDEO NOW');
-                    screenVideo.srcObject = e.streams[0];
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
-                    screenVideo.play();
-                    updateConnectionProgress(100, 'Connected!');
-                    setTimeout(hideConnectionStatus, 500);
+                    // If we're currently viewing this user, show their stream
+                    if (currentlyViewing === userId) {
+                        console.log('  🎥 Displaying stream NOW');
+                        screenVideo.srcObject = event.streams[0];
+                        screenVideo.style.display = 'block';
+                        videoContainer.querySelector('.placeholder').style.display = 'none';
+                        
+                        // Play the video
+                        screenVideo.play().then(() => {
+                            console.log('  ✅ Video playing');
+                            updateConnectionProgress(100, 'Connected!');
+                            setTimeout(hideConnectionStatus, 500);
+                        }).catch(e => {
+                            console.error('  ❌ Error playing video:', e);
+                        });
+                    }
                 }
             };
 
-            pc.onicecandidate = (e) => {
-                if (e.candidate) {
+            // Handle ICE candidates
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    console.log('📡 Sending ICE candidate to:', userId);
                     socket.emit('webrtc-ice-candidate', {
-                        roomId, targetId: userId, candidate: e.candidate
+                        roomId,
+                        targetId: userId,
+                        candidate: event.candidate
                     });
                 }
             };
 
+            // Monitor connection state
             pc.onconnectionstatechange = () => {
-                console.log('State:', pc.connectionState);
-                if (pc.connectionState === 'failed') {
+                console.log('🔗 Connection state for', userId, ':', pc.connectionState);
+                
+                if (pc.connectionState === 'connected') {
+                    console.log('  ✅ Peer connected successfully');
+                    pc.hasReceivedTrack = true;
+                } else if (pc.connectionState === 'failed') {
+                    console.error('  ❌ Connection FAILED for', userId);
                     peerConnections.delete(userId);
                     hideConnectionStatus();
-                    addSystemMessage('Connection failed. Click to retry.');
+                    addSystemMessage('Connection failed. Try clicking the user again.');
+                } else if (pc.connectionState === 'disconnected') {
+                    console.warn('  ⚠️  Peer disconnected:', userId);
                 }
             };
 
+            // Log ICE connection state
+            pc.oniceconnectionstatechange = () => {
+                console.log('❄️  ICE state for', userId, ':', pc.iceConnectionState);
+            };
+
+            // If we're the initiator, create and send offer
             if (isInitiator) {
-                pc.createOffer({ offerToReceiveVideo: true, offerToReceiveAudio: true })
-                    .then(o => pc.setLocalDescription(o))
-                    .then(() => {
-                        socket.emit('webrtc-offer', {
-                            roomId, targetId: userId, offer: pc.localDescription
-                        });
+                console.log('📞 Creating offer for:', userId);
+                
+                pc.createOffer({
+                    offerToReceiveVideo: true,
+                    offerToReceiveAudio: true
+                })
+                .then(offer => {
+                    console.log('  📝 Offer created');
+                    return pc.setLocalDescription(offer);
+                })
+                .then(() => {
+                    console.log('  📤 Sending offer to:', userId);
+                    socket.emit('webrtc-offer', {
+                        roomId,
+                        targetId: userId,
+                        offer: pc.localDescription
                     });
+                })
+                .catch(err => {
+                    console.error('  ❌ Error creating offer:', err);
+                });
             }
 
             return pc;
@@ -1870,44 +1981,80 @@
 
         startShareBtn.addEventListener('click', async () => {
             try {
+                // Request screen share with audio
                 screenStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { mediaSource: 'screen' },
-                    audio: true
+                    video: { 
+                        mediaSource: 'screen',
+                        cursor: 'always'
+                    },
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    }
                 });
 
-                screenVideo.srcObject = screenStream;
-                screenVideo.style.display = 'block';
-                videoContainer.querySelector('.placeholder').style.display = 'none';
+                console.log('✅ Got screen stream');
 
+                // Exit drawing mode if active
                 if (isDrawingMode) {
                     toggleDrawingModeOff();
                 }
 
+                // Display the video locally
+                screenVideo.srcObject = screenStream;
+                screenVideo.style.display = 'block';
+                screenVideo.muted = false; // Unmute to hear audio
+                videoContainer.querySelector('.placeholder').style.display = 'none';
+
+                // Update UI
                 startShareBtn.style.display = 'none';
                 stopShareBtn.style.display = 'inline-block';
                 isSharing = true;
 
+                // Add to sharing users list
                 sharingUsers.set(socket.id, username);
                 updateSharingUsersList();
 
+                // Show mode indicator
                 updateModeIndicator('screen-sharing', 'Screen Sharing');
 
+                // Notify server first
                 socket.emit('start-sharing', { roomId });
 
+                console.log('📤 Notified server of sharing');
+
+                // Add tracks to ALL peer connections (for users already in room)
                 peerConnections.forEach((pc, userId) => {
+                    console.log('Adding stream to existing peer:', userId);
                     screenStream.getTracks().forEach(track => {
-                        pc.addTrack(track, screenStream);
+                        try {
+                            const sender = pc.addTrack(track, screenStream);
+                            console.log('✅ Added track:', track.kind, 'to peer:', userId);
+                        } catch (e) {
+                            console.error('Error adding track:', e);
+                        }
                     });
                 });
 
+                // Handle when user stops sharing via browser UI
                 screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    console.log('Screen sharing ended by user');
                     stopSharing();
                 });
 
                 addSystemMessage('Screen sharing started (with audio)');
+                console.log('🎉 Screen sharing fully initialized');
+
             } catch (err) {
-                console.error('Error starting screen share:', err);
-                addSystemMessage('Failed to start screen sharing');
+                console.error('❌ Error starting screen share:', err);
+                if (err.name === 'NotAllowedError') {
+                    addSystemMessage('Screen sharing permission denied');
+                } else if (err.name === 'NotFoundError') {
+                    addSystemMessage('No screen source found');
+                } else {
+                    addSystemMessage('Failed to start screen sharing: ' + err.message);
+                }
             }
         });
 
@@ -2070,31 +2217,45 @@
         });
 
         function viewUserStream(userId) {
-            console.log('Switching to view stream from:', userId);
+            console.log('👁️  Viewing stream from:', userId);
             currentlyViewing = userId;
             pendingConnection = userId;
+            updateSharingUsersList();
 
             const pc = peerConnections.get(userId);
+            
             if (pc) {
+                console.log('  ✅ Peer connection exists, state:', pc.connectionState);
+                
+                // If we already have the remote stream, display it immediately
                 if (pc.remoteStream) {
-                    updateConnectionProgress(70, 'Loading video...');
+                    console.log('  📺 Remote stream already available!');
+                    updateConnectionProgress(80, 'Loading video...');
+                    
                     screenVideo.srcObject = pc.remoteStream;
                     screenVideo.style.display = 'block';
                     videoContainer.querySelector('.placeholder').style.display = 'none';
-
-                    screenVideo.onloadedmetadata = () => {
-                        screenVideo.play().then(() => {
-                            updateConnectionProgress(100, 'Connected!');
-                            setTimeout(hideConnectionStatus, 1000);
-                        });
-                    };
+                    
+                    screenVideo.play().then(() => {
+                        console.log('  ✅ Video playing');
+                        updateConnectionProgress(100, 'Connected!');
+                        setTimeout(hideConnectionStatus, 1000);
+                    }).catch(e => {
+                        console.error('  ❌ Error playing video:', e);
+                        addSystemMessage('Error playing video. Try again.');
+                        hideConnectionStatus();
+                    });
                 } else {
-                    updateConnectionProgress(10, 'Establishing connection...');
-
+                    // Stream not ready yet, wait for it
+                    console.log('  ⏳ Waiting for stream...');
+                    updateConnectionProgress(30, 'Waiting for video stream...');
+                    
+                    // Set timeout in case stream never arrives
                     connectionTimeout = setTimeout(() => {
                         if (!pc.hasReceivedTrack) {
+                            console.error('  ❌ Timeout - no stream received');
                             hideConnectionStatus();
-                            addSystemMessage('Connection timeout. The user may not be sharing anymore.');
+                            addSystemMessage('Connection timeout. The user may have stopped sharing.');
                             currentlyViewing = null;
                             pendingConnection = null;
                             updateSharingUsersList();
@@ -2102,22 +2263,27 @@
                     }, 15000);
                 }
             } else {
-                updateConnectionProgress(5, 'Initiating connection...');
+                // No peer connection yet, create one
+                console.log('  🔄 No peer connection, creating one...');
+                updateConnectionProgress(10, 'Initiating connection...');
+                
+                // Create peer connection and wait for offer
                 createPeerConnection(userId, false);
-
+                
+                // The peer connection will be established when we receive an offer
+                // Set timeout
                 connectionTimeout = setTimeout(() => {
                     const newPc = peerConnections.get(userId);
                     if (!newPc || !newPc.hasReceivedTrack) {
+                        console.error('  ❌ Failed to establish connection');
                         hideConnectionStatus();
-                        addSystemMessage('Unable to connect. Please try again.');
+                        addSystemMessage('Unable to connect. Make sure they are sharing.');
                         currentlyViewing = null;
                         pendingConnection = null;
                         updateSharingUsersList();
                     }
                 }, 15000);
             }
-
-            updateSharingUsersList();
         }
 
         function checkAuth() {
