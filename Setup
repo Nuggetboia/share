@@ -1,36 +1,74 @@
 #!/bin/bash
 
-echo "🚀 ShareView Setup Script"
-echo "========================"
+echo "🚀 ShareView - Complete Screen Sharing Setup"
+echo "=============================================="
 echo ""
 
-# Check if Node.js is installed
-if ! command -v node &> /dev/null
-then
-    echo "❌ Node.js is not installed. Please install Node.js first."
-    echo "   Visit: https://nodejs.org/"
+# Check Node.js
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js is not installed"
+    echo "   Install from: https://nodejs.org/"
     exit 1
 fi
 
-echo "✅ Node.js version: $(node --version)"
+echo "✅ Node.js: $(node --version)"
+
+# Check npm
+if ! command -v npm &> /dev/null; then
+    echo "❌ npm is not installed"
+    exit 1
+fi
+
+echo "✅ npm: $(npm --version)"
 echo ""
 
 # Install dependencies
 echo "📦 Installing dependencies..."
 npm install
 
-if [ $? -eq 0 ]; then
-    echo "✅ Dependencies installed successfully!"
-    echo ""
-    echo "🎉 Setup complete!"
-    echo ""
-    echo "To start the server, run:"
-    echo "  npm start"
-    echo ""
-    echo "Then open your browser to:"
-    echo "  http://localhost:3000"
-    echo ""
-else
-    echo "❌ Failed to install dependencies"
+if [ $? -ne 0 ]; then
+    echo "❌ Installation failed"
     exit 1
 fi
+
+echo ""
+echo "✅ Installation complete!"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📋 QUICK START GUIDE"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "1️⃣  Start the server:"
+echo "   npm start"
+echo ""
+echo "2️⃣  Open in browser:"
+echo "   http://localhost:3000"
+echo ""
+echo "3️⃣  To share your screen:"
+echo "   • Click 'Create Room'"
+echo "   • Copy the 6-digit code"
+echo "   • Click 'Start Sharing'"
+echo "   • Select screen and check 'Share audio'"
+echo ""
+echo "4️⃣  For others to view:"
+echo "   • Open http://localhost:3000"
+echo "   • Click 'Join Room'"
+echo "   • Enter the 6-digit code"
+echo "   • Click on sharer name to view"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "💡 TESTING ON SAME COMPUTER"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "   1. Open http://localhost:3000 in Chrome"
+echo "   2. Click 'Create Room' and copy code"
+echo "   3. Open NEW INCOGNITO WINDOW"
+echo "   4. Go to http://localhost:3000"
+echo "   5. Join room with the code"
+echo "   6. Start sharing in first window"
+echo "   7. View in second window!"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Ready to start! Run: npm start"
+echo ""
