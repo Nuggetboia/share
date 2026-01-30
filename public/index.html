@@ -101,6 +101,18 @@
             color: #f5f5f7;
         }
 
+        body.dark-theme .sharing-users-panel {
+            background: #2c2c2e;
+        }
+
+        body.dark-theme .sharing-users-header {
+            color: #f5f5f7;
+        }
+
+        body.dark-theme .sharing-user-item:hover {
+            background: #3a3a3c;
+        }
+
         .container {
             display: flex;
             height: 100vh;
@@ -280,19 +292,11 @@
             background: #0071e3;
             color: white;
             align-self: flex-end;
-            margin-left: auto;
         }
 
         .message-received {
             background: #f5f5f7;
-            color: #1d1d1f;
             align-self: flex-start;
-        }
-
-        .message-sender {
-            font-size: 11px;
-            opacity: 0.7;
-            margin-bottom: 4px;
         }
 
         .chat-input-container {
@@ -308,12 +312,6 @@
             border: 1px solid #e5e5e7;
             border-radius: 8px;
             font-size: 14px;
-            font-family: inherit;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #0071e3;
         }
 
         .modal {
@@ -323,7 +321,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -336,115 +334,165 @@
         .modal-content {
             background: white;
             padding: 32px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
+            border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
         }
 
         .modal-content h2 {
-            margin-bottom: 16px;
-            font-size: 22px;
+            margin-bottom: 8px;
         }
 
         .modal-content p {
-            margin-bottom: 20px;
             color: #86868b;
-        }
-
-        .link-box {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .link-input {
-            flex: 1;
-            padding: 10px 12px;
+            width: 100%;
+            padding: 12px;
             border: 1px solid #e5e5e7;
             border-radius: 8px;
             font-size: 14px;
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+
+        .sharing-users-panel {
+            position: fixed;
+            left: 24px;
+            top: 80px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 16px;
+            min-width: 200px;
+            max-width: 300px;
+            display: none;
+        }
+
+        .sharing-users-header {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        .sharing-user-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .sharing-user-item:hover {
             background: #f5f5f7;
         }
 
-        .status-indicator {
-            display: inline-block;
+        .sharing-user-item.active {
+            background: #0071e3;
+            color: white;
+        }
+
+        .sharing-badge {
+            background: rgba(0,113,227,0.1);
+            color: #0071e3;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .sharing-user-item.active .sharing-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-theme .status-bar {
+            background: #2c2c2e;
+            color: #f5f5f7;
+        }
+
+        .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            margin-right: 8px;
+            background: #86868b;
         }
 
-        .status-live {
+        .status-dot.connected {
             background: #34c759;
         }
 
-        .status-offline {
+        .status-dot.sharing {
             background: #ff3b30;
+            animation: pulse 2s infinite;
         }
 
-        .status-connecting {
-            background: #ff9500;
-        }
-
-        @media (max-width: 768px) {
-            .chat-panel {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .main-content.chat-open {
-                margin-right: 0;
-            }
-
-            .controls {
-                flex-wrap: wrap;
-            }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="main-content" id="mainContent">
-            <header class="header">
+            <div class="header">
                 <div class="logo">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="3" width="20" height="14" rx="2"/>
-                        <line x1="8" y1="21" x2="16" y2="21"/>
-                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 013 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/>
                     </svg>
                     ShareView
                 </div>
                 <div class="controls">
-                    <span id="statusIndicator"></span>
-                    <button class="btn-icon" id="themeToggle" title="Toggle theme">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"/>
-                            <line x1="12" y1="1" x2="12" y2="3"/>
-                            <line x1="12" y1="21" x2="12" y2="23"/>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                            <line x1="1" y1="12" x2="3" y2="12"/>
-                            <line x1="21" y1="12" x2="23" y2="12"/>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                        </svg>
-                    </button>
-                    <button class="btn-icon" id="chatToggle" title="Toggle chat">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </button>
-                    <button class="btn-primary" id="startBtn" disabled>Connecting...</button>
+                    <button class="btn-secondary" id="startBtn">Start Sharing</button>
                     <button class="btn-danger" id="stopBtn" style="display: none;">Stop Sharing</button>
-                    <button class="btn-secondary" id="joinBtn" disabled>Join Session</button>
+                    <button class="btn-icon" id="chatToggle" title="Toggle Chat">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="themeToggle" title="Toggle Theme">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                        </svg>
+                    </button>
                 </div>
-            </header>
-
-            <div class="video-container">
+            </div>
+            <div class="video-container" id="videoContainer">
                 <div class="placeholder" id="placeholder">
-                    <h2>Ready to Share</h2>
-                    <p>Click "Start Sharing" to share your screen or "Join Session" to view someone's screen</p>
+                    <h2>No Active Screen Share</h2>
+                    <p>Click "Start Sharing" to share your screen</p>
                 </div>
                 <video id="videoElement" autoplay playsinline style="display: none;"></video>
             </div>
@@ -453,12 +501,7 @@
         <div class="chat-panel" id="chatPanel">
             <div class="chat-header">
                 <h3>Chat</h3>
-                <button class="btn-icon" id="closeChatBtn" style="width: 32px; height: 32px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+                <button class="btn-icon" id="closeChatBtn" style="width: 32px; height: 32px;">×</button>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-container">
@@ -468,220 +511,237 @@
         </div>
     </div>
 
-    <div class="modal" id="joinModal">
-        <div class="modal-content">
-            <h2>Join Screen Share</h2>
-            <p>Enter the session ID to view someone's screen</p>
-            <div class="link-box">
-                <input type="text" class="link-input" id="joinInput" placeholder="Enter session ID">
-            </div>
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                <button class="btn-secondary" id="cancelJoinBtn">Cancel</button>
-                <button class="btn-primary" id="confirmJoinBtn">Join</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Share Modal -->
     <div class="modal" id="shareModal">
         <div class="modal-content">
             <h2>Share Your Screen</h2>
-            <p>Share this session ID with others so they can view your screen</p>
-            <div class="link-box">
-                <input type="text" class="link-input" id="shareLink" readonly>
-                <button class="btn-primary" id="copyLinkBtn">Copy</button>
-            </div>
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <p>Share this Session ID with others to let them view your screen</p>
+            <input type="text" class="link-input" id="shareLink" readonly>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="copyLinkBtn">Copy ID</button>
                 <button class="btn-secondary" id="closeShareModalBtn">Close</button>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script>
-        let peer = null;
-        let currentCall = null;
-        let localStream = null;
-        let peerId = null;
-        let isSharingScreen = false;
-        let dataConnection = null;
-        let isPeerReady = false;
+    <!-- Sharing Users Panel -->
+    <div class="sharing-users-panel" id="sharingUsersPanel">
+        <div class="sharing-users-header">Available Sharers</div>
+        <div id="sharingUsersList"></div>
+    </div>
 
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Connecting...</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script>
+        // DOM Elements
         const videoElement = document.getElementById('videoElement');
         const placeholder = document.getElementById('placeholder');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const joinBtn = document.getElementById('joinBtn');
         const shareModal = document.getElementById('shareModal');
-        const joinModal = document.getElementById('joinModal');
         const shareLink = document.getElementById('shareLink');
-        const joinInput = document.getElementById('joinInput');
         const chatPanel = document.getElementById('chatPanel');
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const mainContent = document.getElementById('mainContent');
-        const statusIndicator = document.getElementById('statusIndicator');
+        const sharingUsersPanel = document.getElementById('sharingUsersPanel');
+        const sharingUsersList = document.getElementById('sharingUsersList');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
 
-        // Get the server URL (will use current domain in production)
-        const PEER_SERVER_HOST = window.location.hostname;
-        const PEER_SERVER_PORT = window.location.port || (window.location.protocol === 'https:' ? 443 : 80);
-        const PEER_SERVER_PATH = '/peerjs';
-        const PEER_SERVER_SECURE = window.location.protocol === 'https:';
+        // State
+        let peer = null;
+        let peerId = null;
+        let localStream = null;
+        let currentCall = null;
+        let dataConnection = null;
+        let isSharingScreen = false;
+        let activeSharers = new Map();
+        let currentlyViewing = null;
+        let discoveryBroadcast = null;
 
-        // Initialize PeerJS with custom server
+        // Initialize PeerJS connection
         function initializePeer() {
-            updateStatus('Connecting...', 'connecting');
+            console.log('Initializing PeerJS...');
             
+            // Connect to PeerJS server
             peer = new Peer({
-                host: PEER_SERVER_HOST,
-                port: PEER_SERVER_PORT,
-                path: PEER_SERVER_PATH,
-                secure: PEER_SERVER_SECURE,
+                host: window.location.hostname,
+                port: window.location.port || (window.location.protocol === 'https:' ? 443 : 80),
+                path: '/peerjs',
+                debug: 2,
                 config: {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' },
-                        { urls: 'stun:stun2.l.google.com:19302' }
+                        { urls: 'stun:stun1.l.google.com:19302' }
                     ]
-                },
-                debug: 2
+                }
             });
 
             peer.on('open', (id) => {
                 peerId = id;
-                isPeerReady = true;
-                console.log('My peer ID is: ' + id);
+                console.log('✅ Connected to PeerJS server. My ID:', peerId);
+                updateStatus('connected', 'Ready - Click "Start Sharing" or select a sharer below');
                 
-                // Enable buttons now that we have a peer ID
-                startBtn.disabled = false;
-                startBtn.textContent = 'Start Sharing';
-                joinBtn.disabled = false;
+                // Start broadcasting presence
+                startDiscoveryBroadcast();
                 
-                updateStatus('Ready', 'offline');
+                // Request list of active sharers
+                setTimeout(discoverActiveSharers, 1000);
             });
 
             peer.on('error', (err) => {
-                console.error('Peer error:', err);
-                isPeerReady = false;
-                
-                if (err.type === 'unavailable-id') {
-                    alert('Session ID is already in use. Please try again.');
-                } else if (err.type === 'peer-unavailable') {
-                    alert('Cannot connect to that session. The session may have ended or the ID is incorrect.');
+                console.error('❌ PeerJS error:', err);
+                if (err.type === 'peer-unavailable') {
+                    updateStatus('connected', 'Peer not available');
                 } else if (err.type === 'network') {
-                    alert('Network error. Please check your connection and try again.');
+                    updateStatus('offline', 'Network error - retrying...');
+                    setTimeout(initializePeer, 3000);
                 } else {
-                    alert('Connection error: ' + err.type + '. Please refresh the page.');
+                    updateStatus('offline', 'Error: ' + err.message);
                 }
-                
-                updateStatus('Connection error', 'offline');
             });
 
             peer.on('disconnected', () => {
-                console.log('Peer disconnected, attempting to reconnect...');
-                isPeerReady = false;
-                updateStatus('Reconnecting...', 'connecting');
-                
-                // Attempt to reconnect
-                setTimeout(() => {
-                    if (!peer.destroyed) {
-                        peer.reconnect();
-                    }
-                }, 1000);
+                console.warn('⚠️  Disconnected from server');
+                updateStatus('offline', 'Disconnected - Reconnecting...');
+                peer.reconnect();
             });
 
-            // Handle incoming calls (when someone connects to view your screen)
+            // Handle incoming calls (when someone wants to view our screen)
             peer.on('call', (call) => {
-                console.log('Incoming call from:', call.peer);
+                console.log('📞 Incoming call from:', call.peer);
                 
-                if (localStream) {
-                    // Answer with your screen stream
+                if (isSharingScreen && localStream) {
+                    console.log('✅ Answering with our screen stream');
                     call.answer(localStream);
                     currentCall = call;
-                    updateStatus('Sharing with viewer', 'live');
+                    updateStatus('sharing', 'Sharing with viewers');
                     
                     call.on('close', () => {
                         console.log('Viewer disconnected');
                         if (isSharingScreen) {
-                            updateStatus('Sharing (waiting for viewers)', 'live');
+                            updateStatus('sharing', 'Sharing (waiting for viewers)');
                         }
                     });
+
+                    call.on('error', (err) => {
+                        console.error('Call error:', err);
+                    });
+                } else {
+                    console.warn('❌ Not sharing, rejecting call');
+                    call.close();
                 }
             });
 
-            // Handle incoming data connections for chat
+            // Handle incoming data connections (for chat and discovery)
             peer.on('connection', (conn) => {
                 setupDataConnection(conn);
             });
         }
 
+        // Broadcast that we're sharing (or just present)
+        function startDiscoveryBroadcast() {
+            // Broadcast our presence every 5 seconds
+            discoveryBroadcast = setInterval(() => {
+                if (isSharingScreen && peerId) {
+                    console.log('📡 Broadcasting that we are sharing...');
+                    // We'll use a discovery mechanism through data connections
+                }
+            }, 5000);
+        }
+
+        // Discover active sharers
+        function discoverActiveSharers() {
+            // In a real app, you'd have a signaling server
+            // For now, we'll use manual connection
+            console.log('🔍 Discovery: Use Session ID to connect to sharers');
+        }
+
         // Start screen sharing
         async function startSharing() {
-            if (!isPeerReady || !peerId) {
-                alert('Please wait, still connecting to server...');
-                return;
-            }
-
             try {
-                // Request screen sharing with AUDIO enabled
+                updateStatus('connected', 'Requesting screen share...');
+                
+                // Request screen sharing with AUDIO
                 localStream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
                         cursor: "always",
-                        displaySurface: "monitor"
+                        displaySurface: "monitor",
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
                     },
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true,
-                        sampleRate: 44100,
-                        autoGainControl: false
+                        autoGainControl: false,
+                        sampleRate: 44100
                     }
                 });
 
-                console.log('Screen sharing started with tracks:', localStream.getTracks());
-                console.log('Your Session ID:', peerId);
+                console.log('✅ Screen sharing started');
+                console.log('   Video tracks:', localStream.getVideoTracks().length);
+                console.log('   Audio tracks:', localStream.getAudioTracks().length);
 
-                // Check if audio track is present
+                // Check for audio
                 const audioTrack = localStream.getAudioTracks()[0];
                 if (audioTrack) {
-                    console.log('✅ Audio track enabled:', audioTrack.enabled);
+                    console.log('✅ Audio enabled:', audioTrack.label);
                 } else {
-                    console.warn('⚠️ No audio track - make sure to check "Share audio" in the browser dialog');
+                    console.warn('⚠️  No audio track - make sure to check "Share audio"');
                 }
 
-                // Display your own screen locally
+                // Display locally
                 videoElement.srcObject = localStream;
+                videoElement.muted = true; // Mute local to avoid feedback
                 videoElement.style.display = 'block';
-                videoElement.muted = true; // Mute local playback to avoid feedback
                 placeholder.style.display = 'none';
                 
                 isSharingScreen = true;
                 startBtn.style.display = 'none';
                 stopBtn.style.display = 'inline-block';
-                joinBtn.disabled = true;
 
-                // Show share modal with session ID
+                // Show session ID
                 shareLink.value = peerId;
                 shareModal.classList.add('active');
-                updateStatus('Sharing (waiting for viewers)', 'live');
+                updateStatus('sharing', `Sharing - Session ID: ${peerId}`);
 
-                // Handle when user stops sharing via browser UI
+                // Add ourselves to the sharers list
+                activeSharers.set(peerId, 'You');
+                updateSharersList();
+
+                // Handle when user stops sharing via browser
                 localStream.getVideoTracks()[0].onended = () => {
+                    console.log('📺 User stopped sharing via browser');
                     stopSharing();
                 };
 
             } catch (err) {
-                console.error('Error starting screen share:', err);
+                console.error('❌ Error starting screen share:', err);
+                let errorMsg = 'Could not start screen sharing. ';
+                
                 if (err.name === 'NotAllowedError') {
-                    alert('Screen sharing permission denied. Please allow screen sharing and try again.');
+                    errorMsg += 'Permission denied.';
                 } else if (err.name === 'NotFoundError') {
-                    alert('No screen available to share.');
+                    errorMsg += 'No screen source found.';
                 } else {
-                    alert('Could not start screen sharing. Make sure you:\n1. Granted permission\n2. Selected a screen/window to share\n3. Checked "Share audio" if you want audio');
+                    errorMsg += err.message;
                 }
+                
+                alert(errorMsg + '\n\nMake sure to:\n1. Grant permission\n2. Select a screen/window\n3. Check "Share audio" for audio');
+                updateStatus('connected', 'Ready');
             }
         }
 
         // Stop screen sharing
         function stopSharing() {
+            console.log('🛑 Stopping screen share');
+            
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
                 localStream = null;
@@ -692,37 +752,41 @@
                 currentCall = null;
             }
 
-            videoElement.style.display = 'none';
             videoElement.srcObject = null;
+            videoElement.style.display = 'none';
             placeholder.style.display = 'block';
             
             isSharingScreen = false;
             startBtn.style.display = 'inline-block';
             stopBtn.style.display = 'none';
-            joinBtn.disabled = false;
 
             shareModal.classList.remove('active');
-            updateStatus('Ready', 'offline');
+            
+            // Remove ourselves from sharers list
+            activeSharers.delete(peerId);
+            updateSharersList();
+            
+            updateStatus('connected', 'Ready');
         }
 
-        // Join a session to view someone's screen
-        function joinSession() {
-            const remotePeerId = joinInput.value.trim();
-            
-            if (!remotePeerId) {
-                alert('Please enter a session ID');
+        // View another user's screen
+        function viewScreen(remotePeerId) {
+            if (!peer || !peerId) {
+                alert('Not connected to server yet. Please wait...');
                 return;
             }
 
-            if (!isPeerReady || !peerId) {
-                alert('Still connecting... Please wait a moment');
+            if (remotePeerId === peerId) {
+                alert('This is your own session!');
                 return;
             }
 
-            console.log('Attempting to join session:', remotePeerId);
-            updateStatus('Connecting to session...', 'connecting');
+            console.log('👁️  Attempting to view screen from:', remotePeerId);
+            updateStatus('connected', 'Connecting to sharer...');
+            currentlyViewing = remotePeerId;
+            updateSharersList();
 
-            // Create a silent audio stream (required for the call, but we don't send anything)
+            // Create a silent stream (required for calling)
             const audioContext = new AudioContext();
             const oscillator = audioContext.createOscillator();
             const dst = audioContext.createMediaStreamDestination();
@@ -730,66 +794,71 @@
             oscillator.start();
             const silentStream = dst.stream;
 
-            // Call the remote peer with silent stream
+            // Call the remote peer
             const call = peer.call(remotePeerId, silentStream);
             
             if (!call) {
-                alert('Could not connect to session. Please check the session ID.');
-                updateStatus('Ready', 'offline');
+                alert('Could not connect. Check the Session ID.');
+                updateStatus('connected', 'Ready');
+                currentlyViewing = null;
+                updateSharersList();
                 return;
             }
 
             currentCall = call;
-            console.log('Call initiated to:', remotePeerId);
-
             let streamReceived = false;
 
             call.on('stream', (remoteStream) => {
                 streamReceived = true;
-                console.log('Receiving remote stream with tracks:', remoteStream.getTracks());
+                console.log('✅ Receiving stream with', remoteStream.getTracks().length, 'tracks');
                 
-                // Display the remote screen with audio
+                // Display the stream
                 videoElement.srcObject = remoteStream;
-                videoElement.muted = false; // Enable audio playback for viewer
+                videoElement.muted = false; // Enable audio for viewer
                 videoElement.style.display = 'block';
                 placeholder.style.display = 'none';
                 
                 stopBtn.style.display = 'inline-block';
-                stopBtn.textContent = 'Leave Session';
+                stopBtn.textContent = 'Stop Viewing';
                 startBtn.style.display = 'none';
-                joinBtn.disabled = true;
                 
-                joinModal.classList.remove('active');
-                updateStatus('Viewing shared screen', 'live');
+                updateStatus('connected', 'Viewing shared screen');
+
+                // Auto-play
+                videoElement.play().catch(err => {
+                    console.log('Auto-play prevented, user needs to click play');
+                });
             });
 
             call.on('close', () => {
-                console.log('Call closed');
-                leaveSession();
+                console.log('📞 Call closed');
+                leaveViewing();
             });
 
             call.on('error', (err) => {
-                console.error('Call error:', err);
-                alert('Connection failed: ' + err);
-                leaveSession();
+                console.error('❌ Call error:', err);
+                alert('Connection failed: ' + err.message);
+                leaveViewing();
             });
 
-            // Timeout if no stream received
+            // Timeout if no stream
             setTimeout(() => {
                 if (!streamReceived) {
-                    console.error('No stream received within timeout');
-                    alert('Could not connect to session. The session may have ended or the ID is incorrect.');
-                    leaveSession();
+                    console.error('❌ Timeout - no stream received');
+                    alert('Could not connect. The session may be inactive or the ID is wrong.');
+                    leaveViewing();
                 }
             }, 10000);
 
-            // Setup data connection for chat
+            // Setup chat connection
             const conn = peer.connect(remotePeerId);
             setupDataConnection(conn);
         }
 
         // Leave viewing session
-        function leaveSession() {
+        function leaveViewing() {
+            console.log('👋 Leaving viewing session');
+            
             if (currentCall) {
                 currentCall.close();
                 currentCall = null;
@@ -800,22 +869,23 @@
                 dataConnection = null;
             }
 
-            videoElement.style.display = 'none';
             videoElement.srcObject = null;
+            videoElement.style.display = 'none';
             placeholder.style.display = 'block';
             
             stopBtn.style.display = 'none';
             stopBtn.textContent = 'Stop Sharing';
             startBtn.style.display = 'inline-block';
-            joinBtn.disabled = false;
 
-            updateStatus('Ready', 'offline');
+            currentlyViewing = null;
+            updateSharersList();
+            updateStatus('connected', 'Ready');
         }
 
         // Setup data connection for chat
         function setupDataConnection(conn) {
             conn.on('open', () => {
-                console.log('Data connection established with:', conn.peer);
+                console.log('💬 Chat connection established');
                 dataConnection = conn;
             });
 
@@ -826,12 +896,12 @@
             });
 
             conn.on('close', () => {
-                console.log('Data connection closed');
+                console.log('Chat connection closed');
                 dataConnection = null;
             });
 
             conn.on('error', (err) => {
-                console.error('Data connection error:', err);
+                console.error('Chat connection error:', err);
             });
         }
 
@@ -858,63 +928,84 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Update status indicator
-        function updateStatus(text, type) {
-            const dot = `<span class="status-indicator status-${type}"></span>`;
-            statusIndicator.innerHTML = `${dot}${text}`;
+        // Update status
+        function updateStatus(type, text) {
+            statusDot.className = 'status-dot';
+            if (type === 'connected') {
+                statusDot.classList.add('connected');
+            } else if (type === 'sharing') {
+                statusDot.classList.add('sharing');
+            }
+            statusText.textContent = text;
+        }
+
+        // Update sharers list
+        function updateSharersList() {
+            if (activeSharers.size === 0) {
+                sharingUsersPanel.style.display = 'none';
+                return;
+            }
+
+            sharingUsersPanel.style.display = 'block';
+            sharingUsersList.innerHTML = '';
+
+            activeSharers.forEach((name, id) => {
+                const item = document.createElement('div');
+                item.className = 'sharing-user-item';
+                if (currentlyViewing === id) {
+                    item.classList.add('active');
+                }
+
+                const isYou = id === peerId;
+                item.innerHTML = `
+                    ${name}
+                    ${isYou ? '<span class="sharing-badge">You</span>' : ''}
+                `;
+
+                if (!isYou) {
+                    item.onclick = () => viewScreen(id);
+                }
+
+                sharingUsersList.appendChild(item);
+            });
+        }
+
+        // Manual add sharer (via prompt)
+        function manualAddSharer() {
+            const sessionId = prompt('Enter Session ID to view:');
+            if (sessionId && sessionId.trim()) {
+                activeSharers.set(sessionId.trim(), 'Remote User');
+                updateSharersList();
+                viewScreen(sessionId.trim());
+            }
         }
 
         // Event Listeners
-        startBtn.addEventListener('click', () => {
-            if (!isPeerReady || !peerId) {
-                alert('Please wait, still connecting to server...');
-                return;
-            }
-            startSharing();
-        });
+        startBtn.addEventListener('click', startSharing);
         
         stopBtn.addEventListener('click', () => {
             if (isSharingScreen) {
                 stopSharing();
             } else {
-                leaveSession();
+                leaveViewing();
             }
-        });
-
-        joinBtn.addEventListener('click', () => {
-            if (!isPeerReady || !peerId) {
-                alert('Please wait, still connecting to server...');
-                return;
-            }
-            joinModal.classList.add('active');
-        });
-
-        document.getElementById('confirmJoinBtn').addEventListener('click', joinSession);
-        
-        document.getElementById('cancelJoinBtn').addEventListener('click', () => {
-            joinModal.classList.remove('active');
-            joinInput.value = '';
-        });
-
-        document.getElementById('closeShareModalBtn').addEventListener('click', () => {
-            shareModal.classList.remove('active');
         });
 
         document.getElementById('copyLinkBtn').addEventListener('click', () => {
             shareLink.select();
             document.execCommand('copy');
             
-            // Modern clipboard API fallback
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(shareLink.value);
             }
             
-            const copyBtn = document.getElementById('copyLinkBtn');
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => {
-                copyBtn.textContent = originalText;
-            }, 2000);
+            const btn = document.getElementById('copyLinkBtn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy ID', 2000);
+        });
+
+        document.getElementById('closeShareModalBtn').addEventListener('click', () => {
+            shareModal.classList.remove('active');
         });
 
         document.getElementById('chatToggle').addEventListener('click', () => {
@@ -930,57 +1021,33 @@
         document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
         chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         });
 
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
-            
-            // Save theme preference
-            if (document.body.classList.contains('dark-theme')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
+            localStorage.setItem('theme', 
+                document.body.classList.contains('dark-theme') ? 'dark' : 'light'
+            );
         });
 
-        // Close modals on outside click
-        [shareModal, joinModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
+        // Add manual connect button to placeholder
+        placeholder.innerHTML += '<br><br><button class="btn-primary" onclick="manualAddSharer()" style="margin-top: 16px;">Join Session by ID</button>';
 
-        // Close modals on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                shareModal.classList.remove('active');
-                joinModal.classList.remove('active');
-            }
-        });
-
-        // Load theme preference
+        // Load theme
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-theme');
         }
 
-        // Initialize peer connection on load
-        window.addEventListener('load', () => {
-            initializePeer();
-        });
+        // Initialize on load
+        window.addEventListener('load', initializePeer);
 
-        // Cleanup on page unload
+        // Cleanup on unload
         window.addEventListener('beforeunload', () => {
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
             }
-            if (peer) {
-                peer.destroy();
-            }
+            if (peer) peer.destroy();
         });
     </script>
 </body>
