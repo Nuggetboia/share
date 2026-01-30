@@ -130,6 +130,9 @@
             font-size: 20px;
             font-weight: 600;
             color: #1d1d1f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .controls {
@@ -621,6 +624,209 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* Drawing Board Styles */
+        #drawingCanvas {
+            display: none;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            cursor: crosshair;
+            background: white;
+        }
+
+        body.dark-theme #drawingCanvas {
+            background: #2c2c2e;
+        }
+
+        .drawing-toolbar {
+            position: absolute;
+            top: 50%;
+            left: 24px;
+            transform: translateY(-50%);
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        body.dark-theme .drawing-toolbar {
+            background: #2c2c2e;
+            border: 1px solid #3a3a3c;
+        }
+
+        .drawing-toolbar.active {
+            display: flex;
+        }
+
+        .tool-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tool-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-button {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e5e5e7;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-theme .tool-button {
+            background: #3a3a3c;
+            border-color: #48484a;
+            color: #f5f5f7;
+        }
+
+        .tool-button:hover {
+            background: #f5f5f7;
+            border-color: #0071e3;
+        }
+
+        body.dark-theme .tool-button:hover {
+            background: #48484a;
+        }
+
+        .tool-button.active {
+            background: #0071e3;
+            border-color: #0071e3;
+            color: white;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .color-option {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #0071e3;
+        }
+
+        body.dark-theme .color-option.active {
+            box-shadow: 0 0 0 2px #2c2c2e, 0 0 0 4px #0071e3;
+        }
+
+        .brush-size-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e5e7;
+            outline: none;
+        }
+
+        body.dark-theme .brush-size-slider {
+            background: #48484a;
+        }
+
+        .brush-size-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0071e3;
+            cursor: pointer;
+        }
+
+        .brush-size-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0071e3;
+            cursor: pointer;
+            border: none;
+        }
+
+        .brush-preview {
+            width: 100%;
+            height: 30px;
+            background: #f5f5f7;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        body.dark-theme .brush-preview {
+            background: #1c1c1e;
+        }
+
+        .brush-preview-dot {
+            background: #000;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .clear-canvas-btn {
+            background: #ff3b30;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-canvas-btn:hover {
+            background: #ff453a;
+        }
+
+        .mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #0071e3;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .mode-indicator.drawing {
+            background: #34c759;
+        }
+
+        .mode-indicator.screen-sharing {
+            background: #0071e3;
+        }
+
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -637,7 +843,12 @@
     <div class="container">
         <div class="main-content" id="mainContent">
             <div class="header">
-                <div class="logo">ShareView</div>
+                <div class="logo">
+                    ShareView
+                    <span class="mode-indicator" id="modeIndicator" style="display: none;">
+                        <span id="modeText">Drawing Mode</span>
+                    </span>
+                </div>
                 <div class="controls">
                     <button class="btn-secondary profile-btn" id="profileBtn">
                         <div class="profile-picture" id="headerProfilePic">
@@ -655,6 +866,7 @@
                             <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2h-3l-3 3-3-3H4a2 2 0 01-2-2V5z"/>
                         </svg>
                     </button>
+                    <button class="btn-secondary" id="toggleDrawingMode">Drawing Mode</button>
                     <button class="btn-secondary" id="shareLink">Share Link</button>
                     <button class="btn-primary" id="startShare">Start Sharing</button>
                     <button class="btn-danger" id="stopShare" style="display: none;">Stop Sharing</button>
@@ -664,10 +876,11 @@
             <div class="video-container" id="videoContainer">
                 <div class="placeholder">
                     <h2>Ready to Share</h2>
-                    <p>Click "Start Sharing" to begin screen sharing</p>
+                    <p>Click "Start Sharing" to begin screen sharing or "Drawing Mode" for collaborative whiteboard</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
-                
+                <canvas id="drawingCanvas"></canvas>
+
                 <!-- Connection Status -->
                 <div class="connection-status" id="connectionStatus" style="display: none;">
                     <h3>Connecting to stream...</h3>
@@ -677,11 +890,52 @@
                     </div>
                     <button class="cancel-connection" id="cancelConnection">Cancel</button>
                 </div>
-                
+
                 <!-- Sharing Users List -->
                 <div class="sharing-users" id="sharingUsers" style="display: none;">
                     <h4>Sharing Now</h4>
                     <div id="sharingUsersList"></div>
+                </div>
+
+                <!-- Drawing Toolbar -->
+                <div class="drawing-toolbar" id="drawingToolbar">
+                    <div class="tool-section">
+                        <div class="tool-section-title">Tools</div>
+                        <button class="tool-button active" id="toolPen" title="Pen">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                            </svg>
+                        </button>
+                        <button class="tool-button" id="toolEraser" title="Eraser">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                                <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="tool-section">
+                        <div class="tool-section-title">Colors</div>
+                        <div class="color-picker-wrapper">
+                            <div class="color-option active" data-color="#000000" style="background: #000000;" title="Black"></div>
+                            <div class="color-option" data-color="#FF3B30" style="background: #FF3B30;" title="Red"></div>
+                            <div class="color-option" data-color="#0071E3" style="background: #0071E3;" title="Blue"></div>
+                            <div class="color-option" data-color="#34C759" style="background: #34C759;" title="Green"></div>
+                            <div class="color-option" data-color="#FFD60A" style="background: #FFD60A;" title="Yellow"></div>
+                            <div class="color-option" data-color="#FF9F0A" style="background: #FF9F0A;" title="Orange"></div>
+                            <div class="color-option" data-color="#AF52DE" style="background: #AF52DE;" title="Purple"></div>
+                            <div class="color-option" data-color="#FFFFFF" style="background: #FFFFFF; border: 1px solid #e5e5e7;" title="White"></div>
+                        </div>
+                    </div>
+                    <div class="tool-section">
+                        <div class="tool-section-title">Brush Size</div>
+                        <input type="range" class="brush-size-slider" id="brushSize" min="1" max="50" value="3">
+                        <div class="brush-preview">
+                            <div class="brush-preview-dot" id="brushPreview"></div>
+                        </div>
+                    </div>
+                    <div class="tool-section">
+                        <button class="clear-canvas-btn" id="clearCanvas">Clear Canvas</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -778,16 +1032,26 @@
         let screenStream = null;
         let roomId = null;
         let username = null;
-        let userProfile = null; // { username, profilePicture, theme }
+        let userProfile = null;
         let socket = null;
-        let peerConnections = new Map(); // Map of userId -> RTCPeerConnection
-        let sharingUsers = new Map(); // Map of userId -> username who are sharing
-        let currentlyViewing = null; // ID of user whose stream we're viewing
-        let isAuthMode = 'login'; // 'login' or 'register'
+        let peerConnections = new Map();
+        let sharingUsers = new Map();
+        let currentlyViewing = null;
+        let isAuthMode = 'login';
         let connectionTimeout = null;
         let connectionProgress = 0;
         let connectionInterval = null;
         let pendingConnection = null;
+
+        // Drawing Mode State
+        let isDrawingMode = false;
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let currentColor = '#000000';
+        let brushSize = 3;
+        let lastX = 0;
+        let lastY = 0;
 
         // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
@@ -813,7 +1077,7 @@
         const copyLinkBtn = document.getElementById('copyLink');
         const sharingUsersPanel = document.getElementById('sharingUsers');
         const sharingUsersList = document.getElementById('sharingUsersList');
-        
+
         // Profile elements
         const profileBtn = document.getElementById('profileBtn');
         const headerUsername = document.getElementById('headerUsername');
@@ -841,27 +1105,20 @@
         const progressFill = document.getElementById('progressFill');
         const cancelConnection = document.getElementById('cancelConnection');
 
-        // Check if user is logged in
-        function checkAuth() {
-            const savedProfile = localStorage.getItem('userProfile');
-            if (savedProfile) {
-                try {
-                    userProfile = JSON.parse(savedProfile);
-                    username = userProfile.username;
-                    updateProfileUI();
-                    initSocket();
-                } catch (e) {
-                    // Invalid saved profile, show login
-                    localStorage.removeItem('userProfile');
-                    loginModal.classList.add('active');
-                }
-            } else {
-                // Show login modal
-                loginModal.classList.add('active');
-            }
-        }
+        // Drawing Mode Elements
+        const toggleDrawingModeBtn = document.getElementById('toggleDrawingMode');
+        const drawingCanvas = document.getElementById('drawingCanvas');
+        const drawingToolbar = document.getElementById('drawingToolbar');
+        const toolPen = document.getElementById('toolPen');
+        const toolEraser = document.getElementById('toolEraser');
+        const brushSizeSlider = document.getElementById('brushSize');
+        const brushPreview = document.getElementById('brushPreview');
+        const clearCanvasBtn = document.getElementById('clearCanvas');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const modeIndicator = document.getElementById('modeIndicator');
+        const modeText = document.getElementById('modeText');
 
-        // Continue as guest
+        // Continue as guest function...
         function continueAsGuest() {
             const guestName = 'Guest' + Math.floor(Math.random() * 10000);
             userProfile = {
@@ -877,12 +1134,10 @@
             initSocket();
         }
 
-        // Guest button click
         guestBtn.addEventListener('click', () => {
             continueAsGuest();
         });
 
-        // Update profile UI
         function updateProfileUI() {
             if (userProfile) {
                 headerUsername.textContent = userProfile.username;
@@ -890,7 +1145,7 @@
                 headerInitial.textContent = initial;
                 profileInitial.textContent = initial;
                 profileUsername.value = userProfile.username;
-                
+
                 if (userProfile.profilePicture) {
                     headerProfilePic.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
                     profilePicLarge.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
@@ -898,8 +1153,7 @@
                     headerProfilePic.innerHTML = `<span id="headerInitial">${initial}</span>`;
                     profilePicLarge.innerHTML = `<span id="profileInitial">${initial}</span>`;
                 }
-                
-                // Apply theme
+
                 if (userProfile.theme === 'dark') {
                     document.body.classList.add('dark-theme');
                     updateThemeIcon(true);
@@ -907,11 +1161,9 @@
             }
         }
 
-        // Profile button click
         profileBtn.addEventListener('click', () => {
             if (userProfile) {
                 if (userProfile.isGuest) {
-                    // Guests see login modal to create account
                     loginModal.classList.add('active');
                 } else {
                     profileModal.classList.add('active');
@@ -921,7 +1173,6 @@
             }
         });
 
-        // Auth form toggle
         authToggle.addEventListener('click', () => {
             isAuthMode = isAuthMode === 'login' ? 'register' : 'login';
             if (isAuthMode === 'login') {
@@ -938,26 +1189,24 @@
             authError.style.display = 'none';
         });
 
-        // Auth form submit
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             authError.style.display = 'none';
-            
+
             const user = authUsername.value.trim();
             const pass = authPassword.value;
-            
+
             if (!user || !pass) {
                 authError.textContent = 'Please fill in all fields';
                 authError.style.display = 'block';
                 return;
             }
-            
+
             const endpoint = isAuthMode === 'login' ? '/api/login' : '/api/register';
             authSubmit.disabled = true;
             authSubmit.textContent = 'Please wait...';
-            
+
             try {
-                console.log('Attempting', isAuthMode, 'for user:', user);
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 
@@ -966,14 +1215,11 @@
                     },
                     body: JSON.stringify({ username: user, password: pass })
                 });
-                
-                console.log('Response status:', response.status);
+
                 const data = await response.json();
-                console.log('Response data:', data);
-                
+
                 if (response.ok) {
                     if (isAuthMode === 'register') {
-                        // After registration, log them in
                         userProfile = {
                             username: user,
                             profilePicture: null,
@@ -984,17 +1230,16 @@
                         userProfile = data.profile;
                         userProfile.isGuest = false;
                     }
-                    
+
                     username = userProfile.username;
                     localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     loginModal.classList.remove('active');
                     updateProfileUI();
-                    
-                    // Initialize socket if not already connected
+
                     if (!socket || !socket.connected) {
                         initSocket();
                     }
-                    
+
                     authForm.reset();
                 } else {
                     authError.textContent = data.error || 'An error occurred';
@@ -1010,7 +1255,6 @@
             }
         });
 
-        // Profile picture upload
         profilePicInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1025,13 +1269,12 @@
             }
         });
 
-        // Save profile
         saveProfile.addEventListener('click', async () => {
             if (userProfile.isGuest) {
                 alert('Guest users cannot save profiles. Please create an account.');
                 return;
             }
-            
+
             try {
                 const response = await fetch('/api/update-profile', {
                     method: 'POST',
@@ -1042,7 +1285,7 @@
                         theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light'
                     })
                 });
-                
+
                 if (response.ok) {
                     userProfile.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
                     localStorage.setItem('userProfile', JSON.stringify(userProfile));
@@ -1056,18 +1299,221 @@
             }
         });
 
-        // Logout
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('userProfile');
             userProfile = null;
             username = null;
             profileModal.classList.remove('active');
-            
-            // Disconnect and reload
+
             if (socket) {
                 socket.disconnect();
             }
             window.location.reload();
+        });
+
+        // ===== DRAWING MODE FUNCTIONS =====
+        
+        function initDrawingCanvas() {
+            canvas = drawingCanvas;
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function resizeCanvas() {
+            const container = videoContainer.getBoundingClientRect();
+            canvas.width = container.width - 48;
+            canvas.height = container.height - 48;
+            
+            const isDark = document.body.classList.contains('dark-theme');
+            ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function updateModeIndicator(mode, text) {
+            modeIndicator.className = 'mode-indicator ' + mode;
+            modeText.textContent = text;
+            modeIndicator.style.display = 'inline-flex';
+        }
+
+        function hideModeIndicator() {
+            modeIndicator.style.display = 'none';
+        }
+
+        function toggleDrawingModeOn() {
+            isDrawingMode = true;
+            
+            if (isSharing) {
+                stopSharing();
+            }
+            
+            videoContainer.querySelector('.placeholder').style.display = 'none';
+            drawingCanvas.style.display = 'block';
+            drawingToolbar.classList.add('active');
+            
+            toggleDrawingModeBtn.textContent = 'Exit Drawing';
+            toggleDrawingModeBtn.classList.remove('btn-secondary');
+            toggleDrawingModeBtn.classList.add('btn-primary');
+            
+            updateModeIndicator('drawing', 'Drawing Mode');
+            
+            initDrawingCanvas();
+            
+            socket.emit('drawing-mode-start', { roomId });
+            
+            addSystemMessage('Drawing mode activated');
+        }
+
+        function toggleDrawingModeOff() {
+            isDrawingMode = false;
+            
+            drawingCanvas.style.display = 'none';
+            drawingToolbar.classList.remove('active');
+            videoContainer.querySelector('.placeholder').style.display = 'block';
+            
+            toggleDrawingModeBtn.textContent = 'Drawing Mode';
+            toggleDrawingModeBtn.classList.remove('btn-primary');
+            toggleDrawingModeBtn.classList.add('btn-secondary');
+            
+            hideModeIndicator();
+            
+            socket.emit('drawing-mode-stop', { roomId });
+            
+            addSystemMessage('Drawing mode deactivated');
+        }
+
+        toggleDrawingModeBtn.addEventListener('click', () => {
+            if (isDrawingMode) {
+                toggleDrawingModeOff();
+            } else {
+                toggleDrawingModeOn();
+            }
+        });
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing || !isDrawingMode) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            
+            if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = brushSize * 3;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = brushSize;
+            }
+            
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            
+            socket.emit('drawing-data', {
+                roomId,
+                x0: lastX,
+                y0: lastY,
+                x1: x,
+                y1: y,
+                color: currentColor,
+                size: brushSize,
+                tool: currentTool
+            });
+            
+            lastX = x;
+            lastY = y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        drawingCanvas.addEventListener('mousedown', startDrawing);
+        drawingCanvas.addEventListener('mousemove', draw);
+        drawingCanvas.addEventListener('mouseup', stopDrawing);
+        drawingCanvas.addEventListener('mouseout', stopDrawing);
+
+        drawingCanvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        drawingCanvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        drawingCanvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        toolPen.addEventListener('click', () => {
+            currentTool = 'pen';
+            toolPen.classList.add('active');
+            toolEraser.classList.remove('active');
+            drawingCanvas.style.cursor = 'crosshair';
+        });
+
+        toolEraser.addEventListener('click', () => {
+            currentTool = 'eraser';
+            toolEraser.classList.add('active');
+            toolPen.classList.remove('active');
+            drawingCanvas.style.cursor = 'grab';
+        });
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                colorOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                currentColor = option.dataset.color;
+                brushPreview.style.background = currentColor;
+            });
+        });
+
+        brushSizeSlider.addEventListener('input', (e) => {
+            brushSize = parseInt(e.target.value);
+            brushPreview.style.width = brushSize * 2 + 'px';
+            brushPreview.style.height = brushSize * 2 + 'px';
+        });
+
+        brushPreview.style.width = brushSize * 2 + 'px';
+        brushPreview.style.height = brushSize * 2 + 'px';
+        brushPreview.style.background = currentColor;
+
+        clearCanvasBtn.addEventListener('click', () => {
+            if (confirm('Clear the entire canvas? This will clear it for everyone.')) {
+                const isDark = document.body.classList.contains('dark-theme');
+                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                socket.emit('clear-canvas', { roomId });
+                addSystemMessage('Canvas cleared');
+            }
         });
 
         // Initialize Socket.IO connection
@@ -1076,7 +1522,7 @@
                 console.log('Socket already connected');
                 return;
             }
-            
+
             socket = io({
                 reconnection: true,
                 reconnectionDelay: 1000,
@@ -1087,22 +1533,18 @@
             socket.on('connect', () => {
                 console.log('Connected to server');
                 socket.emit('join-room', { roomId, username });
-                
-                // Save room state for persistence
                 localStorage.setItem('lastRoom', roomId);
             });
 
             socket.on('reconnect', (attemptNumber) => {
                 console.log('Reconnected after', attemptNumber, 'attempts');
                 addSystemMessage('Reconnected to server');
-                // Rejoin the room
                 socket.emit('join-room', { roomId, username });
             });
 
             socket.on('disconnect', (reason) => {
                 console.log('Disconnected:', reason);
                 if (reason === 'io server disconnect') {
-                    // Server disconnected us, try to reconnect
                     socket.connect();
                 }
             });
@@ -1115,30 +1557,31 @@
             });
 
             socket.on('user-joined', (user) => {
-                console.log('User joined:', user);
+                console.log('👤 User joined:', user.username);
                 addSystemMessage(`${user.username} joined the room`);
-                
-                // FIXED: If we're sharing, create peer connection for new user
+
+                // CRITICAL: If we're currently sharing, immediately create peer connection for the new user
                 if (isSharing && screenStream) {
-                    createPeerConnection(user.id, true);
+                    console.log('📤 We are sharing! Creating peer for new user:', user.id);
+                    // Small delay to ensure they're ready
+                    setTimeout(() => {
+                        createPeerConnection(user.id, true);
+                    }, 500);
                 }
             });
 
             socket.on('user-left', (user) => {
                 console.log('User left:', user);
                 addSystemMessage(`${user.username} left the room`);
-                
-                // Remove from sharing users if they were sharing
+
                 sharingUsers.delete(user.id);
                 updateSharingUsersList();
-                
-                // Clean up peer connection
+
                 if (peerConnections.has(user.id)) {
                     peerConnections.get(user.id).close();
                     peerConnections.delete(user.id);
                 }
-                
-                // If we were viewing this user, clear the video
+
                 if (currentlyViewing === user.id) {
                     screenVideo.style.display = 'none';
                     videoContainer.querySelector('.placeholder').style.display = 'block';
@@ -1152,39 +1595,49 @@
             });
 
             socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
+                console.log('📢 User sharing event:', username, 'sharing:', userIsSharing);
+                
                 if (userIsSharing) {
                     addSystemMessage(`${username} started sharing their screen`);
-                    // Track this user as sharing
                     sharingUsers.set(id, username);
                     updateSharingUsersList();
-                    
-                    // FIXED: Create peer connection to receive their stream
+
+                    // If it's NOT us sharing, prepare to receive their stream
                     if (id !== socket.id) {
-                        console.log('User started sharing, requesting their stream');
-                        // Request the stream by creating a peer connection
-                        setTimeout(() => {
-                            const pc = createPeerConnection(id, false);
-                            // Send a signal to request offer
-                            socket.emit('request-stream', { roomId, targetId: id });
-                        }, 100);
+                        console.log('👀 Someone else is sharing, will receive their stream');
                         
-                        // Automatically view the first person who starts sharing
-                        if (sharingUsers.size === 1 && !currentlyViewing) {
-                            setTimeout(() => viewUserStream(id), 200);
+                        // Wait a bit for them to set up, then request stream
+                        setTimeout(() => {
+                            console.log('📞 Requesting stream from:', id);
+                            socket.emit('request-stream', { roomId, targetId: id });
+                        }, 300);
+
+                        // Auto-view the first person who shares
+                        if (sharingUsers.size === 1 && !currentlyViewing && !isSharing) {
+                            console.log('🎯 Auto-viewing first sharer');
+                            setTimeout(() => {
+                                viewUserStream(id);
+                            }, 500);
                         }
                     }
                 } else {
                     addSystemMessage(`${username} stopped sharing`);
-                    // Remove from sharing users
                     sharingUsers.delete(id);
                     updateSharingUsersList();
-                    
-                    // Hide video when sharing stops
+
+                    // If we were viewing this user, clear the video
                     if (id !== socket.id && currentlyViewing === id) {
+                        console.log('❌ User we were viewing stopped sharing');
                         screenVideo.style.display = 'none';
                         videoContainer.querySelector('.placeholder').style.display = 'block';
                         currentlyViewing = null;
                         hideConnectionStatus();
+                    }
+
+                    // Clean up peer connection
+                    if (peerConnections.has(id)) {
+                        peerConnections.get(id).close();
+                        peerConnections.delete(id);
                     }
                 }
             });
@@ -1193,13 +1646,11 @@
                 console.log(`Room ${roomId} has ${userCount} user(s)`);
             });
 
-            // FIXED: WebRTC signaling handlers with better flow
             socket.on('stream-requested', ({ fromId }) => {
                 console.log('📞 Stream requested by:', fromId);
                 console.log('   Am I sharing?', isSharing);
                 console.log('   Do I have screenStream?', !!screenStream);
                 
-                // If we're sharing, create offer for the requester
                 if (isSharing && screenStream) {
                     console.log('   ✅ Creating peer connection for requester');
                     createPeerConnection(fromId, true);
@@ -1209,182 +1660,273 @@
             });
 
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
-                console.log('📥 Received WebRTC offer from:', fromId);
-                console.log('   Offer type:', offer.type);
-                console.log('   Offer SDP length:', offer.sdp ? offer.sdp.length : 0);
+                console.log('📥 Received offer from:', fromId);
+                console.log('   Offer type:', offer?.type);
                 updateConnectionProgress(50, 'Received offer, creating answer...');
-                
+
                 try {
                     let pc = peerConnections.get(fromId);
+                    
                     if (!pc) {
-                        console.log('   Creating new peer connection for offer');
+                        console.log('   Creating new peer connection for incoming offer');
                         pc = createPeerConnection(fromId, false);
                     }
+
+                    console.log('   Current signaling state:', pc.signalingState);
                     
-                    console.log('   Setting remote description...');
+                    // Set remote description
                     await pc.setRemoteDescription(new RTCSessionDescription(offer));
                     console.log('   ✅ Remote description set');
-                    
-                    // Add our screen stream if we're sharing
-                    if (screenStream) {
-                        console.log('   Adding our stream tracks to answer');
+
+                    // If we're sharing, add our tracks to the answer
+                    if (screenStream && isSharing) {
+                        console.log('   📤 Adding our stream to answer');
                         screenStream.getTracks().forEach(track => {
                             const senders = pc.getSenders();
                             const trackExists = senders.some(sender => sender.track === track);
                             if (!trackExists) {
-                                pc.addTrack(track, screenStream);
-                                console.log('   ✅ Added track:', track.kind);
+                                try {
+                                    pc.addTrack(track, screenStream);
+                                    console.log('     ✅ Added', track.kind, 'track');
+                                } catch (e) {
+                                    console.error('     ❌ Error adding track:', e);
+                                }
                             }
                         });
                     }
-                    
+
+                    // Create answer
                     console.log('   Creating answer...');
                     const answer = await pc.createAnswer();
-                    console.log('   Setting local description...');
-                    await pc.setLocalDescription(answer);
-                    console.log('   📤 Sending answer back');
-                    updateConnectionProgress(60, 'Sending answer...');
+                    console.log('   ✅ Answer created');
                     
+                    await pc.setLocalDescription(answer);
+                    console.log('   ✅ Local description set');
+                    
+                    updateConnectionProgress(60, 'Sending answer...');
+
+                    // Send answer back
                     socket.emit('webrtc-answer', {
                         roomId,
                         targetId: fromId,
-                        answer
+                        answer: pc.localDescription
                     });
-                    console.log('   ✅ Answer sent successfully');
+                    console.log('   📤 Answer sent');
+
                 } catch (error) {
-                    console.error('   ❌ Error handling offer:', error);
+                    console.error('❌ Error handling offer:', error);
                     hideConnectionStatus();
-                    addSystemMessage('Error establishing connection');
+                    addSystemMessage('Error establishing connection: ' + error.message);
                 }
             });
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
-                console.log('📥 Received WebRTC answer from:', fromId);
-                console.log('   Answer type:', answer.type);
+                console.log('📥 Received answer from:', fromId);
+                console.log('   Answer type:', answer?.type);
                 updateConnectionProgress(70, 'Received answer, connecting...');
-                
+
                 try {
                     const pc = peerConnections.get(fromId);
+                    
                     if (!pc) {
                         console.error('   ❌ No peer connection found for', fromId);
                         return;
                     }
                     
-                    console.log('   Peer connection state:', pc.signalingState);
-                    if (pc.signalingState !== 'stable') {
-                        console.log('   Setting remote description from answer...');
+                    console.log('   Current signaling state:', pc.signalingState);
+                    
+                    // Only set remote description if we're in the right state
+                    if (pc.signalingState === 'have-local-offer') {
                         await pc.setRemoteDescription(new RTCSessionDescription(answer));
                         console.log('   ✅ Remote description set from answer');
                     } else {
-                        console.log('   ⚠️  Already in stable state, skipping');
+                        console.warn('   ⚠️  Unexpected signaling state:', pc.signalingState);
                     }
+                    
                 } catch (error) {
-                    console.error('   ❌ Error handling answer:', error);
+                    console.error('❌ Error handling answer:', error);
                 }
             });
 
             socket.on('webrtc-ice-candidate', async ({ fromId, candidate }) => {
-                console.log('📥 Received ICE candidate from:', fromId);
                 const pc = peerConnections.get(fromId);
                 if (pc && candidate) {
                     try {
                         await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                        console.log('   ✅ ICE candidate added');
                     } catch (error) {
-                        console.error('   ❌ Error adding ICE candidate:', error);
+                        console.error('Error adding ICE candidate:', error);
                     }
-                } else {
-                    console.warn('   ⚠️  No peer connection or candidate is null');
                 }
             });
 
-            socket.on('disconnect', () => {
-                console.log('Disconnected from server');
-                addSystemMessage('Disconnected from server');
+            // Drawing mode handlers
+            socket.on('drawing-data', (data) => {
+                if (!isDrawingMode || !ctx) return;
+                
+                const { x0, y0, x1, y1, color, size, tool } = data;
+                
+                ctx.beginPath();
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(x1, y1);
+                
+                if (tool === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = size * 3;
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = size;
+                }
+                
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            });
+
+            socket.on('clear-canvas', () => {
+                if (!isDrawingMode || !ctx) return;
+                const isDark = document.body.classList.contains('dark-theme');
+                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                addSystemMessage('Canvas was cleared');
+            });
+
+            socket.on('user-drawing-mode', ({ username, isActive }) => {
+                if (isActive) {
+                    addSystemMessage(`${username} started drawing mode`);
+                } else {
+                    addSystemMessage(`${username} left drawing mode`);
+                }
             });
         }
 
-        // FIXED: Create WebRTC peer connection with proper stream handling
-        // FIXED: Simplified WebRTC peer connection - INSTANT CONNECTION
         function createPeerConnection(userId, isInitiator) {
-            // Close existing if not working
+            // Check if connection already exists and is working
             if (peerConnections.has(userId)) {
-                const old = peerConnections.get(userId);
-                if (old.hasReceivedTrack && old.connectionState === 'connected') {
-                    console.log('✅ Reusing existing connection');
-                    return old;
+                const existing = peerConnections.get(userId);
+                if (existing.connectionState === 'connected' || existing.connectionState === 'connecting') {
+                    console.log('✅ Reusing existing peer connection:', userId);
+                    return existing;
                 }
-                console.log('Closing old connection');
-                old.close();
+                // Close broken connection
+                console.log('🔄 Closing old connection for:', userId);
+                existing.close();
                 peerConnections.delete(userId);
             }
 
-            console.log('🔄 NEW peer connection:', userId, 'initiator:', isInitiator);
+            console.log('🆕 Creating NEW peer connection:', userId, 'initiator:', isInitiator);
+            
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
             pc.userId = userId;
             pc.hasReceivedTrack = false;
 
-            // Add OUR stream if we're sharing
-            if (isInitiator && screenStream) {
-                console.log('📤 Adding OUR tracks');
+            // If we're sharing, add OUR stream immediately
+            if (isSharing && screenStream) {
+                console.log('📤 Adding OUR stream to peer:', userId);
+                const senders = [];
                 screenStream.getTracks().forEach(track => {
-                    pc.addTrack(track, screenStream);
+                    try {
+                        const sender = pc.addTrack(track, screenStream);
+                        senders.push(sender);
+                        console.log('  ✅ Added', track.kind, 'track');
+                    } catch (e) {
+                        console.error('  ❌ Failed to add track:', e);
+                    }
                 });
+                pc.senders = senders;
             }
 
-            // RECEIVE stream - THIS IS THE MAGIC
-            pc.ontrack = (e) => {
-                console.log('🎉 GOT TRACK:', e.track.kind);
+            // Handle INCOMING stream (when viewing others)
+            pc.ontrack = (event) => {
+                console.log('🎉 RECEIVED TRACK from', userId, ':', event.track.kind);
                 pc.hasReceivedTrack = true;
-                pc.remoteStream = e.streams[0];
                 
-                if (currentlyViewing === userId) {
-                    console.log('🎥 SHOWING VIDEO NOW');
-                    screenVideo.srcObject = e.streams[0];
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
-                    screenVideo.play();
-                    updateConnectionProgress(100, 'Connected!');
-                    setTimeout(hideConnectionStatus, 500);
+                if (event.streams && event.streams[0]) {
+                    pc.remoteStream = event.streams[0];
+                    console.log('  📺 Got remote stream');
+
+                    // If we're currently viewing this user, show their stream
+                    if (currentlyViewing === userId) {
+                        console.log('  🎥 Displaying stream NOW');
+                        screenVideo.srcObject = event.streams[0];
+                        screenVideo.style.display = 'block';
+                        videoContainer.querySelector('.placeholder').style.display = 'none';
+                        
+                        // Play the video
+                        screenVideo.play().then(() => {
+                            console.log('  ✅ Video playing');
+                            updateConnectionProgress(100, 'Connected!');
+                            setTimeout(hideConnectionStatus, 500);
+                        }).catch(e => {
+                            console.error('  ❌ Error playing video:', e);
+                        });
+                    }
                 }
             };
 
-            // Send ICE candidates
-            pc.onicecandidate = (e) => {
-                if (e.candidate) {
+            // Handle ICE candidates
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    console.log('📡 Sending ICE candidate to:', userId);
                     socket.emit('webrtc-ice-candidate', {
-                        roomId, targetId: userId, candidate: e.candidate
+                        roomId,
+                        targetId: userId,
+                        candidate: event.candidate
                     });
                 }
             };
 
-            // Monitor connection
+            // Monitor connection state
             pc.onconnectionstatechange = () => {
-                console.log('State:', pc.connectionState);
-                if (pc.connectionState === 'failed') {
-                    console.error('❌ FAILED');
+                console.log('🔗 Connection state for', userId, ':', pc.connectionState);
+                
+                if (pc.connectionState === 'connected') {
+                    console.log('  ✅ Peer connected successfully');
+                    pc.hasReceivedTrack = true;
+                } else if (pc.connectionState === 'failed') {
+                    console.error('  ❌ Connection FAILED for', userId);
                     peerConnections.delete(userId);
                     hideConnectionStatus();
-                    addSystemMessage('Connection failed. Click to retry.');
+                    addSystemMessage('Connection failed. Try clicking the user again.');
+                } else if (pc.connectionState === 'disconnected') {
+                    console.warn('  ⚠️  Peer disconnected:', userId);
                 }
             };
 
-            // CREATE OFFER if initiator
+            // Log ICE connection state
+            pc.oniceconnectionstatechange = () => {
+                console.log('❄️  ICE state for', userId, ':', pc.iceConnectionState);
+            };
+
+            // If we're the initiator, create and send offer
             if (isInitiator) {
-                pc.createOffer({ offerToReceiveVideo: true })
-                    .then(o => pc.setLocalDescription(o))
-                    .then(() => {
-                        socket.emit('webrtc-offer', {
-                            roomId, targetId: userId, offer: pc.localDescription
-                        });
+                console.log('📞 Creating offer for:', userId);
+                
+                pc.createOffer({
+                    offerToReceiveVideo: true,
+                    offerToReceiveAudio: true
+                })
+                .then(offer => {
+                    console.log('  📝 Offer created');
+                    return pc.setLocalDescription(offer);
+                })
+                .then(() => {
+                    console.log('  📤 Sending offer to:', userId);
+                    socket.emit('webrtc-offer', {
+                        roomId,
+                        targetId: userId,
+                        offer: pc.localDescription
                     });
+                })
+                .catch(err => {
+                    console.error('  ❌ Error creating offer:', err);
+                });
             }
 
             return pc;
         }
 
-        // Theme Toggle
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-theme');
@@ -1405,25 +1947,21 @@
             }
         }
 
-        // Generate Room ID
         function generateRoomId() {
             return Math.random().toString(36).substring(2, 10);
         }
 
-        // Update URL with room ID
         function updateURL() {
             try {
                 const newURL = window.location.origin + window.location.pathname + '?room=' + roomId;
                 window.history.replaceState({}, '', newURL);
             } catch (e) {
-                // Ignore errors in sandboxed environments
                 console.log('Cannot update URL in this environment');
             }
         }
 
         updateURL();
 
-        // Chat Toggle
         chatToggle.addEventListener('click', () => {
             isChatOpen = !isChatOpen;
             if (isChatOpen) {
@@ -1441,45 +1979,82 @@
             mainContent.classList.remove('chat-open');
         });
 
-        // Screen Sharing
         startShareBtn.addEventListener('click', async () => {
             try {
+                // Request screen share with audio
                 screenStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { mediaSource: 'screen' },
-                    audio: false
+                    video: { 
+                        mediaSource: 'screen',
+                        cursor: 'always'
+                    },
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    }
                 });
 
+                console.log('✅ Got screen stream');
+
+                // Exit drawing mode if active
+                if (isDrawingMode) {
+                    toggleDrawingModeOff();
+                }
+
+                // Display the video locally
                 screenVideo.srcObject = screenStream;
                 screenVideo.style.display = 'block';
+                screenVideo.muted = false; // Unmute to hear audio
                 videoContainer.querySelector('.placeholder').style.display = 'none';
-                
+
+                // Update UI
                 startShareBtn.style.display = 'none';
                 stopShareBtn.style.display = 'inline-block';
                 isSharing = true;
 
-                // Add ourselves to sharing users
+                // Add to sharing users list
                 sharingUsers.set(socket.id, username);
                 updateSharingUsersList();
 
-                // Notify server
+                // Show mode indicator
+                updateModeIndicator('screen-sharing', 'Screen Sharing');
+
+                // Notify server first
                 socket.emit('start-sharing', { roomId });
 
-                // FIXED: Add stream to all existing peer connections
+                console.log('📤 Notified server of sharing');
+
+                // Add tracks to ALL peer connections (for users already in room)
                 peerConnections.forEach((pc, userId) => {
+                    console.log('Adding stream to existing peer:', userId);
                     screenStream.getTracks().forEach(track => {
-                        pc.addTrack(track, screenStream);
+                        try {
+                            const sender = pc.addTrack(track, screenStream);
+                            console.log('✅ Added track:', track.kind, 'to peer:', userId);
+                        } catch (e) {
+                            console.error('Error adding track:', e);
+                        }
                     });
                 });
 
-                // Handle stream end
+                // Handle when user stops sharing via browser UI
                 screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    console.log('Screen sharing ended by user');
                     stopSharing();
                 });
 
-                addSystemMessage('Screen sharing started');
+                addSystemMessage('Screen sharing started (with audio)');
+                console.log('🎉 Screen sharing fully initialized');
+
             } catch (err) {
-                console.error('Error starting screen share:', err);
-                addSystemMessage('Failed to start screen sharing');
+                console.error('❌ Error starting screen share:', err);
+                if (err.name === 'NotAllowedError') {
+                    addSystemMessage('Screen sharing permission denied');
+                } else if (err.name === 'NotFoundError') {
+                    addSystemMessage('No screen source found');
+                } else {
+                    addSystemMessage('Failed to start screen sharing: ' + err.message);
+                }
             }
         });
 
@@ -1498,22 +2073,20 @@
             startShareBtn.style.display = 'inline-block';
             stopShareBtn.style.display = 'none';
             isSharing = false;
-            
-            // Remove ourselves from sharing users
+
             sharingUsers.delete(socket.id);
             updateSharingUsersList();
-            
-            // Close all peer connections
+
             peerConnections.forEach(pc => pc.close());
             peerConnections.clear();
-            
-            // Notify server
+
+            hideModeIndicator();
+
             socket.emit('stop-sharing', { roomId });
-            
+
             addSystemMessage('Screen sharing stopped');
         }
 
-        // Share Link
         shareLinkBtn.addEventListener('click', () => {
             const link = window.location.origin + window.location.pathname + '?room=' + roomId;
             shareableLink.value = link;
@@ -1529,22 +2102,21 @@
             }, 2000);
         });
 
-        // Chat functionality
         function addMessage(text, sender, isSent = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + (isSent ? 'message-sent' : 'message-received');
-            
+
             if (!isSent) {
                 const senderDiv = document.createElement('div');
                 senderDiv.className = 'message-sender';
                 senderDiv.textContent = sender;
                 messageDiv.appendChild(senderDiv);
             }
-            
+
             const textDiv = document.createElement('div');
             textDiv.textContent = text;
             messageDiv.appendChild(textDiv);
-            
+
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -1578,49 +2150,45 @@
             }
         });
 
-        // Update the sharing users list UI
         function updateSharingUsersList() {
             if (sharingUsers.size === 0) {
                 sharingUsersPanel.style.display = 'none';
                 return;
             }
-            
+
             sharingUsersPanel.style.display = 'block';
             sharingUsersList.innerHTML = '';
-            
+
             sharingUsers.forEach((username, userId) => {
                 const userItem = document.createElement('div');
                 userItem.className = 'sharing-user-item';
                 if (currentlyViewing === userId) {
                     userItem.classList.add('active');
                 }
-                
+
                 const nameDiv = document.createElement('div');
                 nameDiv.className = 'sharing-user-name';
                 nameDiv.innerHTML = `
                     <span>${username}</span>
                     ${userId === socket.id ? '<span class="sharing-badge">You</span>' : ''}
                 `;
-                
+
                 userItem.appendChild(nameDiv);
-                
-                // Only add click handler for other users' streams
+
                 if (userId !== socket.id) {
                     userItem.addEventListener('click', () => viewUserStream(userId));
                 }
-                
+
                 sharingUsersList.appendChild(userItem);
             });
         }
-        
-        // Update connection progress
+
         function updateConnectionProgress(percent, message) {
             connectionStatus.style.display = 'block';
             connectionMessage.textContent = message;
             progressFill.style.width = percent + '%';
         }
 
-        // Hide connection status
         function hideConnectionStatus() {
             connectionStatus.style.display = 'none';
             if (connectionTimeout) {
@@ -1635,7 +2203,6 @@
             progressFill.style.width = '0%';
         }
 
-        // Cancel connection button
         cancelConnection.addEventListener('click', () => {
             if (pendingConnection) {
                 const pc = peerConnections.get(pendingConnection);
@@ -1648,73 +2215,97 @@
             hideConnectionStatus();
             addSystemMessage('Connection cancelled');
         });
-        
-        // Switch to viewing a specific user's stream
+
         function viewUserStream(userId) {
-            console.log('Switching to view stream from:', userId);
+            console.log('👁️  Viewing stream from:', userId);
             currentlyViewing = userId;
             pendingConnection = userId;
-            
+            updateSharingUsersList();
+
             const pc = peerConnections.get(userId);
+            
             if (pc) {
-                console.log('Found peer connection for user:', userId, 'state:', pc.connectionState);
+                console.log('  ✅ Peer connection exists, state:', pc.connectionState);
+                
+                // If we already have the remote stream, display it immediately
                 if (pc.remoteStream) {
-                    console.log('Found remote stream, displaying it');
-                    updateConnectionProgress(70, 'Loading video...');
+                    console.log('  📺 Remote stream already available!');
+                    updateConnectionProgress(80, 'Loading video...');
+                    
                     screenVideo.srcObject = pc.remoteStream;
                     screenVideo.style.display = 'block';
                     videoContainer.querySelector('.placeholder').style.display = 'none';
                     
-                    screenVideo.onloadedmetadata = () => {
-                        screenVideo.play().then(() => {
-                            updateConnectionProgress(100, 'Connected!');
-                            setTimeout(hideConnectionStatus, 1000);
-                        });
-                    };
+                    screenVideo.play().then(() => {
+                        console.log('  ✅ Video playing');
+                        updateConnectionProgress(100, 'Connected!');
+                        setTimeout(hideConnectionStatus, 1000);
+                    }).catch(e => {
+                        console.error('  ❌ Error playing video:', e);
+                        addSystemMessage('Error playing video. Try again.');
+                        hideConnectionStatus();
+                    });
                 } else {
-                    console.log('Peer connection exists but no remote stream yet');
-                    updateConnectionProgress(10, 'Establishing connection...');
+                    // Stream not ready yet, wait for it
+                    console.log('  ⏳ Waiting for stream...');
+                    updateConnectionProgress(30, 'Waiting for video stream...');
                     
-                    // Set a timeout for the connection
+                    // Set timeout in case stream never arrives
                     connectionTimeout = setTimeout(() => {
                         if (!pc.hasReceivedTrack) {
-                            console.error('Connection timeout - no track received');
+                            console.error('  ❌ Timeout - no stream received');
                             hideConnectionStatus();
-                            addSystemMessage('Connection timeout. The user may not be sharing anymore.');
+                            addSystemMessage('Connection timeout. The user may have stopped sharing.');
                             currentlyViewing = null;
                             pendingConnection = null;
                             updateSharingUsersList();
                         }
-                    }, 15000); // 15 second timeout
+                    }, 15000);
                 }
             } else {
-                console.log('No peer connection found for user:', userId, 'creating one...');
-                updateConnectionProgress(5, 'Initiating connection...');
+                // No peer connection yet, create one
+                console.log('  🔄 No peer connection, creating one...');
+                updateConnectionProgress(10, 'Initiating connection...');
+                
+                // Create peer connection and wait for offer
                 createPeerConnection(userId, false);
                 
+                // The peer connection will be established when we receive an offer
                 // Set timeout
                 connectionTimeout = setTimeout(() => {
                     const newPc = peerConnections.get(userId);
                     if (!newPc || !newPc.hasReceivedTrack) {
-                        console.error('Connection timeout - failed to establish');
+                        console.error('  ❌ Failed to establish connection');
                         hideConnectionStatus();
-                        addSystemMessage('Unable to connect. Please try again.');
+                        addSystemMessage('Unable to connect. Make sure they are sharing.');
                         currentlyViewing = null;
                         pendingConnection = null;
                         updateSharingUsersList();
                     }
                 }, 15000);
             }
-            
-            // Update active state in list
-            updateSharingUsersList();
         }
 
-        // Initial system message
+        function checkAuth() {
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                try {
+                    userProfile = JSON.parse(savedProfile);
+                    username = userProfile.username;
+                    updateProfileUI();
+                    initSocket();
+                } catch (e) {
+                    localStorage.removeItem('userProfile');
+                    loginModal.classList.add('active');
+                }
+            } else {
+                loginModal.classList.add('active');
+            }
+        }
+
         addSystemMessage('Room ID: ' + roomId);
         addSystemMessage('Connecting to server...');
 
-        // Check authentication and initialize
         checkAuth();
     </script>
 </body>
