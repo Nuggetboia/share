@@ -58,34 +58,6 @@
             color: #98989d;
         }
 
-        body.dark-theme .chat-panel {
-            background: #2c2c2e;
-        }
-
-        body.dark-theme .chat-header {
-            border-bottom-color: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .message-received {
-            background: #3a3a3c;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .chat-input-container {
-            border-top-color: #3a3a3c;
-        }
-
-        body.dark-theme .chat-input {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
-        }
-
-        body.dark-theme .modal {
-            background: rgba(0,0,0,0.7);
-        }
-
         body.dark-theme .modal-content {
             background: #2c2c2e;
             color: #f5f5f7;
@@ -95,21 +67,23 @@
             color: #98989d;
         }
 
-        body.dark-theme .link-input {
+        body.dark-theme .form-input {
             background: #3a3a3c;
             border-color: #48484a;
             color: #f5f5f7;
         }
 
-        body.dark-theme .sharing-users-panel {
-            background: #2c2c2e;
-        }
-
-        body.dark-theme .sharing-users-header {
+        body.dark-theme .room-code {
+            background: #3a3a3c;
+            border-color: #48484a;
             color: #f5f5f7;
         }
 
-        body.dark-theme .sharing-user-item:hover {
+        body.dark-theme .sharers-panel {
+            background: #2c2c2e;
+        }
+
+        body.dark-theme .sharer-item:hover {
             background: #3a3a3c;
         }
 
@@ -122,11 +96,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            transition: margin-right 0.3s ease;
-        }
-
-        .main-content.chat-open {
-            margin-right: 320px;
         }
 
         .header {
@@ -240,78 +209,7 @@
 
         .placeholder p {
             font-size: 16px;
-        }
-
-        .chat-panel {
-            position: fixed;
-            right: -320px;
-            top: 0;
-            width: 320px;
-            height: 100vh;
-            background: white;
-            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-panel.open {
-            right: 0;
-        }
-
-        .chat-header {
-            padding: 16px;
-            border-bottom: 1px solid #e5e5e7;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .message {
-            padding: 10px 12px;
-            border-radius: 8px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .message-sent {
-            background: #0071e3;
-            color: white;
-            align-self: flex-end;
-        }
-
-        .message-received {
-            background: #f5f5f7;
-            align-self: flex-start;
-        }
-
-        .chat-input-container {
-            padding: 16px;
-            border-top: 1px solid #e5e5e7;
-            display: flex;
-            gap: 8px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #e5e5e7;
-            border-radius: 8px;
-            font-size: 14px;
+            margin-bottom: 24px;
         }
 
         .modal {
@@ -349,15 +247,31 @@
             margin-bottom: 24px;
         }
 
-        .link-input {
+        .room-code {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #0071e3;
+            border-radius: 8px;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            user-select: all;
+        }
+
+        .form-input {
             width: 100%;
             padding: 12px;
             border: 1px solid #e5e5e7;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 16px;
             text-align: center;
-            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .modal-buttons {
@@ -369,7 +283,7 @@
             flex: 1;
         }
 
-        .sharing-users-panel {
+        .sharers-panel {
             position: fixed;
             left: 24px;
             top: 80px;
@@ -382,14 +296,14 @@
             display: none;
         }
 
-        .sharing-users-header {
+        .sharers-header {
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 12px;
             color: #1d1d1f;
         }
 
-        .sharing-user-item {
+        .sharer-item {
             padding: 10px 12px;
             border-radius: 8px;
             margin-bottom: 4px;
@@ -398,28 +312,18 @@
             font-size: 14px;
         }
 
-        .sharing-user-item:hover {
+        .sharer-item:hover {
             background: #f5f5f7;
         }
 
-        .sharing-user-item.active {
+        .sharer-item.active {
             background: #0071e3;
             color: white;
         }
 
-        .sharing-badge {
-            background: rgba(0,113,227,0.1);
-            color: #0071e3;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .sharing-user-item.active .sharing-badge {
-            background: rgba(255,255,255,0.2);
-            color: white;
+        .sharer-item.you {
+            opacity: 0.6;
+            cursor: default;
         }
 
         .status-bar {
@@ -462,11 +366,20 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+        .room-info {
+            background: #0071e3;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main-content" id="mainContent">
+        <div class="main-content">
             <div class="header">
                 <div class="logo">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -475,13 +388,11 @@
                     ShareView
                 </div>
                 <div class="controls">
-                    <button class="btn-secondary" id="startBtn">Start Sharing</button>
-                    <button class="btn-danger" id="stopBtn" style="display: none;">Stop Sharing</button>
-                    <button class="btn-icon" id="chatToggle" title="Toggle Chat">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
-                        </svg>
-                    </button>
+                    <span class="room-info" id="roomInfo">Not in room</span>
+                    <button class="btn-secondary" id="createRoomBtn">Create Room</button>
+                    <button class="btn-secondary" id="joinRoomBtn">Join Room</button>
+                    <button class="btn-primary" id="startShareBtn" style="display: none;">Start Sharing</button>
+                    <button class="btn-danger" id="stopShareBtn" style="display: none;">Stop Sharing</button>
                     <button class="btn-icon" id="themeToggle" title="Toggle Theme">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
@@ -489,45 +400,46 @@
                     </button>
                 </div>
             </div>
-            <div class="video-container" id="videoContainer">
+            <div class="video-container">
                 <div class="placeholder" id="placeholder">
-                    <h2>No Active Screen Share</h2>
-                    <p>Click "Start Sharing" to share your screen</p>
+                    <h2>Welcome to ShareView</h2>
+                    <p>Create a room to share your screen or join an existing room</p>
                 </div>
                 <video id="videoElement" autoplay playsinline style="display: none;"></video>
             </div>
         </div>
-
-        <div class="chat-panel" id="chatPanel">
-            <div class="chat-header">
-                <h3>Chat</h3>
-                <button class="btn-icon" id="closeChatBtn" style="width: 32px; height: 32px;">×</button>
-            </div>
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-container">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
-                <button class="btn-primary" id="sendBtn">Send</button>
-            </div>
-        </div>
     </div>
 
-    <!-- Share Modal -->
-    <div class="modal" id="shareModal">
+    <!-- Create Room Modal -->
+    <div class="modal" id="createRoomModal">
         <div class="modal-content">
-            <h2>Share Your Screen</h2>
-            <p>Share this Session ID with others to let them view your screen</p>
-            <input type="text" class="link-input" id="shareLink" readonly>
+            <h2>Room Created!</h2>
+            <p>Share this code with others to let them join</p>
+            <div class="room-code" id="displayRoomCode">LOADING...</div>
             <div class="modal-buttons">
-                <button class="btn-primary" id="copyLinkBtn">Copy ID</button>
-                <button class="btn-secondary" id="closeShareModalBtn">Close</button>
+                <button class="btn-primary" id="copyCodeBtn">Copy Code</button>
+                <button class="btn-secondary" id="closeCreateModalBtn">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- Sharing Users Panel -->
-    <div class="sharing-users-panel" id="sharingUsersPanel">
-        <div class="sharing-users-header">Available Sharers</div>
-        <div id="sharingUsersList"></div>
+    <!-- Join Room Modal -->
+    <div class="modal" id="joinRoomModal">
+        <div class="modal-content">
+            <h2>Join Room</h2>
+            <p>Enter the room code to join</p>
+            <input type="text" class="form-input" id="joinRoomInput" placeholder="Enter room code" maxlength="6">
+            <div class="modal-buttons">
+                <button class="btn-primary" id="confirmJoinBtn">Join</button>
+                <button class="btn-secondary" id="cancelJoinBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sharers Panel -->
+    <div class="sharers-panel" id="sharersPanel">
+        <div class="sharers-header">Active Sharers</div>
+        <div id="sharersList"></div>
     </div>
 
     <!-- Status Bar -->
@@ -536,399 +448,414 @@
         <span id="statusText">Connecting...</span>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
         // DOM Elements
         const videoElement = document.getElementById('videoElement');
         const placeholder = document.getElementById('placeholder');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const shareModal = document.getElementById('shareModal');
-        const shareLink = document.getElementById('shareLink');
-        const chatPanel = document.getElementById('chatPanel');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const mainContent = document.getElementById('mainContent');
-        const sharingUsersPanel = document.getElementById('sharingUsersPanel');
-        const sharingUsersList = document.getElementById('sharingUsersList');
+        const createRoomBtn = document.getElementById('createRoomBtn');
+        const joinRoomBtn = document.getElementById('joinRoomBtn');
+        const startShareBtn = document.getElementById('startShareBtn');
+        const stopShareBtn = document.getElementById('stopShareBtn');
+        const createRoomModal = document.getElementById('createRoomModal');
+        const joinRoomModal = document.getElementById('joinRoomModal');
+        const displayRoomCode = document.getElementById('displayRoomCode');
+        const joinRoomInput = document.getElementById('joinRoomInput');
+        const sharersPanel = document.getElementById('sharersPanel');
+        const sharersList = document.getElementById('sharersList');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
+        const roomInfo = document.getElementById('roomInfo');
 
         // State
-        let peer = null;
-        let peerId = null;
+        let socket = null;
+        let myPeerId = null;
+        let currentRoom = null;
         let localStream = null;
-        let currentCall = null;
-        let dataConnection = null;
-        let isSharingScreen = false;
+        let isSharing = false;
+        let peerConnections = new Map();
         let activeSharers = new Map();
         let currentlyViewing = null;
-        let discoveryBroadcast = null;
 
-        // Initialize PeerJS connection
-        function initializePeer() {
-            console.log('Initializing PeerJS...');
-            
-            // Connect to PeerJS server
-            peer = new Peer({
-                host: window.location.hostname,
-                port: window.location.port || (window.location.protocol === 'https:' ? 443 : 80),
-                path: '/peerjs',
-                debug: 2,
-                config: {
-                    iceServers: [
-                        { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' }
-                    ]
-                }
+        const ICE_SERVERS = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' }
+            ]
+        };
+
+        // Initialize Socket.IO
+        function initSocket() {
+            socket = io();
+
+            socket.on('connect', () => {
+                myPeerId = socket.id;
+                console.log('✅ Connected to server. My ID:', myPeerId);
+                updateStatus('connected', 'Connected - Ready to create or join a room');
             });
 
-            peer.on('open', (id) => {
-                peerId = id;
-                console.log('✅ Connected to PeerJS server. My ID:', peerId);
-                updateStatus('connected', 'Ready - Click "Start Sharing" or select a sharer below');
-                
-                // Start broadcasting presence
-                startDiscoveryBroadcast();
-                
-                // Request list of active sharers
-                setTimeout(discoverActiveSharers, 1000);
-            });
-
-            peer.on('error', (err) => {
-                console.error('❌ PeerJS error:', err);
-                if (err.type === 'peer-unavailable') {
-                    updateStatus('connected', 'Peer not available');
-                } else if (err.type === 'network') {
-                    updateStatus('offline', 'Network error - retrying...');
-                    setTimeout(initializePeer, 3000);
-                } else {
-                    updateStatus('offline', 'Error: ' + err.message);
-                }
-            });
-
-            peer.on('disconnected', () => {
-                console.warn('⚠️  Disconnected from server');
+            socket.on('disconnect', () => {
+                console.log('❌ Disconnected from server');
                 updateStatus('offline', 'Disconnected - Reconnecting...');
-                peer.reconnect();
             });
 
-            // Handle incoming calls (when someone wants to view our screen)
-            peer.on('call', (call) => {
-                console.log('📞 Incoming call from:', call.peer);
+            socket.on('room-created', (data) => {
+                currentRoom = data.roomCode;
+                console.log('✅ Room created:', currentRoom);
+                displayRoomCode.textContent = currentRoom;
+                createRoomModal.classList.add('active');
+                roomInfo.textContent = `Room: ${currentRoom}`;
                 
-                if (isSharingScreen && localStream) {
-                    console.log('✅ Answering with our screen stream');
-                    call.answer(localStream);
-                    currentCall = call;
-                    updateStatus('sharing', 'Sharing with viewers');
-                    
-                    call.on('close', () => {
-                        console.log('Viewer disconnected');
-                        if (isSharingScreen) {
-                            updateStatus('sharing', 'Sharing (waiting for viewers)');
+                createRoomBtn.style.display = 'none';
+                joinRoomBtn.style.display = 'none';
+                startShareBtn.style.display = 'inline-block';
+                
+                updateStatus('connected', `In room ${currentRoom}`);
+            });
+
+            socket.on('room-joined', (data) => {
+                currentRoom = data.roomCode;
+                console.log('✅ Joined room:', currentRoom);
+                roomInfo.textContent = `Room: ${currentRoom}`;
+                
+                createRoomBtn.style.display = 'none';
+                joinRoomBtn.style.display = 'none';
+                startShareBtn.style.display = 'inline-block';
+                
+                joinRoomModal.classList.remove('active');
+                updateStatus('connected', `In room ${currentRoom} - ${data.userCount} users`);
+
+                // Update sharers list with existing sharers
+                if (data.sharers) {
+                    data.sharers.forEach(sharer => {
+                        if (sharer.id !== myPeerId) {
+                            activeSharers.set(sharer.id, sharer.username || 'User');
                         }
                     });
+                    updateSharersList();
+                }
+            });
 
-                    call.on('error', (err) => {
-                        console.error('Call error:', err);
-                    });
+            socket.on('room-error', (data) => {
+                alert(data.error);
+                joinRoomInput.value = '';
+            });
+
+            socket.on('user-joined', (data) => {
+                console.log('👋 User joined:', data.username);
+                updateStatus('connected', `${data.username} joined - ${data.userCount} users`);
+            });
+
+            socket.on('user-left', (data) => {
+                console.log('👋 User left:', data.username);
+                activeSharers.delete(data.id);
+                updateSharersList();
+                
+                const pc = peerConnections.get(data.id);
+                if (pc) {
+                    pc.close();
+                    peerConnections.delete(data.id);
+                }
+                
+                if (currentlyViewing === data.id) {
+                    videoElement.srcObject = null;
+                    videoElement.style.display = 'none';
+                    placeholder.style.display = 'block';
+                    currentlyViewing = null;
+                }
+            });
+
+            socket.on('user-sharing', (data) => {
+                console.log('📢 User sharing update:', data.username, data.isSharing);
+                
+                if (data.isSharing) {
+                    activeSharers.set(data.id, data.username || 'User');
                 } else {
-                    console.warn('❌ Not sharing, rejecting call');
-                    call.close();
+                    activeSharers.delete(data.id);
+                    
+                    if (currentlyViewing === data.id) {
+                        videoElement.srcObject = null;
+                        videoElement.style.display = 'none';
+                        placeholder.style.display = 'block';
+                        currentlyViewing = null;
+                    }
+                }
+                
+                updateSharersList();
+            });
+
+            socket.on('request-stream', (data) => {
+                console.log('📞 Stream requested by:', data.fromId);
+                
+                if (isSharing && localStream) {
+                    console.log('✅ Creating peer connection for viewer');
+                    createPeerConnection(data.fromId, true);
                 }
             });
 
-            // Handle incoming data connections (for chat and discovery)
-            peer.on('connection', (conn) => {
-                setupDataConnection(conn);
+            socket.on('webrtc-offer', async (data) => {
+                console.log('📥 Received offer from:', data.fromId);
+                
+                try {
+                    let pc = peerConnections.get(data.fromId);
+                    
+                    if (!pc) {
+                        pc = createPeerConnection(data.fromId, false);
+                    }
+
+                    await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                    console.log('✅ Remote description set');
+
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    
+                    socket.emit('webrtc-answer', {
+                        roomCode: currentRoom,
+                        targetId: data.fromId,
+                        answer: pc.localDescription
+                    });
+                    
+                    console.log('📤 Answer sent');
+
+                } catch (error) {
+                    console.error('❌ Error handling offer:', error);
+                }
+            });
+
+            socket.on('webrtc-answer', async (data) => {
+                console.log('📥 Received answer from:', data.fromId);
+                
+                try {
+                    const pc = peerConnections.get(data.fromId);
+                    
+                    if (!pc) {
+                        console.error('❌ No peer connection found');
+                        return;
+                    }
+                    
+                    if (pc.signalingState === 'have-local-offer') {
+                        await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+                        console.log('✅ Remote description set from answer');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error handling answer:', error);
+                }
+            });
+
+            socket.on('webrtc-ice-candidate', async (data) => {
+                const pc = peerConnections.get(data.fromId);
+                if (pc && data.candidate) {
+                    try {
+                        await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+                        console.log('❄️ ICE candidate added');
+                    } catch (error) {
+                        console.error('❌ Error adding ICE candidate:', error);
+                    }
+                }
             });
         }
 
-        // Broadcast that we're sharing (or just present)
-        function startDiscoveryBroadcast() {
-            // Broadcast our presence every 5 seconds
-            discoveryBroadcast = setInterval(() => {
-                if (isSharingScreen && peerId) {
-                    console.log('📡 Broadcasting that we are sharing...');
-                    // We'll use a discovery mechanism through data connections
+        function createPeerConnection(userId, isInitiator) {
+            if (peerConnections.has(userId)) {
+                const existing = peerConnections.get(userId);
+                if (existing.connectionState === 'connected' || existing.connectionState === 'connecting') {
+                    return existing;
                 }
-            }, 5000);
+                existing.close();
+                peerConnections.delete(userId);
+            }
+
+            console.log('🆕 Creating peer connection for:', userId, 'initiator:', isInitiator);
+            
+            const pc = new RTCPeerConnection(ICE_SERVERS);
+            peerConnections.set(userId, pc);
+
+            if (isSharing && localStream) {
+                console.log('📤 Adding our stream to peer');
+                localStream.getTracks().forEach(track => {
+                    pc.addTrack(track, localStream);
+                    console.log('✅ Added', track.kind, 'track');
+                });
+            }
+
+            pc.ontrack = (event) => {
+                console.log('🎉 Received track from', userId, ':', event.track.kind);
+                
+                if (event.streams && event.streams[0]) {
+                    console.log('📺 Got remote stream');
+
+                    if (currentlyViewing === userId) {
+                        videoElement.srcObject = event.streams[0];
+                        videoElement.muted = false;
+                        videoElement.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        
+                        videoElement.play().then(() => {
+                            console.log('✅ Video playing');
+                        }).catch(e => {
+                            console.log('⚠️ Click video to play');
+                        });
+                    }
+                }
+            };
+
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    socket.emit('webrtc-ice-candidate', {
+                        roomCode: currentRoom,
+                        targetId: userId,
+                        candidate: event.candidate
+                    });
+                }
+            };
+
+            pc.onconnectionstatechange = () => {
+                console.log('🔗 Connection state:', pc.connectionState);
+                
+                if (pc.connectionState === 'failed') {
+                    console.error('❌ Connection failed');
+                    peerConnections.delete(userId);
+                }
+            };
+
+            if (isInitiator) {
+                pc.createOffer({
+                    offerToReceiveVideo: true,
+                    offerToReceiveAudio: true
+                })
+                .then(offer => pc.setLocalDescription(offer))
+                .then(() => {
+                    socket.emit('webrtc-offer', {
+                        roomCode: currentRoom,
+                        targetId: userId,
+                        offer: pc.localDescription
+                    });
+                    console.log('📤 Offer sent');
+                })
+                .catch(err => console.error('❌ Error creating offer:', err));
+            }
+
+            return pc;
         }
 
-        // Discover active sharers
-        function discoverActiveSharers() {
-            // In a real app, you'd have a signaling server
-            // For now, we'll use manual connection
-            console.log('🔍 Discovery: Use Session ID to connect to sharers');
-        }
-
-        // Start screen sharing
         async function startSharing() {
             try {
-                updateStatus('connected', 'Requesting screen share...');
+                console.log('🎬 Starting screen share...');
                 
-                // Request screen sharing with AUDIO
                 localStream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
                         cursor: "always",
-                        displaySurface: "monitor",
                         width: { ideal: 1920 },
                         height: { ideal: 1080 }
                     },
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true,
-                        autoGainControl: false,
-                        sampleRate: 44100
+                        autoGainControl: false
                     }
                 });
 
-                console.log('✅ Screen sharing started');
+                console.log('✅ Got screen stream');
                 console.log('   Video tracks:', localStream.getVideoTracks().length);
                 console.log('   Audio tracks:', localStream.getAudioTracks().length);
 
-                // Check for audio
-                const audioTrack = localStream.getAudioTracks()[0];
-                if (audioTrack) {
-                    console.log('✅ Audio enabled:', audioTrack.label);
-                } else {
-                    console.warn('⚠️  No audio track - make sure to check "Share audio"');
-                }
-
-                // Display locally
                 videoElement.srcObject = localStream;
-                videoElement.muted = true; // Mute local to avoid feedback
+                videoElement.muted = true;
                 videoElement.style.display = 'block';
                 placeholder.style.display = 'none';
                 
-                isSharingScreen = true;
-                startBtn.style.display = 'none';
-                stopBtn.style.display = 'inline-block';
+                await videoElement.play();
 
-                // Show session ID
-                shareLink.value = peerId;
-                shareModal.classList.add('active');
-                updateStatus('sharing', `Sharing - Session ID: ${peerId}`);
+                isSharing = true;
+                startShareBtn.style.display = 'none';
+                stopShareBtn.style.display = 'inline-block';
 
-                // Add ourselves to the sharers list
-                activeSharers.set(peerId, 'You');
+                activeSharers.set(myPeerId, 'You');
                 updateSharersList();
 
-                // Handle when user stops sharing via browser
                 localStream.getVideoTracks()[0].onended = () => {
-                    console.log('📺 User stopped sharing via browser');
                     stopSharing();
                 };
 
+                socket.emit('start-sharing', { roomCode: currentRoom });
+                updateStatus('sharing', `Sharing in room ${currentRoom}`);
+
             } catch (err) {
                 console.error('❌ Error starting screen share:', err);
-                let errorMsg = 'Could not start screen sharing. ';
-                
-                if (err.name === 'NotAllowedError') {
-                    errorMsg += 'Permission denied.';
-                } else if (err.name === 'NotFoundError') {
-                    errorMsg += 'No screen source found.';
-                } else {
-                    errorMsg += err.message;
-                }
-                
-                alert(errorMsg + '\n\nMake sure to:\n1. Grant permission\n2. Select a screen/window\n3. Check "Share audio" for audio');
-                updateStatus('connected', 'Ready');
+                alert('Could not start screen sharing. Make sure to:\n1. Grant permission\n2. Select a screen/window\n3. Check "Share audio" for audio');
             }
         }
 
-        // Stop screen sharing
         function stopSharing() {
-            console.log('🛑 Stopping screen share');
-            
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
                 localStream = null;
             }
-
-            if (currentCall) {
-                currentCall.close();
-                currentCall = null;
-            }
-
+            
             videoElement.srcObject = null;
             videoElement.style.display = 'none';
             placeholder.style.display = 'block';
             
-            isSharingScreen = false;
-            startBtn.style.display = 'inline-block';
-            stopBtn.style.display = 'none';
+            isSharing = false;
+            startShareBtn.style.display = 'inline-block';
+            stopShareBtn.style.display = 'none';
 
-            shareModal.classList.remove('active');
-            
-            // Remove ourselves from sharers list
-            activeSharers.delete(peerId);
+            activeSharers.delete(myPeerId);
             updateSharersList();
-            
-            updateStatus('connected', 'Ready');
+
+            peerConnections.forEach(pc => pc.close());
+            peerConnections.clear();
+
+            socket.emit('stop-sharing', { roomCode: currentRoom });
+            updateStatus('connected', `In room ${currentRoom}`);
         }
 
-        // View another user's screen
-        function viewScreen(remotePeerId) {
-            if (!peer || !peerId) {
-                alert('Not connected to server yet. Please wait...');
-                return;
-            }
+        function viewStream(userId) {
+            console.log('👁️ Viewing stream from:', userId);
+            currentlyViewing = userId;
+            updateSharersList();
 
-            if (remotePeerId === peerId) {
-                alert('This is your own session!');
-                return;
-            }
+            socket.emit('request-stream', {
+                roomCode: currentRoom,
+                targetId: userId
+            });
 
-            console.log('👁️  Attempting to view screen from:', remotePeerId);
             updateStatus('connected', 'Connecting to sharer...');
-            currentlyViewing = remotePeerId;
-            updateSharersList();
+        }
 
-            // Create a silent stream (required for calling)
-            const audioContext = new AudioContext();
-            const oscillator = audioContext.createOscillator();
-            const dst = audioContext.createMediaStreamDestination();
-            oscillator.connect(dst);
-            oscillator.start();
-            const silentStream = dst.stream;
-
-            // Call the remote peer
-            const call = peer.call(remotePeerId, silentStream);
-            
-            if (!call) {
-                alert('Could not connect. Check the Session ID.');
-                updateStatus('connected', 'Ready');
-                currentlyViewing = null;
-                updateSharersList();
+        function updateSharersList() {
+            if (activeSharers.size === 0) {
+                sharersPanel.style.display = 'none';
                 return;
             }
 
-            currentCall = call;
-            let streamReceived = false;
+            sharersPanel.style.display = 'block';
+            sharersList.innerHTML = '';
 
-            call.on('stream', (remoteStream) => {
-                streamReceived = true;
-                console.log('✅ Receiving stream with', remoteStream.getTracks().length, 'tracks');
+            activeSharers.forEach((name, id) => {
+                const item = document.createElement('div');
+                item.className = 'sharer-item';
                 
-                // Display the stream
-                videoElement.srcObject = remoteStream;
-                videoElement.muted = false; // Enable audio for viewer
-                videoElement.style.display = 'block';
-                placeholder.style.display = 'none';
-                
-                stopBtn.style.display = 'inline-block';
-                stopBtn.textContent = 'Stop Viewing';
-                startBtn.style.display = 'none';
-                
-                updateStatus('connected', 'Viewing shared screen');
-
-                // Auto-play
-                videoElement.play().catch(err => {
-                    console.log('Auto-play prevented, user needs to click play');
-                });
-            });
-
-            call.on('close', () => {
-                console.log('📞 Call closed');
-                leaveViewing();
-            });
-
-            call.on('error', (err) => {
-                console.error('❌ Call error:', err);
-                alert('Connection failed: ' + err.message);
-                leaveViewing();
-            });
-
-            // Timeout if no stream
-            setTimeout(() => {
-                if (!streamReceived) {
-                    console.error('❌ Timeout - no stream received');
-                    alert('Could not connect. The session may be inactive or the ID is wrong.');
-                    leaveViewing();
+                if (currentlyViewing === id) {
+                    item.classList.add('active');
                 }
-            }, 10000);
-
-            // Setup chat connection
-            const conn = peer.connect(remotePeerId);
-            setupDataConnection(conn);
-        }
-
-        // Leave viewing session
-        function leaveViewing() {
-            console.log('👋 Leaving viewing session');
-            
-            if (currentCall) {
-                currentCall.close();
-                currentCall = null;
-            }
-
-            if (dataConnection) {
-                dataConnection.close();
-                dataConnection = null;
-            }
-
-            videoElement.srcObject = null;
-            videoElement.style.display = 'none';
-            placeholder.style.display = 'block';
-            
-            stopBtn.style.display = 'none';
-            stopBtn.textContent = 'Stop Sharing';
-            startBtn.style.display = 'inline-block';
-
-            currentlyViewing = null;
-            updateSharersList();
-            updateStatus('connected', 'Ready');
-        }
-
-        // Setup data connection for chat
-        function setupDataConnection(conn) {
-            conn.on('open', () => {
-                console.log('💬 Chat connection established');
-                dataConnection = conn;
-            });
-
-            conn.on('data', (data) => {
-                if (data.type === 'chat') {
-                    addMessage(data.message, false);
+                
+                if (id === myPeerId) {
+                    item.classList.add('you');
                 }
-            });
 
-            conn.on('close', () => {
-                console.log('Chat connection closed');
-                dataConnection = null;
-            });
+                item.textContent = name + (id === myPeerId ? ' (You)' : '');
 
-            conn.on('error', (err) => {
-                console.error('Chat connection error:', err);
+                if (id !== myPeerId) {
+                    item.onclick = () => viewStream(id);
+                }
+
+                sharersList.appendChild(item);
             });
         }
 
-        // Send chat message
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
-
-            if (dataConnection && dataConnection.open) {
-                dataConnection.send({ type: 'chat', message });
-                addMessage(message, true);
-                chatInput.value = '';
-            } else {
-                alert('No active connection for chat');
-            }
-        }
-
-        // Add message to chat
-        function addMessage(text, isSent) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = isSent ? 'message message-sent' : 'message message-received';
-            messageDiv.textContent = text;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // Update status
         function updateStatus(type, text) {
             statusDot.className = 'status-dot';
             if (type === 'connected') {
@@ -939,90 +866,44 @@
             statusText.textContent = text;
         }
 
-        // Update sharers list
-        function updateSharersList() {
-            if (activeSharers.size === 0) {
-                sharingUsersPanel.style.display = 'none';
-                return;
-            }
-
-            sharingUsersPanel.style.display = 'block';
-            sharingUsersList.innerHTML = '';
-
-            activeSharers.forEach((name, id) => {
-                const item = document.createElement('div');
-                item.className = 'sharing-user-item';
-                if (currentlyViewing === id) {
-                    item.classList.add('active');
-                }
-
-                const isYou = id === peerId;
-                item.innerHTML = `
-                    ${name}
-                    ${isYou ? '<span class="sharing-badge">You</span>' : ''}
-                `;
-
-                if (!isYou) {
-                    item.onclick = () => viewScreen(id);
-                }
-
-                sharingUsersList.appendChild(item);
-            });
-        }
-
-        // Manual add sharer (via prompt)
-        function manualAddSharer() {
-            const sessionId = prompt('Enter Session ID to view:');
-            if (sessionId && sessionId.trim()) {
-                activeSharers.set(sessionId.trim(), 'Remote User');
-                updateSharersList();
-                viewScreen(sessionId.trim());
-            }
-        }
-
         // Event Listeners
-        startBtn.addEventListener('click', startSharing);
-        
-        stopBtn.addEventListener('click', () => {
-            if (isSharingScreen) {
-                stopSharing();
+        createRoomBtn.addEventListener('click', () => {
+            socket.emit('create-room');
+        });
+
+        joinRoomBtn.addEventListener('click', () => {
+            joinRoomModal.classList.add('active');
+        });
+
+        document.getElementById('confirmJoinBtn').addEventListener('click', () => {
+            const code = joinRoomInput.value.trim().toUpperCase();
+            if (code && code.length === 6) {
+                socket.emit('join-room', { roomCode: code });
             } else {
-                leaveViewing();
+                alert('Please enter a valid 6-character room code');
             }
         });
 
-        document.getElementById('copyLinkBtn').addEventListener('click', () => {
-            shareLink.select();
-            document.execCommand('copy');
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareLink.value);
-            }
-            
-            const btn = document.getElementById('copyLinkBtn');
-            btn.textContent = 'Copied!';
-            setTimeout(() => btn.textContent = 'Copy ID', 2000);
+        document.getElementById('cancelJoinBtn').addEventListener('click', () => {
+            joinRoomModal.classList.remove('active');
+            joinRoomInput.value = '';
         });
 
-        document.getElementById('closeShareModalBtn').addEventListener('click', () => {
-            shareModal.classList.remove('active');
+        document.getElementById('copyCodeBtn').addEventListener('click', () => {
+            const code = displayRoomCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyCodeBtn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy Code', 2000);
+            });
         });
 
-        document.getElementById('chatToggle').addEventListener('click', () => {
-            chatPanel.classList.toggle('open');
-            mainContent.classList.toggle('chat-open');
+        document.getElementById('closeCreateModalBtn').addEventListener('click', () => {
+            createRoomModal.classList.remove('active');
         });
 
-        document.getElementById('closeChatBtn').addEventListener('click', () => {
-            chatPanel.classList.remove('open');
-            mainContent.classList.remove('chat-open');
-        });
-
-        document.getElementById('sendBtn').addEventListener('click', sendMessage);
-
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        startShareBtn.addEventListener('click', startSharing);
+        stopShareBtn.addEventListener('click', stopSharing);
 
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
@@ -1031,23 +912,28 @@
             );
         });
 
-        // Add manual connect button to placeholder
-        placeholder.innerHTML += '<br><br><button class="btn-primary" onclick="manualAddSharer()" style="margin-top: 16px;">Join Session by ID</button>';
+        joinRoomInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        joinRoomInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('confirmJoinBtn').click();
+            }
+        });
 
         // Load theme
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-theme');
         }
 
-        // Initialize on load
-        window.addEventListener('load', initializePeer);
+        // Initialize
+        window.addEventListener('load', initSocket);
 
-        // Cleanup on unload
         window.addEventListener('beforeunload', () => {
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
             }
-            if (peer) peer.destroy();
         });
     </script>
 </body>
