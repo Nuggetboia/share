@@ -1195,41 +1195,54 @@
 
             // FIXED: WebRTC signaling handlers with better flow
             socket.on('stream-requested', ({ fromId }) => {
-                console.log('Stream requested by:', fromId);
+                console.log('📞 Stream requested by:', fromId);
+                console.log('   Am I sharing?', isSharing);
+                console.log('   Do I have screenStream?', !!screenStream);
+                
                 // If we're sharing, create offer for the requester
                 if (isSharing && screenStream) {
+                    console.log('   ✅ Creating peer connection for requester');
                     createPeerConnection(fromId, true);
+                } else {
+                    console.warn('   ❌ Cannot send stream - not sharing or no stream');
                 }
             });
 
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
                 console.log('📥 Received WebRTC offer from:', fromId);
+                console.log('   Offer type:', offer.type);
+                console.log('   Offer SDP length:', offer.sdp ? offer.sdp.length : 0);
                 updateConnectionProgress(50, 'Received offer, creating answer...');
                 
                 try {
                     let pc = peerConnections.get(fromId);
                     if (!pc) {
+                        console.log('   Creating new peer connection for offer');
                         pc = createPeerConnection(fromId, false);
                     }
                     
+                    console.log('   Setting remote description...');
                     await pc.setRemoteDescription(new RTCSessionDescription(offer));
-                    console.log('✅ Set remote description');
+                    console.log('   ✅ Remote description set');
                     
                     // Add our screen stream if we're sharing
                     if (screenStream) {
+                        console.log('   Adding our stream tracks to answer');
                         screenStream.getTracks().forEach(track => {
                             const senders = pc.getSenders();
                             const trackExists = senders.some(sender => sender.track === track);
                             if (!trackExists) {
                                 pc.addTrack(track, screenStream);
-                                console.log('Added our track to answer');
+                                console.log('   ✅ Added track:', track.kind);
                             }
                         });
                     }
                     
+                    console.log('   Creating answer...');
                     const answer = await pc.createAnswer();
+                    console.log('   Setting local description...');
                     await pc.setLocalDescription(answer);
-                    console.log('📤 Sending answer back');
+                    console.log('   📤 Sending answer back');
                     updateConnectionProgress(60, 'Sending answer...');
                     
                     socket.emit('webrtc-answer', {
@@ -1237,8 +1250,9 @@
                         targetId: fromId,
                         answer
                     });
+                    console.log('   ✅ Answer sent successfully');
                 } catch (error) {
-                    console.error('Error handling offer:', error);
+                    console.error('   ❌ Error handling offer:', error);
                     hideConnectionStatus();
                     addSystemMessage('Error establishing connection');
                 }
@@ -1246,16 +1260,26 @@
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
                 console.log('📥 Received WebRTC answer from:', fromId);
+                console.log('   Answer type:', answer.type);
                 updateConnectionProgress(70, 'Received answer, connecting...');
                 
                 try {
                     const pc = peerConnections.get(fromId);
-                    if (pc && pc.signalingState !== 'stable') {
+                    if (!pc) {
+                        console.error('   ❌ No peer connection found for', fromId);
+                        return;
+                    }
+                    
+                    console.log('   Peer connection state:', pc.signalingState);
+                    if (pc.signalingState !== 'stable') {
+                        console.log('   Setting remote description from answer...');
                         await pc.setRemoteDescription(new RTCSessionDescription(answer));
-                        console.log('✅ Set remote description from answer');
+                        console.log('   ✅ Remote description set from answer');
+                    } else {
+                        console.log('   ⚠️  Already in stable state, skipping');
                     }
                 } catch (error) {
-                    console.error('Error handling answer:', error);
+                    console.error('   ❌ Error handling answer:', error);
                 }
             });
 
@@ -1265,10 +1289,12 @@
                 if (pc && candidate) {
                     try {
                         await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                        console.log('✅ Added ICE candidate');
+                        console.log('   ✅ ICE candidate added');
                     } catch (error) {
-                        console.error('Error adding ICE candidate:', error);
+                        console.error('   ❌ Error adding ICE candidate:', error);
                     }
+                } else {
+                    console.warn('   ⚠️  No peer connection or candidate is null');
                 }
             });
 
