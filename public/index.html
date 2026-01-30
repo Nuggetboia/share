@@ -380,247 +380,6 @@
             background: #ff3b30;
         }
 
-        .sharing-users {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            padding: 16px;
-            min-width: 200px;
-            max-width: 300px;
-        }
-
-        body.dark-theme .sharing-users {
-            background: #2c2c2e;
-        }
-
-        .sharing-users h4 {
-            font-size: 14px;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-        }
-
-        body.dark-theme .sharing-users h4 {
-            color: #f5f5f7;
-        }
-
-        .sharing-user-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            background: #f5f5f7;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        body.dark-theme .sharing-user-item {
-            background: #3a3a3c;
-        }
-
-        .sharing-user-item:hover {
-            background: #e8e8ed;
-            transform: translateX(-2px);
-        }
-
-        body.dark-theme .sharing-user-item:hover {
-            background: #48484a;
-        }
-
-        .sharing-user-item.active {
-            background: #0071e3;
-            color: white;
-        }
-
-        body.dark-theme .sharing-user-item.active {
-            background: #0071e3;
-        }
-
-        .sharing-user-name {
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .sharing-badge {
-            font-size: 11px;
-            background: #34c759;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-        }
-
-        .profile-picture {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #0071e3;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .profile-picture img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .login-modal .modal-content {
-            max-width: 400px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #e5e5e7;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        body.dark-theme .form-group input {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #0071e3;
-        }
-
-        .error-message {
-            color: #ff3b30;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        .form-actions button {
-            flex: 1;
-        }
-
-        .profile-settings {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .profile-picture-upload {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .profile-picture-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #0071e3;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: 600;
-        }
-
-        .profile-picture-large img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .connection-status {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 24px 32px;
-            border-radius: 12px;
-            text-align: center;
-            z-index: 10;
-        }
-
-        .connection-status h3 {
-            margin-bottom: 12px;
-            font-size: 18px;
-        }
-
-        .connection-status p {
-            margin-bottom: 16px;
-            opacity: 0.8;
-        }
-
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 0 auto;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #0071e3;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .cancel-connection {
-            margin-top: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .cancel-connection:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -631,20 +390,222 @@
                 margin-right: 0;
             }
         }
+
+        /* Drawing Board Styles */
+        #drawingCanvas {
+            display: none;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            cursor: crosshair;
+            background: white;
+        }
+
+        body.dark-theme #drawingCanvas {
+            background: #2c2c2e;
+        }
+
+        .drawing-toolbar {
+            position: absolute;
+            top: 50%;
+            left: 24px;
+            transform: translateY(-50%);
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        body.dark-theme .drawing-toolbar {
+            background: #2c2c2e;
+            border: 1px solid #3a3a3c;
+        }
+
+        .drawing-toolbar.active {
+            display: flex;
+        }
+
+        .tool-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tool-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-button {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e5e5e7;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-theme .tool-button {
+            background: #3a3a3c;
+            border-color: #48484a;
+            color: #f5f5f7;
+        }
+
+        .tool-button:hover {
+            background: #f5f5f7;
+            border-color: #0071e3;
+        }
+
+        body.dark-theme .tool-button:hover {
+            background: #48484a;
+        }
+
+        .tool-button.active {
+            background: #0071e3;
+            border-color: #0071e3;
+            color: white;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .color-option {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #0071e3;
+        }
+
+        body.dark-theme .color-option.active {
+            box-shadow: 0 0 0 2px #2c2c2e, 0 0 0 4px #0071e3;
+        }
+
+        .brush-size-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e5e7;
+            outline: none;
+        }
+
+        body.dark-theme .brush-size-slider {
+            background: #48484a;
+        }
+
+        .brush-size-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0071e3;
+            cursor: pointer;
+        }
+
+        .brush-size-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0071e3;
+            cursor: pointer;
+            border: none;
+        }
+
+        .brush-preview {
+            width: 100%;
+            height: 30px;
+            background: #f5f5f7;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        body.dark-theme .brush-preview {
+            background: #1c1c1e;
+        }
+
+        .brush-preview-dot {
+            background: #000;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .clear-canvas-btn {
+            background: #ff3b30;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-canvas-btn:hover {
+            background: #ff453a;
+        }
+
+        .mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #0071e3;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .mode-indicator.drawing {
+            background: #34c759;
+        }
+
+        .mode-indicator.screen-sharing {
+            background: #0071e3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="main-content" id="mainContent">
             <div class="header">
-                <div class="logo">ShareView</div>
+                <div class="logo">
+                    ShareView
+                    <span class="mode-indicator" id="modeIndicator" style="margin-left: 12px; display: none;">
+                        <span id="modeText">Drawing Mode</span>
+                    </span>
+                </div>
                 <div class="controls">
-                    <button class="btn-secondary profile-btn" id="profileBtn">
-                        <div class="profile-picture" id="headerProfilePic">
-                            <span id="headerInitial">?</span>
-                        </div>
-                        <span id="headerUsername">Guest</span>
-                    </button>
                     <button class="btn-icon" id="themeToggle" title="Toggle Theme">
                         <svg id="themeIcon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
@@ -655,6 +616,7 @@
                             <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2h-3l-3 3-3-3H4a2 2 0 01-2-2V5z"/>
                         </svg>
                     </button>
+                    <button class="btn-secondary" id="toggleDrawingMode">Drawing Mode</button>
                     <button class="btn-secondary" id="shareLink">Share Link</button>
                     <button class="btn-primary" id="startShare">Start Sharing</button>
                     <button class="btn-danger" id="stopShare" style="display: none;">Stop Sharing</button>
@@ -664,24 +626,57 @@
             <div class="video-container" id="videoContainer">
                 <div class="placeholder">
                     <h2>Ready to Share</h2>
-                    <p>Click "Start Sharing" to begin screen sharing</p>
+                    <p>Click "Start Sharing" to begin screen sharing or "Drawing Mode" for collaborative whiteboard</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
+                <canvas id="drawingCanvas"></canvas>
                 
-                <!-- Connection Status -->
-                <div class="connection-status" id="connectionStatus" style="display: none;">
-                    <h3>Connecting to stream...</h3>
-                    <p id="connectionMessage">Establishing connection</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                <!-- Drawing Toolbar -->
+                <div class="drawing-toolbar" id="drawingToolbar">
+                    <!-- Tools -->
+                    <div class="tool-section">
+                        <div class="tool-section-title">Tools</div>
+                        <button class="tool-button active" id="toolPen" title="Pen">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                            </svg>
+                        </button>
+                        <button class="tool-button" id="toolEraser" title="Eraser">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                                <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                            </svg>
+                        </button>
                     </div>
-                    <button class="cancel-connection" id="cancelConnection">Cancel</button>
-                </div>
-                
-                <!-- Sharing Users List -->
-                <div class="sharing-users" id="sharingUsers" style="display: none;">
-                    <h4>Sharing Now</h4>
-                    <div id="sharingUsersList"></div>
+
+                    <!-- Colors -->
+                    <div class="tool-section">
+                        <div class="tool-section-title">Colors</div>
+                        <div class="color-picker-wrapper">
+                            <div class="color-option active" data-color="#000000" style="background: #000000;" title="Black"></div>
+                            <div class="color-option" data-color="#FF3B30" style="background: #FF3B30;" title="Red"></div>
+                            <div class="color-option" data-color="#0071E3" style="background: #0071E3;" title="Blue"></div>
+                            <div class="color-option" data-color="#34C759" style="background: #34C759;" title="Green"></div>
+                            <div class="color-option" data-color="#FFD60A" style="background: #FFD60A;" title="Yellow"></div>
+                            <div class="color-option" data-color="#FF9F0A" style="background: #FF9F0A;" title="Orange"></div>
+                            <div class="color-option" data-color="#AF52DE" style="background: #AF52DE;" title="Purple"></div>
+                            <div class="color-option" data-color="#FFFFFF" style="background: #FFFFFF; border: 1px solid #e5e5e7;" title="White"></div>
+                        </div>
+                    </div>
+
+                    <!-- Brush Size -->
+                    <div class="tool-section">
+                        <div class="tool-section-title">Brush Size</div>
+                        <input type="range" class="brush-size-slider" id="brushSize" min="1" max="50" value="3">
+                        <div class="brush-preview">
+                            <div class="brush-preview-dot" id="brushPreview"></div>
+                        </div>
+                    </div>
+
+                    <!-- Clear Canvas -->
+                    <div class="tool-section">
+                        <button class="clear-canvas-btn" id="clearCanvas">Clear Canvas</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -715,53 +710,6 @@
         </div>
     </div>
 
-    <div class="modal login-modal" id="loginModal">
-        <div class="modal-content">
-            <h2 id="authTitle">Login</h2>
-            <p id="authSubtitle">Sign in to your account</p>
-            <form id="authForm">
-                <div class="form-group">
-                    <label for="authUsername">Username</label>
-                    <input type="text" id="authUsername" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label for="authPassword">Password</label>
-                    <input type="password" id="authPassword" required autocomplete="current-password">
-                </div>
-                <div id="authError" class="error-message" style="display: none;"></div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary" id="authSubmit">Login</button>
-                    <button type="button" class="btn-secondary" id="authToggle">Register</button>
-                </div>
-                <button type="button" class="btn-secondary" id="guestBtn" style="width: 100%; margin-top: 12px;">Continue as Guest</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <h2>Profile Settings</h2>
-            <div class="profile-settings">
-                <div class="profile-picture-upload">
-                    <div class="profile-picture-large" id="profilePicLarge">
-                        <span id="profileInitial">?</span>
-                    </div>
-                    <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
-                    <button class="btn-secondary" onclick="document.getElementById('profilePicInput').click()">Change Picture</button>
-                </div>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="profileUsername" disabled>
-                </div>
-                <div class="form-actions">
-                    <button class="btn-primary" id="saveProfile">Save Changes</button>
-                    <button class="btn-secondary" id="logoutBtn">Logout</button>
-                </div>
-                <button class="btn-secondary" style="width: 100%;" onclick="document.getElementById('profileModal').classList.remove('active')">Close</button>
-            </div>
-        </div>
-    </div>
-
     <script src="/socket.io/socket.io.js"></script>
     <script>
         // Configuration
@@ -777,17 +725,19 @@
         let isChatOpen = false;
         let screenStream = null;
         let roomId = null;
-        let username = null;
-        let userProfile = null; // { username, profilePicture, theme }
+        let username = 'User' + Math.floor(Math.random() * 1000);
         let socket = null;
         let peerConnections = new Map(); // Map of userId -> RTCPeerConnection
-        let sharingUsers = new Map(); // Map of userId -> username who are sharing
-        let currentlyViewing = null; // ID of user whose stream we're viewing
-        let isAuthMode = 'login'; // 'login' or 'register'
-        let connectionTimeout = null;
-        let connectionProgress = 0;
-        let connectionInterval = null;
-        let pendingConnection = null;
+
+        // Drawing Mode State
+        let isDrawingMode = false;
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let currentColor = '#000000';
+        let brushSize = 3;
+        let lastX = 0;
+        let lastY = 0;
 
         // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
@@ -811,300 +761,27 @@
         const linkModal = document.getElementById('linkModal');
         const shareableLink = document.getElementById('shareableLink');
         const copyLinkBtn = document.getElementById('copyLink');
-        const sharingUsersPanel = document.getElementById('sharingUsers');
-        const sharingUsersList = document.getElementById('sharingUsersList');
         
-        // Profile elements
-        const profileBtn = document.getElementById('profileBtn');
-        const headerUsername = document.getElementById('headerUsername');
-        const headerProfilePic = document.getElementById('headerProfilePic');
-        const headerInitial = document.getElementById('headerInitial');
-        const loginModal = document.getElementById('loginModal');
-        const profileModal = document.getElementById('profileModal');
-        const authForm = document.getElementById('authForm');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
-        const authUsername = document.getElementById('authUsername');
-        const authPassword = document.getElementById('authPassword');
-        const authSubmit = document.getElementById('authSubmit');
-        const authToggle = document.getElementById('authToggle');
-        const authError = document.getElementById('authError');
-        const profileUsername = document.getElementById('profileUsername');
-        const profilePicLarge = document.getElementById('profilePicLarge');
-        const profileInitial = document.getElementById('profileInitial');
-        const profilePicInput = document.getElementById('profilePicInput');
-        const saveProfile = document.getElementById('saveProfile');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const guestBtn = document.getElementById('guestBtn');
-        const connectionStatus = document.getElementById('connectionStatus');
-        const connectionMessage = document.getElementById('connectionMessage');
-        const progressFill = document.getElementById('progressFill');
-        const cancelConnection = document.getElementById('cancelConnection');
-
-        // Check if user is logged in
-        function checkAuth() {
-            const savedProfile = localStorage.getItem('userProfile');
-            if (savedProfile) {
-                try {
-                    userProfile = JSON.parse(savedProfile);
-                    username = userProfile.username;
-                    updateProfileUI();
-                    initSocket();
-                } catch (e) {
-                    // Invalid saved profile, show login
-                    localStorage.removeItem('userProfile');
-                    loginModal.classList.add('active');
-                }
-            } else {
-                // Show login modal
-                loginModal.classList.add('active');
-            }
-        }
-
-        // Continue as guest
-        function continueAsGuest() {
-            const guestName = 'Guest' + Math.floor(Math.random() * 10000);
-            userProfile = {
-                username: guestName,
-                profilePicture: null,
-                theme: 'light',
-                isGuest: true
-            };
-            username = guestName;
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            loginModal.classList.remove('active');
-            updateProfileUI();
-            initSocket();
-        }
-
-        // Guest button click
-        guestBtn.addEventListener('click', () => {
-            continueAsGuest();
-        });
-
-        // Update profile UI
-        function updateProfileUI() {
-            if (userProfile) {
-                headerUsername.textContent = userProfile.username;
-                const initial = userProfile.username.charAt(0).toUpperCase();
-                headerInitial.textContent = initial;
-                profileInitial.textContent = initial;
-                profileUsername.value = userProfile.username;
-                
-                if (userProfile.profilePicture) {
-                    headerProfilePic.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
-                    profilePicLarge.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
-                } else {
-                    headerProfilePic.innerHTML = `<span id="headerInitial">${initial}</span>`;
-                    profilePicLarge.innerHTML = `<span id="profileInitial">${initial}</span>`;
-                }
-                
-                // Apply theme
-                if (userProfile.theme === 'dark') {
-                    document.body.classList.add('dark-theme');
-                    updateThemeIcon(true);
-                }
-            }
-        }
-
-        // Profile button click
-        profileBtn.addEventListener('click', () => {
-            if (userProfile) {
-                if (userProfile.isGuest) {
-                    // Guests see login modal to create account
-                    loginModal.classList.add('active');
-                } else {
-                    profileModal.classList.add('active');
-                }
-            } else {
-                loginModal.classList.add('active');
-            }
-        });
-
-        // Auth form toggle
-        authToggle.addEventListener('click', () => {
-            isAuthMode = isAuthMode === 'login' ? 'register' : 'login';
-            if (isAuthMode === 'login') {
-                authTitle.textContent = 'Login';
-                authSubtitle.textContent = 'Sign in to your account';
-                authSubmit.textContent = 'Login';
-                authToggle.textContent = 'Register';
-            } else {
-                authTitle.textContent = 'Register';
-                authSubtitle.textContent = 'Create a new account';
-                authSubmit.textContent = 'Register';
-                authToggle.textContent = 'Login';
-            }
-            authError.style.display = 'none';
-        });
-
-        // Auth form submit
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            authError.style.display = 'none';
-            
-            const user = authUsername.value.trim();
-            const pass = authPassword.value;
-            
-            if (!user || !pass) {
-                authError.textContent = 'Please fill in all fields';
-                authError.style.display = 'block';
-                return;
-            }
-            
-            const endpoint = isAuthMode === 'login' ? '/api/login' : '/api/register';
-            authSubmit.disabled = true;
-            authSubmit.textContent = 'Please wait...';
-            
-            try {
-                console.log('Attempting', isAuthMode, 'for user:', user);
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ username: user, password: pass })
-                });
-                
-                console.log('Response status:', response.status);
-                const data = await response.json();
-                console.log('Response data:', data);
-                
-                if (response.ok) {
-                    if (isAuthMode === 'register') {
-                        // After registration, log them in
-                        userProfile = {
-                            username: user,
-                            profilePicture: null,
-                            theme: 'light',
-                            isGuest: false
-                        };
-                    } else {
-                        userProfile = data.profile;
-                        userProfile.isGuest = false;
-                    }
-                    
-                    username = userProfile.username;
-                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                    loginModal.classList.remove('active');
-                    updateProfileUI();
-                    
-                    // Initialize socket if not already connected
-                    if (!socket || !socket.connected) {
-                        initSocket();
-                    }
-                    
-                    authForm.reset();
-                } else {
-                    authError.textContent = data.error || 'An error occurred';
-                    authError.style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                authError.textContent = 'Server connection error. Make sure the server is running.';
-                authError.style.display = 'block';
-            } finally {
-                authSubmit.disabled = false;
-                authSubmit.textContent = isAuthMode === 'login' ? 'Login' : 'Register';
-            }
-        });
-
-        // Profile picture upload
-        profilePicInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const dataUrl = event.target.result;
-                    userProfile.profilePicture = dataUrl;
-                    headerProfilePic.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
-                    profilePicLarge.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Save profile
-        saveProfile.addEventListener('click', async () => {
-            if (userProfile.isGuest) {
-                alert('Guest users cannot save profiles. Please create an account.');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/update-profile', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: userProfile.username,
-                        profilePicture: userProfile.profilePicture,
-                        theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light'
-                    })
-                });
-                
-                if (response.ok) {
-                    userProfile.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                    alert('Profile updated!');
-                } else {
-                    alert('Error updating profile');
-                }
-            } catch (error) {
-                console.error('Profile update error:', error);
-                alert('Error updating profile. Make sure the server is running.');
-            }
-        });
-
-        // Logout
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('userProfile');
-            userProfile = null;
-            username = null;
-            profileModal.classList.remove('active');
-            
-            // Disconnect and reload
-            if (socket) {
-                socket.disconnect();
-            }
-            window.location.reload();
-        });
+        // Drawing Mode Elements
+        const toggleDrawingModeBtn = document.getElementById('toggleDrawingMode');
+        const drawingCanvas = document.getElementById('drawingCanvas');
+        const drawingToolbar = document.getElementById('drawingToolbar');
+        const toolPen = document.getElementById('toolPen');
+        const toolEraser = document.getElementById('toolEraser');
+        const brushSizeSlider = document.getElementById('brushSize');
+        const brushPreview = document.getElementById('brushPreview');
+        const clearCanvasBtn = document.getElementById('clearCanvas');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const modeIndicator = document.getElementById('modeIndicator');
+        const modeText = document.getElementById('modeText');
 
         // Initialize Socket.IO connection
         function initSocket() {
-            if (socket && socket.connected) {
-                console.log('Socket already connected');
-                return;
-            }
-            
-            socket = io({
-                reconnection: true,
-                reconnectionDelay: 1000,
-                reconnectionDelayMax: 5000,
-                reconnectionAttempts: Infinity
-            });
+            socket = io();
 
             socket.on('connect', () => {
                 console.log('Connected to server');
                 socket.emit('join-room', { roomId, username });
-                
-                // Save room state for persistence
-                localStorage.setItem('lastRoom', roomId);
-            });
-
-            socket.on('reconnect', (attemptNumber) => {
-                console.log('Reconnected after', attemptNumber, 'attempts');
-                addSystemMessage('Reconnected to server');
-                // Rejoin the room
-                socket.emit('join-room', { roomId, username });
-            });
-
-            socket.on('disconnect', (reason) => {
-                console.log('Disconnected:', reason);
-                if (reason === 'io server disconnect') {
-                    // Server disconnected us, try to reconnect
-                    socket.connect();
-                }
             });
 
             socket.on('existing-users', (users) => {
@@ -1117,32 +794,16 @@
             socket.on('user-joined', (user) => {
                 console.log('User joined:', user);
                 addSystemMessage(`${user.username} joined the room`);
-                
-                // FIXED: If we're sharing, create peer connection for new user
-                if (isSharing && screenStream) {
-                    createPeerConnection(user.id, true);
-                }
             });
 
             socket.on('user-left', (user) => {
                 console.log('User left:', user);
                 addSystemMessage(`${user.username} left the room`);
                 
-                // Remove from sharing users if they were sharing
-                sharingUsers.delete(user.id);
-                updateSharingUsersList();
-                
                 // Clean up peer connection
                 if (peerConnections.has(user.id)) {
                     peerConnections.get(user.id).close();
                     peerConnections.delete(user.id);
-                }
-                
-                // If we were viewing this user, clear the video
-                if (currentlyViewing === user.id) {
-                    screenVideo.style.display = 'none';
-                    videoContainer.querySelector('.placeholder').style.display = 'block';
-                    currentlyViewing = null;
                 }
             });
 
@@ -1151,41 +812,15 @@
                 addMessage(message, username, isSent);
             });
 
-            socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
-                if (userIsSharing) {
+            socket.on('user-sharing', ({ id, username, isSharing }) => {
+                if (isSharing) {
                     addSystemMessage(`${username} started sharing their screen`);
-                    // Track this user as sharing
-                    sharingUsers.set(id, username);
-                    updateSharingUsersList();
-                    
-                    // FIXED: Create peer connection to receive their stream
                     if (id !== socket.id) {
-                        console.log('User started sharing, requesting their stream');
-                        // Request the stream by creating a peer connection
-                        setTimeout(() => {
-                            const pc = createPeerConnection(id, false);
-                            // Send a signal to request offer
-                            socket.emit('request-stream', { roomId, targetId: id });
-                        }, 100);
-                        
-                        // Automatically view the first person who starts sharing
-                        if (sharingUsers.size === 1 && !currentlyViewing) {
-                            setTimeout(() => viewUserStream(id), 200);
-                        }
+                        // Request WebRTC connection to view their screen
+                        createPeerConnection(id, true);
                     }
                 } else {
                     addSystemMessage(`${username} stopped sharing`);
-                    // Remove from sharing users
-                    sharingUsers.delete(id);
-                    updateSharingUsersList();
-                    
-                    // Hide video when sharing stops
-                    if (id !== socket.id && currentlyViewing === id) {
-                        screenVideo.style.display = 'none';
-                        videoContainer.querySelector('.placeholder').style.display = 'block';
-                        currentlyViewing = null;
-                        hideConnectionStatus();
-                    }
                 }
             });
 
@@ -1193,108 +828,40 @@
                 console.log(`Room ${roomId} has ${userCount} user(s)`);
             });
 
-            // FIXED: WebRTC signaling handlers with better flow
-            socket.on('stream-requested', ({ fromId }) => {
-                console.log('📞 Stream requested by:', fromId);
-                console.log('   Am I sharing?', isSharing);
-                console.log('   Do I have screenStream?', !!screenStream);
-                
-                // If we're sharing, create offer for the requester
-                if (isSharing && screenStream) {
-                    console.log('   ✅ Creating peer connection for requester');
-                    createPeerConnection(fromId, true);
-                } else {
-                    console.warn('   ❌ Cannot send stream - not sharing or no stream');
-                }
-            });
-
+            // WebRTC signaling handlers
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
-                console.log('📥 Received WebRTC offer from:', fromId);
-                console.log('   Offer type:', offer.type);
-                console.log('   Offer SDP length:', offer.sdp ? offer.sdp.length : 0);
-                updateConnectionProgress(50, 'Received offer, creating answer...');
+                console.log('Received WebRTC offer from:', fromId);
+                const pc = createPeerConnection(fromId, false);
+                await pc.setRemoteDescription(new RTCSessionDescription(offer));
                 
-                try {
-                    let pc = peerConnections.get(fromId);
-                    if (!pc) {
-                        console.log('   Creating new peer connection for offer');
-                        pc = createPeerConnection(fromId, false);
-                    }
-                    
-                    console.log('   Setting remote description...');
-                    await pc.setRemoteDescription(new RTCSessionDescription(offer));
-                    console.log('   ✅ Remote description set');
-                    
-                    // Add our screen stream if we're sharing
-                    if (screenStream) {
-                        console.log('   Adding our stream tracks to answer');
-                        screenStream.getTracks().forEach(track => {
-                            const senders = pc.getSenders();
-                            const trackExists = senders.some(sender => sender.track === track);
-                            if (!trackExists) {
-                                pc.addTrack(track, screenStream);
-                                console.log('   ✅ Added track:', track.kind);
-                            }
-                        });
-                    }
-                    
-                    console.log('   Creating answer...');
-                    const answer = await pc.createAnswer();
-                    console.log('   Setting local description...');
-                    await pc.setLocalDescription(answer);
-                    console.log('   📤 Sending answer back');
-                    updateConnectionProgress(60, 'Sending answer...');
-                    
-                    socket.emit('webrtc-answer', {
-                        roomId,
-                        targetId: fromId,
-                        answer
+                // Add our screen stream if we're sharing
+                if (screenStream) {
+                    screenStream.getTracks().forEach(track => {
+                        pc.addTrack(track, screenStream);
                     });
-                    console.log('   ✅ Answer sent successfully');
-                } catch (error) {
-                    console.error('   ❌ Error handling offer:', error);
-                    hideConnectionStatus();
-                    addSystemMessage('Error establishing connection');
                 }
+                
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                socket.emit('webrtc-answer', {
+                    roomId,
+                    targetId: fromId,
+                    answer
+                });
             });
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
-                console.log('📥 Received WebRTC answer from:', fromId);
-                console.log('   Answer type:', answer.type);
-                updateConnectionProgress(70, 'Received answer, connecting...');
-                
-                try {
-                    const pc = peerConnections.get(fromId);
-                    if (!pc) {
-                        console.error('   ❌ No peer connection found for', fromId);
-                        return;
-                    }
-                    
-                    console.log('   Peer connection state:', pc.signalingState);
-                    if (pc.signalingState !== 'stable') {
-                        console.log('   Setting remote description from answer...');
-                        await pc.setRemoteDescription(new RTCSessionDescription(answer));
-                        console.log('   ✅ Remote description set from answer');
-                    } else {
-                        console.log('   ⚠️  Already in stable state, skipping');
-                    }
-                } catch (error) {
-                    console.error('   ❌ Error handling answer:', error);
+                console.log('Received WebRTC answer from:', fromId);
+                const pc = peerConnections.get(fromId);
+                if (pc) {
+                    await pc.setRemoteDescription(new RTCSessionDescription(answer));
                 }
             });
 
             socket.on('webrtc-ice-candidate', async ({ fromId, candidate }) => {
-                console.log('📥 Received ICE candidate from:', fromId);
                 const pc = peerConnections.get(fromId);
                 if (pc && candidate) {
-                    try {
-                        await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                        console.log('   ✅ ICE candidate added');
-                    } catch (error) {
-                        console.error('   ❌ Error adding ICE candidate:', error);
-                    }
-                } else {
-                    console.warn('   ⚠️  No peer connection or candidate is null');
+                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
                 }
             });
 
@@ -1302,81 +869,92 @@
                 console.log('Disconnected from server');
                 addSystemMessage('Disconnected from server');
             });
+
+            // Drawing mode handlers
+            socket.on('drawing-data', (data) => {
+                if (!isDrawingMode || !ctx) return;
+                
+                const { x0, y0, x1, y1, color, size, tool } = data;
+                
+                ctx.beginPath();
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(x1, y1);
+                
+                if (tool === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = size * 3;
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = size;
+                }
+                
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            });
+
+            socket.on('clear-canvas', () => {
+                if (!isDrawingMode || !ctx) return;
+                const isDark = document.body.classList.contains('dark-theme');
+                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                addSystemMessage('Canvas was cleared');
+            });
+
+            socket.on('user-drawing-mode', ({ username, isActive }) => {
+                if (isActive) {
+                    addSystemMessage(`${username} started drawing mode`);
+                } else {
+                    addSystemMessage(`${username} left drawing mode`);
+                }
+            });
         }
 
-        // FIXED: Create WebRTC peer connection with proper stream handling
-        // FIXED: Simplified WebRTC peer connection - INSTANT CONNECTION
+        // Create WebRTC peer connection
         function createPeerConnection(userId, isInitiator) {
-            // Close existing if not working
             if (peerConnections.has(userId)) {
-                const old = peerConnections.get(userId);
-                if (old.hasReceivedTrack && old.connectionState === 'connected') {
-                    console.log('✅ Reusing existing connection');
-                    return old;
-                }
-                console.log('Closing old connection');
-                old.close();
-                peerConnections.delete(userId);
+                return peerConnections.get(userId);
             }
 
-            console.log('🔄 NEW peer connection:', userId, 'initiator:', isInitiator);
             const pc = new RTCPeerConnection(ICE_SERVERS);
             peerConnections.set(userId, pc);
-            pc.userId = userId;
-            pc.hasReceivedTrack = false;
 
-            // Add OUR stream if we're sharing
-            if (isInitiator && screenStream) {
-                console.log('📤 Adding OUR tracks');
-                screenStream.getTracks().forEach(track => {
-                    pc.addTrack(track, screenStream);
-                });
-            }
-
-            // RECEIVE stream - THIS IS THE MAGIC
-            pc.ontrack = (e) => {
-                console.log('🎉 GOT TRACK:', e.track.kind);
-                pc.hasReceivedTrack = true;
-                pc.remoteStream = e.streams[0];
-                
-                if (currentlyViewing === userId) {
-                    console.log('🎥 SHOWING VIDEO NOW');
-                    screenVideo.srcObject = e.streams[0];
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
-                    screenVideo.play();
-                    updateConnectionProgress(100, 'Connected!');
-                    setTimeout(hideConnectionStatus, 500);
-                }
-            };
-
-            // Send ICE candidates
-            pc.onicecandidate = (e) => {
-                if (e.candidate) {
+            // Handle ICE candidates
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
                     socket.emit('webrtc-ice-candidate', {
-                        roomId, targetId: userId, candidate: e.candidate
+                        roomId,
+                        targetId: userId,
+                        candidate: event.candidate
                     });
                 }
             };
 
-            // Monitor connection
+            // Handle incoming stream
+            pc.ontrack = (event) => {
+                console.log('Received remote stream from:', userId);
+                screenVideo.srcObject = event.streams[0];
+                screenVideo.style.display = 'block';
+                videoContainer.querySelector('.placeholder').style.display = 'none';
+            };
+
             pc.onconnectionstatechange = () => {
-                console.log('State:', pc.connectionState);
-                if (pc.connectionState === 'failed') {
-                    console.error('❌ FAILED');
+                console.log('Connection state:', pc.connectionState);
+                if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
                     peerConnections.delete(userId);
-                    hideConnectionStatus();
-                    addSystemMessage('Connection failed. Click to retry.');
                 }
             };
 
-            // CREATE OFFER if initiator
+            // If we're the initiator, create and send offer
             if (isInitiator) {
-                pc.createOffer({ offerToReceiveVideo: true })
-                    .then(o => pc.setLocalDescription(o))
+                pc.createOffer()
+                    .then(offer => pc.setLocalDescription(offer))
                     .then(() => {
                         socket.emit('webrtc-offer', {
-                            roomId, targetId: userId, offer: pc.localDescription
+                            roomId,
+                            targetId: userId,
+                            offer: pc.localDescription
                         });
                     });
             }
@@ -1412,16 +990,238 @@
 
         // Update URL with room ID
         function updateURL() {
-            try {
-                const newURL = window.location.origin + window.location.pathname + '?room=' + roomId;
-                window.history.replaceState({}, '', newURL);
-            } catch (e) {
-                // Ignore errors in sandboxed environments
-                console.log('Cannot update URL in this environment');
-            }
+            const newURL = window.location.origin + window.location.pathname + '?room=' + roomId;
+            window.history.replaceState({}, '', newURL);
         }
 
         updateURL();
+
+        // ===== DRAWING MODE FUNCTIONS =====
+        
+        function initDrawingCanvas() {
+            canvas = drawingCanvas;
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function resizeCanvas() {
+            const container = videoContainer.getBoundingClientRect();
+            canvas.width = container.width - 48;
+            canvas.height = container.height - 48;
+            
+            // Set canvas background
+            const isDark = document.body.classList.contains('dark-theme');
+            ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function updateModeIndicator(mode, text) {
+            modeIndicator.className = 'mode-indicator ' + mode;
+            modeText.textContent = text;
+            modeIndicator.style.display = 'inline-flex';
+        }
+
+        function hideModeIndicator() {
+            modeIndicator.style.display = 'none';
+        }
+
+        function toggleDrawingModeOn() {
+            isDrawingMode = true;
+            
+            // Hide screen share if active
+            if (isSharing) {
+                stopSharing();
+            }
+            
+            // Show canvas and toolbar
+            videoContainer.querySelector('.placeholder').style.display = 'none';
+            drawingCanvas.style.display = 'block';
+            drawingToolbar.classList.add('active');
+            
+            // Update button
+            toggleDrawingModeBtn.textContent = 'Exit Drawing';
+            toggleDrawingModeBtn.classList.remove('btn-secondary');
+            toggleDrawingModeBtn.classList.add('btn-primary');
+            
+            // Update mode indicator
+            updateModeIndicator('drawing', 'Drawing Mode');
+            
+            // Initialize canvas
+            initDrawingCanvas();
+            
+            // Notify server
+            socket.emit('drawing-mode-start', { roomId });
+            
+            addSystemMessage('Drawing mode activated');
+        }
+
+        function toggleDrawingModeOff() {
+            isDrawingMode = false;
+            
+            // Hide canvas and toolbar
+            drawingCanvas.style.display = 'none';
+            drawingToolbar.classList.remove('active');
+            videoContainer.querySelector('.placeholder').style.display = 'block';
+            
+            // Update button
+            toggleDrawingModeBtn.textContent = 'Drawing Mode';
+            toggleDrawingModeBtn.classList.remove('btn-primary');
+            toggleDrawingModeBtn.classList.add('btn-secondary');
+            
+            // Hide mode indicator
+            hideModeIndicator();
+            
+            // Notify server
+            socket.emit('drawing-mode-stop', { roomId });
+            
+            addSystemMessage('Drawing mode deactivated');
+        }
+
+        // Drawing Mode Toggle
+        toggleDrawingModeBtn.addEventListener('click', () => {
+            if (isDrawingMode) {
+                toggleDrawingModeOff();
+            } else {
+                toggleDrawingModeOn();
+            }
+        });
+
+        // Canvas Drawing Functions
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing || !isDrawingMode) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            
+            if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = brushSize * 3;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = brushSize;
+            }
+            
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            
+            // Emit drawing data to other users
+            socket.emit('drawing-data', {
+                roomId,
+                x0: lastX,
+                y0: lastY,
+                x1: x,
+                y1: y,
+                color: currentColor,
+                size: brushSize,
+                tool: currentTool
+            });
+            
+            lastX = x;
+            lastY = y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Canvas Event Listeners
+        drawingCanvas.addEventListener('mousedown', startDrawing);
+        drawingCanvas.addEventListener('mousemove', draw);
+        drawingCanvas.addEventListener('mouseup', stopDrawing);
+        drawingCanvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch support
+        drawingCanvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        drawingCanvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        drawingCanvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            drawingCanvas.dispatchEvent(mouseEvent);
+        });
+
+        // Tool Selection
+        toolPen.addEventListener('click', () => {
+            currentTool = 'pen';
+            toolPen.classList.add('active');
+            toolEraser.classList.remove('active');
+            drawingCanvas.style.cursor = 'crosshair';
+        });
+
+        toolEraser.addEventListener('click', () => {
+            currentTool = 'eraser';
+            toolEraser.classList.add('active');
+            toolPen.classList.remove('active');
+            drawingCanvas.style.cursor = 'grab';
+        });
+
+        // Color Selection
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                colorOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                currentColor = option.dataset.color;
+                brushPreview.style.background = currentColor;
+            });
+        });
+
+        // Brush Size
+        brushSizeSlider.addEventListener('input', (e) => {
+            brushSize = parseInt(e.target.value);
+            brushPreview.style.width = brushSize * 2 + 'px';
+            brushPreview.style.height = brushSize * 2 + 'px';
+        });
+
+        // Initialize brush preview
+        brushPreview.style.width = brushSize * 2 + 'px';
+        brushPreview.style.height = brushSize * 2 + 'px';
+        brushPreview.style.background = currentColor;
+
+        // Clear Canvas
+        clearCanvasBtn.addEventListener('click', () => {
+            if (confirm('Clear the entire canvas? This will clear it for everyone.')) {
+                const isDark = document.body.classList.contains('dark-theme');
+                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Notify other users
+                socket.emit('clear-canvas', { roomId });
+                addSystemMessage('Canvas cleared');
+            }
+        });
 
         // Chat Toggle
         chatToggle.addEventListener('click', () => {
@@ -1446,25 +1246,29 @@
             try {
                 screenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: { mediaSource: 'screen' },
-                    audio: false
+                    audio: true // Enable audio capture
                 });
 
                 screenVideo.srcObject = screenStream;
                 screenVideo.style.display = 'block';
                 videoContainer.querySelector('.placeholder').style.display = 'none';
                 
+                // Hide drawing mode if active
+                if (isDrawingMode) {
+                    toggleDrawingModeOff();
+                }
+                
                 startShareBtn.style.display = 'none';
                 stopShareBtn.style.display = 'inline-block';
                 isSharing = true;
 
-                // Add ourselves to sharing users
-                sharingUsers.set(socket.id, username);
-                updateSharingUsersList();
+                // Update mode indicator
+                updateModeIndicator('screen-sharing', 'Screen Sharing');
 
                 // Notify server
                 socket.emit('start-sharing', { roomId });
 
-                // FIXED: Add stream to all existing peer connections
+                // Add stream to all existing peer connections
                 peerConnections.forEach((pc, userId) => {
                     screenStream.getTracks().forEach(track => {
                         pc.addTrack(track, screenStream);
@@ -1476,10 +1280,14 @@
                     stopSharing();
                 });
 
-                addSystemMessage('Screen sharing started');
+                addSystemMessage('Screen sharing started (with audio)');
             } catch (err) {
                 console.error('Error starting screen share:', err);
-                addSystemMessage('Failed to start screen sharing');
+                if (err.name === 'NotAllowedError') {
+                    addSystemMessage('Screen sharing permission denied');
+                } else {
+                    addSystemMessage('Failed to start screen sharing');
+                }
             }
         });
 
@@ -1498,14 +1306,6 @@
             startShareBtn.style.display = 'inline-block';
             stopShareBtn.style.display = 'none';
             isSharing = false;
-            
-            // Remove ourselves from sharing users
-            sharingUsers.delete(socket.id);
-            updateSharingUsersList();
-            
-            // Close all peer connections
-            peerConnections.forEach(pc => pc.close());
-            peerConnections.clear();
             
             // Notify server
             socket.emit('stop-sharing', { roomId });
@@ -1578,144 +1378,12 @@
             }
         });
 
-        // Update the sharing users list UI
-        function updateSharingUsersList() {
-            if (sharingUsers.size === 0) {
-                sharingUsersPanel.style.display = 'none';
-                return;
-            }
-            
-            sharingUsersPanel.style.display = 'block';
-            sharingUsersList.innerHTML = '';
-            
-            sharingUsers.forEach((username, userId) => {
-                const userItem = document.createElement('div');
-                userItem.className = 'sharing-user-item';
-                if (currentlyViewing === userId) {
-                    userItem.classList.add('active');
-                }
-                
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'sharing-user-name';
-                nameDiv.innerHTML = `
-                    <span>${username}</span>
-                    ${userId === socket.id ? '<span class="sharing-badge">You</span>' : ''}
-                `;
-                
-                userItem.appendChild(nameDiv);
-                
-                // Only add click handler for other users' streams
-                if (userId !== socket.id) {
-                    userItem.addEventListener('click', () => viewUserStream(userId));
-                }
-                
-                sharingUsersList.appendChild(userItem);
-            });
-        }
-        
-        // Update connection progress
-        function updateConnectionProgress(percent, message) {
-            connectionStatus.style.display = 'block';
-            connectionMessage.textContent = message;
-            progressFill.style.width = percent + '%';
-        }
-
-        // Hide connection status
-        function hideConnectionStatus() {
-            connectionStatus.style.display = 'none';
-            if (connectionTimeout) {
-                clearTimeout(connectionTimeout);
-                connectionTimeout = null;
-            }
-            if (connectionInterval) {
-                clearInterval(connectionInterval);
-                connectionInterval = null;
-            }
-            connectionProgress = 0;
-            progressFill.style.width = '0%';
-        }
-
-        // Cancel connection button
-        cancelConnection.addEventListener('click', () => {
-            if (pendingConnection) {
-                const pc = peerConnections.get(pendingConnection);
-                if (pc) {
-                    pc.close();
-                    peerConnections.delete(pendingConnection);
-                }
-                pendingConnection = null;
-            }
-            hideConnectionStatus();
-            addSystemMessage('Connection cancelled');
-        });
-        
-        // Switch to viewing a specific user's stream
-        function viewUserStream(userId) {
-            console.log('Switching to view stream from:', userId);
-            currentlyViewing = userId;
-            pendingConnection = userId;
-            
-            const pc = peerConnections.get(userId);
-            if (pc) {
-                console.log('Found peer connection for user:', userId, 'state:', pc.connectionState);
-                if (pc.remoteStream) {
-                    console.log('Found remote stream, displaying it');
-                    updateConnectionProgress(70, 'Loading video...');
-                    screenVideo.srcObject = pc.remoteStream;
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
-                    
-                    screenVideo.onloadedmetadata = () => {
-                        screenVideo.play().then(() => {
-                            updateConnectionProgress(100, 'Connected!');
-                            setTimeout(hideConnectionStatus, 1000);
-                        });
-                    };
-                } else {
-                    console.log('Peer connection exists but no remote stream yet');
-                    updateConnectionProgress(10, 'Establishing connection...');
-                    
-                    // Set a timeout for the connection
-                    connectionTimeout = setTimeout(() => {
-                        if (!pc.hasReceivedTrack) {
-                            console.error('Connection timeout - no track received');
-                            hideConnectionStatus();
-                            addSystemMessage('Connection timeout. The user may not be sharing anymore.');
-                            currentlyViewing = null;
-                            pendingConnection = null;
-                            updateSharingUsersList();
-                        }
-                    }, 15000); // 15 second timeout
-                }
-            } else {
-                console.log('No peer connection found for user:', userId, 'creating one...');
-                updateConnectionProgress(5, 'Initiating connection...');
-                createPeerConnection(userId, false);
-                
-                // Set timeout
-                connectionTimeout = setTimeout(() => {
-                    const newPc = peerConnections.get(userId);
-                    if (!newPc || !newPc.hasReceivedTrack) {
-                        console.error('Connection timeout - failed to establish');
-                        hideConnectionStatus();
-                        addSystemMessage('Unable to connect. Please try again.');
-                        currentlyViewing = null;
-                        pendingConnection = null;
-                        updateSharingUsersList();
-                    }
-                }, 15000);
-            }
-            
-            // Update active state in list
-            updateSharingUsersList();
-        }
-
         // Initial system message
         addSystemMessage('Room ID: ' + roomId);
         addSystemMessage('Connecting to server...');
 
-        // Check authentication and initialize
-        checkAuth();
+        // Initialize connection
+        initSocket();
     </script>
 </body>
 </html>
