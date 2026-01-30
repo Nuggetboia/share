@@ -14,8 +14,10 @@ const rooms = new Map();
 const userProfiles = new Map();
 
 // Middleware
-app.use(express.json({ limit: '10mb' })); // Increased limit for profile pictures
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // API endpoint to register user
@@ -33,8 +35,8 @@ app.post('/api/register', (req, res) => {
     
     // In production: hash the password with bcrypt!
     userProfiles.set(username.toLowerCase(), {
-        username: username, // Store original case
-        password: password, // INSECURE: hash this in production!
+        username: username,
+        password: password,
         profilePicture: null,
         theme: 'light',
         createdAt: Date.now()
@@ -94,13 +96,8 @@ app.post('/api/update-profile', (req, res) => {
     res.json({ success: true, message: 'Profile updated' });
 });
 
-// Handle root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Handle room routes
-app.get('/:roomId', (req, res) => {
+// Handle all routes by serving index.html
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -142,10 +139,11 @@ io.on('connection', (socket) => {
         // Notify others about new user
         socket.to(roomId).emit('user-joined', { id: socket.id, username });
         
-        // Send room info
-        socket.emit('room-info', { roomId, userCount: rooms.get(roomId).size });
+        // Send room info to all users in the room
+        const userCount = rooms.get(roomId).size;
+        io.to(roomId).emit('room-info', { roomId, userCount });
         
-        console.log(`Room ${roomId} now has ${rooms.get(roomId).size} users`);
+        console.log(`Room ${roomId} now has ${userCount} users`);
     });
     
     // Handle screen sharing start
@@ -196,7 +194,7 @@ io.on('connection', (socket) => {
         }
     });
     
-    // WebRTC signaling - updated to match frontend
+    // WebRTC signaling
     socket.on('webrtc-offer', (data) => {
         const { targetId, offer } = data;
         console.log(`Sending offer from ${socket.id} to ${targetId}`);
@@ -217,7 +215,6 @@ io.on('connection', (socket) => {
     
     socket.on('webrtc-ice-candidate', (data) => {
         const { targetId, candidate } = data;
-        console.log(`Sending ICE candidate from ${socket.id} to ${targetId}`);
         io.to(targetId).emit('webrtc-ice-candidate', {
             fromId: socket.id,
             candidate: candidate
@@ -246,6 +243,10 @@ io.on('connection', (socket) => {
                 
                 // Notify others
                 io.to(roomId).emit('user-left', { id: socket.id, username: user.username });
+                
+                // Update room info
+                const userCount = users.size;
+                io.to(roomId).emit('room-info', { roomId, userCount });
                 
                 // Clean up empty rooms
                 if (users.size === 0) {
