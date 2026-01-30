@@ -383,6 +383,10 @@
             background: #ff3b30;
         }
 
+        .status-connecting {
+            background: #ff9500;
+        }
+
         @media (max-width: 768px) {
             .chat-panel {
                 width: 100%;
@@ -391,6 +395,10 @@
             
             .main-content.chat-open {
                 margin-right: 0;
+            }
+
+            .controls {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -427,9 +435,9 @@
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                         </svg>
                     </button>
-                    <button class="btn-primary" id="startBtn">Start Sharing</button>
+                    <button class="btn-primary" id="startBtn" disabled>Connecting...</button>
                     <button class="btn-danger" id="stopBtn" style="display: none;">Stop Sharing</button>
-                    <button class="btn-secondary" id="joinBtn">Join Session</button>
+                    <button class="btn-secondary" id="joinBtn" disabled>Join Session</button>
                 </div>
             </header>
 
@@ -496,6 +504,7 @@
         let peerId = null;
         let isSharingScreen = false;
         let dataConnection = null;
+        let isPeerReady = false;
 
         const videoElement = document.getElementById('videoElement');
         const placeholder = document.getElementById('placeholder');
@@ -520,6 +529,8 @@
 
         // Initialize PeerJS with custom server
         function initializePeer() {
+            updateStatus('Connecting...', 'connecting');
+            
             peer = new Peer({
                 host: PEER_SERVER_HOST,
                 port: PEER_SERVER_PORT,
@@ -537,13 +548,45 @@
 
             peer.on('open', (id) => {
                 peerId = id;
+                isPeerReady = true;
                 console.log('My peer ID is: ' + id);
+                
+                // Enable buttons now that we have a peer ID
+                startBtn.disabled = false;
+                startBtn.textContent = 'Start Sharing';
+                joinBtn.disabled = false;
+                
                 updateStatus('Ready', 'offline');
             });
 
             peer.on('error', (err) => {
                 console.error('Peer error:', err);
-                alert('Connection error: ' + err.type + '. Please refresh the page.');
+                isPeerReady = false;
+                
+                if (err.type === 'unavailable-id') {
+                    alert('Session ID is already in use. Please try again.');
+                } else if (err.type === 'peer-unavailable') {
+                    alert('Cannot connect to that session. The session may have ended or the ID is incorrect.');
+                } else if (err.type === 'network') {
+                    alert('Network error. Please check your connection and try again.');
+                } else {
+                    alert('Connection error: ' + err.type + '. Please refresh the page.');
+                }
+                
+                updateStatus('Connection error', 'offline');
+            });
+
+            peer.on('disconnected', () => {
+                console.log('Peer disconnected, attempting to reconnect...');
+                isPeerReady = false;
+                updateStatus('Reconnecting...', 'connecting');
+                
+                // Attempt to reconnect
+                setTimeout(() => {
+                    if (!peer.destroyed) {
+                        peer.reconnect();
+                    }
+                }, 1000);
             });
 
             // Handle incoming calls (when someone connects to view your screen)
@@ -559,7 +602,7 @@
                     call.on('close', () => {
                         console.log('Viewer disconnected');
                         if (isSharingScreen) {
-                            updateStatus('Sharing', 'live');
+                            updateStatus('Sharing (waiting for viewers)', 'live');
                         }
                     });
                 }
@@ -573,6 +616,11 @@
 
         // Start screen sharing
         async function startSharing() {
+            if (!isPeerReady || !peerId) {
+                alert('Please wait, still connecting to server...');
+                return;
+            }
+
             try {
                 // Request screen sharing with AUDIO enabled
                 localStream = await navigator.mediaDevices.getDisplayMedia({
@@ -589,13 +637,14 @@
                 });
 
                 console.log('Screen sharing started with tracks:', localStream.getTracks());
+                console.log('Your Session ID:', peerId);
 
                 // Check if audio track is present
                 const audioTrack = localStream.getAudioTracks()[0];
                 if (audioTrack) {
-                    console.log('Audio track enabled:', audioTrack.enabled);
+                    console.log('✅ Audio track enabled:', audioTrack.enabled);
                 } else {
-                    console.warn('No audio track - user may not have selected "Share audio"');
+                    console.warn('⚠️ No audio track - make sure to check "Share audio" in the browser dialog');
                 }
 
                 // Display your own screen locally
@@ -612,7 +661,7 @@
                 // Show share modal with session ID
                 shareLink.value = peerId;
                 shareModal.classList.add('active');
-                updateStatus('Sharing', 'live');
+                updateStatus('Sharing (waiting for viewers)', 'live');
 
                 // Handle when user stops sharing via browser UI
                 localStream.getVideoTracks()[0].onended = () => {
@@ -621,7 +670,13 @@
 
             } catch (err) {
                 console.error('Error starting screen share:', err);
-                alert('Could not start screen sharing. Make sure you:\n1. Granted permission\n2. Selected a screen/window to share\n3. Checked "Share audio" if you want audio');
+                if (err.name === 'NotAllowedError') {
+                    alert('Screen sharing permission denied. Please allow screen sharing and try again.');
+                } else if (err.name === 'NotFoundError') {
+                    alert('No screen available to share.');
+                } else {
+                    alert('Could not start screen sharing. Make sure you:\n1. Granted permission\n2. Selected a screen/window to share\n3. Checked "Share audio" if you want audio');
+                }
             }
         }
 
@@ -646,6 +701,7 @@
             stopBtn.style.display = 'none';
             joinBtn.disabled = false;
 
+            shareModal.classList.remove('active');
             updateStatus('Ready', 'offline');
         }
 
@@ -658,12 +714,13 @@
                 return;
             }
 
-            if (!peer || !peerId) {
+            if (!isPeerReady || !peerId) {
                 alert('Still connecting... Please wait a moment');
                 return;
             }
 
             console.log('Attempting to join session:', remotePeerId);
+            updateStatus('Connecting to session...', 'connecting');
 
             // Create a silent audio stream (required for the call, but we don't send anything)
             const audioContext = new AudioContext();
@@ -678,13 +735,17 @@
             
             if (!call) {
                 alert('Could not connect to session. Please check the session ID.');
+                updateStatus('Ready', 'offline');
                 return;
             }
 
             currentCall = call;
             console.log('Call initiated to:', remotePeerId);
 
+            let streamReceived = false;
+
             call.on('stream', (remoteStream) => {
+                streamReceived = true;
                 console.log('Receiving remote stream with tracks:', remoteStream.getTracks());
                 
                 // Display the remote screen with audio
@@ -712,6 +773,15 @@
                 alert('Connection failed: ' + err);
                 leaveSession();
             });
+
+            // Timeout if no stream received
+            setTimeout(() => {
+                if (!streamReceived) {
+                    console.error('No stream received within timeout');
+                    alert('Could not connect to session. The session may have ended or the ID is incorrect.');
+                    leaveSession();
+                }
+            }, 10000);
 
             // Setup data connection for chat
             const conn = peer.connect(remotePeerId);
@@ -795,7 +865,13 @@
         }
 
         // Event Listeners
-        startBtn.addEventListener('click', startSharing);
+        startBtn.addEventListener('click', () => {
+            if (!isPeerReady || !peerId) {
+                alert('Please wait, still connecting to server...');
+                return;
+            }
+            startSharing();
+        });
         
         stopBtn.addEventListener('click', () => {
             if (isSharingScreen) {
@@ -806,6 +882,10 @@
         });
 
         joinBtn.addEventListener('click', () => {
+            if (!isPeerReady || !peerId) {
+                alert('Please wait, still connecting to server...');
+                return;
+            }
             joinModal.classList.add('active');
         });
 
@@ -830,9 +910,10 @@
             }
             
             const copyBtn = document.getElementById('copyLinkBtn');
+            const originalText = copyBtn.textContent;
             copyBtn.textContent = 'Copied!';
             setTimeout(() => {
-                copyBtn.textContent = 'Copy';
+                copyBtn.textContent = originalText;
             }, 2000);
         });
 
@@ -874,6 +955,14 @@
             });
         });
 
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                shareModal.classList.remove('active');
+                joinModal.classList.remove('active');
+            }
+        });
+
         // Load theme preference
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-theme');
@@ -882,7 +971,6 @@
         // Initialize peer connection on load
         window.addEventListener('load', () => {
             initializePeer();
-            updateStatus('Connecting...', 'offline');
         });
 
         // Cleanup on page unload
