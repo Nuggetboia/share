@@ -260,39 +260,52 @@
             font-weight: 600;
         }
 
+        .close-chat {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #86868b;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .close-chat:hover {
+            background: #f5f5f7;
+        }
+
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
         .message {
-            padding: 10px 12px;
-            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
             max-width: 80%;
-            word-wrap: break-word;
         }
 
         .message-sent {
             background: #0071e3;
             color: white;
-            align-self: flex-end;
             margin-left: auto;
         }
 
         .message-received {
             background: #f5f5f7;
-            color: #1d1d1f;
-            align-self: flex-start;
         }
 
         .message-sender {
             font-size: 11px;
-            opacity: 0.7;
+            font-weight: 600;
             margin-bottom: 4px;
+            color: #86868b;
         }
 
         .chat-input-container {
@@ -308,12 +321,6 @@
             border: 1px solid #e5e5e7;
             border-radius: 8px;
             font-size: 14px;
-            font-family: inherit;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #0071e3;
         }
 
         .modal {
@@ -323,7 +330,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -336,158 +343,19 @@
         .modal-content {
             background: white;
             padding: 32px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
+            border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
         }
 
         .modal-content h2 {
-            margin-bottom: 16px;
-            font-size: 22px;
+            margin-bottom: 8px;
         }
 
         .modal-content p {
-            margin-bottom: 20px;
             color: #86868b;
-        }
-
-        .link-box {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .link-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #e5e5e7;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #f5f5f7;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .status-live {
-            background: #34c759;
-        }
-
-        .status-offline {
-            background: #ff3b30;
-        }
-
-        .sharing-users {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            padding: 16px;
-            min-width: 200px;
-            max-width: 300px;
-        }
-
-        body.dark-theme .sharing-users {
-            background: #2c2c2e;
-        }
-
-        .sharing-users h4 {
-            font-size: 14px;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-        }
-
-        body.dark-theme .sharing-users h4 {
-            color: #f5f5f7;
-        }
-
-        .sharing-user-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            background: #f5f5f7;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        body.dark-theme .sharing-user-item {
-            background: #3a3a3c;
-        }
-
-        .sharing-user-item:hover {
-            background: #e8e8ed;
-            transform: translateX(-2px);
-        }
-
-        body.dark-theme .sharing-user-item:hover {
-            background: #48484a;
-        }
-
-        .sharing-user-item.active {
-            background: #0071e3;
-            color: white;
-        }
-
-        body.dark-theme .sharing-user-item.active {
-            background: #0071e3;
-        }
-
-        .sharing-user-name {
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .sharing-badge {
-            font-size: 11px;
-            background: #34c759;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-        }
-
-        .profile-picture {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #0071e3;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .profile-picture img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .login-modal .modal-content {
-            max-width: 400px;
+            margin-bottom: 24px;
         }
 
         .form-group {
@@ -497,7 +365,6 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
             font-weight: 500;
         }
 
@@ -507,335 +374,169 @@
             border: 1px solid #e5e5e7;
             border-radius: 8px;
             font-size: 14px;
-            font-family: inherit;
         }
 
-        body.dark-theme .form-group input {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
+        .link-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e5e7;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #0071e3;
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
         }
 
         .error-message {
             color: #ff3b30;
-            font-size: 12px;
-            margin-top: 4px;
+            font-size: 13px;
+            margin-top: 8px;
         }
 
-        .form-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 20px;
+        .switch-mode {
+            text-align: center;
+            margin-top: 16px;
+            color: #86868b;
+            font-size: 14px;
         }
 
-        .form-actions button {
-            flex: 1;
+        .switch-mode a {
+            color: #0071e3;
+            text-decoration: none;
+            cursor: pointer;
         }
 
-        .profile-settings {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .switch-mode a:hover {
+            text-decoration: underline;
         }
 
-        .profile-picture-upload {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
+        .sharing-users-panel {
+            position: fixed;
+            left: 24px;
+            top: 80px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 16px;
+            min-width: 200px;
+            max-width: 300px;
+            display: none;
         }
 
-        .profile-picture-large {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+        body.dark-theme .sharing-users-panel {
+            background: #2c2c2e;
+        }
+
+        .sharing-users-header {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        body.dark-theme .sharing-users-header {
+            color: #f5f5f7;
+        }
+
+        .sharing-user-item {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .sharing-user-item:hover {
+            background: #f5f5f7;
+        }
+
+        body.dark-theme .sharing-user-item:hover {
+            background: #3a3a3c;
+        }
+
+        .sharing-user-item.active {
             background: #0071e3;
             color: white;
+        }
+
+        .sharing-user-name {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 32px;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .sharing-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 600;
         }
 
-        .profile-picture-large img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
         .connection-status {
-            position: absolute;
-            top: 50%;
+            position: fixed;
+            bottom: 24px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 24px 32px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 16px 24px;
             border-radius: 12px;
-            text-align: center;
-            z-index: 10;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: none;
+            min-width: 300px;
         }
 
-        .connection-status h3 {
+        body.dark-theme .connection-status {
+            background: #2c2c2e;
+            color: #f5f5f7;
+        }
+
+        .connection-message {
             margin-bottom: 12px;
-            font-size: 18px;
-        }
-
-        .connection-status p {
-            margin-bottom: 16px;
-            opacity: 0.8;
+            font-size: 14px;
         }
 
         .progress-bar {
-            width: 200px;
             height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            background: #e5e5e7;
             border-radius: 2px;
             overflow: hidden;
-            margin: 0 auto;
+            margin-bottom: 12px;
         }
 
         .progress-fill {
             height: 100%;
             background: #0071e3;
-            border-radius: 2px;
-            transition: width 0.3s ease;
+            width: 0%;
+            transition: width 0.3s;
         }
 
         .cancel-connection {
-            margin-top: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: #ff3b30;
             color: white;
             padding: 8px 16px;
             border-radius: 6px;
-            cursor: pointer;
             font-size: 13px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
 
-        .cancel-connection:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Drawing Board Styles */
-        #drawingCanvas {
-            display: none;
-            max-width: 100%;
-            max-height: 100%;
+        #userCount {
+            background: #0071e3;
+            color: white;
+            padding: 4px 12px;
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            cursor: crosshair;
-            background: white;
-        }
-
-        body.dark-theme #drawingCanvas {
-            background: #2c2c2e;
-        }
-
-        .drawing-toolbar {
-            position: absolute;
-            top: 50%;
-            left: 24px;
-            transform: translateY(-50%);
-            background: white;
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 100;
-        }
-
-        body.dark-theme .drawing-toolbar {
-            background: #2c2c2e;
-            border: 1px solid #3a3a3c;
-        }
-
-        .drawing-toolbar.active {
-            display: flex;
-        }
-
-        .tool-section {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .tool-section-title {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 600;
-            color: #86868b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .tool-button {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #e5e5e7;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        body.dark-theme .tool-button {
-            background: #3a3a3c;
-            border-color: #48484a;
-            color: #f5f5f7;
-        }
-
-        .tool-button:hover {
-            background: #f5f5f7;
-            border-color: #0071e3;
-        }
-
-        body.dark-theme .tool-button:hover {
-            background: #48484a;
-        }
-
-        .tool-button.active {
-            background: #0071e3;
-            border-color: #0071e3;
-            color: white;
-        }
-
-        .color-picker-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .color-option {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.active {
-            border-color: #0071e3;
-            box-shadow: 0 0 0 2px white, 0 0 0 4px #0071e3;
-        }
-
-        body.dark-theme .color-option.active {
-            box-shadow: 0 0 0 2px #2c2c2e, 0 0 0 4px #0071e3;
-        }
-
-        .brush-size-slider {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #e5e5e7;
-            outline: none;
-        }
-
-        body.dark-theme .brush-size-slider {
-            background: #48484a;
-        }
-
-        .brush-size-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #0071e3;
-            cursor: pointer;
-        }
-
-        .brush-size-slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #0071e3;
-            cursor: pointer;
-            border: none;
-        }
-
-        .brush-preview {
-            width: 100%;
-            height: 30px;
-            background: #f5f5f7;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 4px;
-        }
-
-        body.dark-theme .brush-preview {
-            background: #1c1c1e;
-        }
-
-        .brush-preview-dot {
-            background: #000;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-
-        .clear-canvas-btn {
-            background: #ff3b30;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .clear-canvas-btn:hover {
-            background: #ff453a;
-        }
-
-        .mode-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            background: #0071e3;
-            color: white;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .mode-indicator.drawing {
-            background: #34c759;
-        }
-
-        .mode-indicator.screen-sharing {
-            background: #0071e3;
-        }
-
-        @media (max-width: 768px) {
-            .chat-panel {
-                width: 100%;
-                right: -100%;
-            }
-
-            .main-content.chat-open {
-                margin-right: 0;
-            }
         }
     </style>
 </head>
@@ -844,110 +545,41 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 013 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/>
+                    </svg>
                     ShareView
-                    <span class="mode-indicator" id="modeIndicator" style="display: none;">
-                        <span id="modeText">Drawing Mode</span>
-                    </span>
                 </div>
                 <div class="controls">
-                    <button class="btn-secondary profile-btn" id="profileBtn">
-                        <div class="profile-picture" id="headerProfilePic">
-                            <span id="headerInitial">?</span>
-                        </div>
-                        <span id="headerUsername">Guest</span>
+                    <span id="userCount">1 user</span>
+                    <button class="btn-secondary" id="startShare">Start Sharing</button>
+                    <button class="btn-danger" id="stopShare" style="display: none;">Stop Sharing</button>
+                    <button class="btn-secondary" id="shareLink">Share Link</button>
+                    <button class="btn-icon" id="chatToggle">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
+                        </svg>
                     </button>
-                    <button class="btn-icon" id="themeToggle" title="Toggle Theme">
-                        <svg id="themeIcon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <button class="btn-icon" id="themeToggle">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" id="themeIcon">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
                         </svg>
                     </button>
-                    <button class="btn-icon" id="chatToggle" title="Toggle Chat">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2h-3l-3 3-3-3H4a2 2 0 01-2-2V5z"/>
-                        </svg>
-                    </button>
-                    <button class="btn-secondary" id="toggleDrawingMode">Drawing Mode</button>
-                    <button class="btn-secondary" id="shareLink">Share Link</button>
-                    <button class="btn-primary" id="startShare">Start Sharing</button>
-                    <button class="btn-danger" id="stopShare" style="display: none;">Stop Sharing</button>
                 </div>
             </div>
-
             <div class="video-container" id="videoContainer">
                 <div class="placeholder">
-                    <h2>Ready to Share</h2>
-                    <p>Click "Start Sharing" to begin screen sharing or "Drawing Mode" for collaborative whiteboard</p>
+                    <h2>No Active Screen Share</h2>
+                    <p>Click "Start Sharing" to share your screen or wait for someone to start sharing</p>
                 </div>
                 <video id="screenVideo" autoplay playsinline style="display: none;"></video>
-                <canvas id="drawingCanvas"></canvas>
-
-                <!-- Connection Status -->
-                <div class="connection-status" id="connectionStatus" style="display: none;">
-                    <h3>Connecting to stream...</h3>
-                    <p id="connectionMessage">Establishing connection</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-                    </div>
-                    <button class="cancel-connection" id="cancelConnection">Cancel</button>
-                </div>
-
-                <!-- Sharing Users List -->
-                <div class="sharing-users" id="sharingUsers" style="display: none;">
-                    <h4>Sharing Now</h4>
-                    <div id="sharingUsersList"></div>
-                </div>
-
-                <!-- Drawing Toolbar -->
-                <div class="drawing-toolbar" id="drawingToolbar">
-                    <div class="tool-section">
-                        <div class="tool-section-title">Tools</div>
-                        <button class="tool-button active" id="toolPen" title="Pen">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
-                            </svg>
-                        </button>
-                        <button class="tool-button" id="toolEraser" title="Eraser">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
-                                <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="tool-section">
-                        <div class="tool-section-title">Colors</div>
-                        <div class="color-picker-wrapper">
-                            <div class="color-option active" data-color="#000000" style="background: #000000;" title="Black"></div>
-                            <div class="color-option" data-color="#FF3B30" style="background: #FF3B30;" title="Red"></div>
-                            <div class="color-option" data-color="#0071E3" style="background: #0071E3;" title="Blue"></div>
-                            <div class="color-option" data-color="#34C759" style="background: #34C759;" title="Green"></div>
-                            <div class="color-option" data-color="#FFD60A" style="background: #FFD60A;" title="Yellow"></div>
-                            <div class="color-option" data-color="#FF9F0A" style="background: #FF9F0A;" title="Orange"></div>
-                            <div class="color-option" data-color="#AF52DE" style="background: #AF52DE;" title="Purple"></div>
-                            <div class="color-option" data-color="#FFFFFF" style="background: #FFFFFF; border: 1px solid #e5e5e7;" title="White"></div>
-                        </div>
-                    </div>
-                    <div class="tool-section">
-                        <div class="tool-section-title">Brush Size</div>
-                        <input type="range" class="brush-size-slider" id="brushSize" min="1" max="50" value="3">
-                        <div class="brush-preview">
-                            <div class="brush-preview-dot" id="brushPreview"></div>
-                        </div>
-                    </div>
-                    <div class="tool-section">
-                        <button class="clear-canvas-btn" id="clearCanvas">Clear Canvas</button>
-                    </div>
-                </div>
             </div>
         </div>
 
         <div class="chat-panel" id="chatPanel">
             <div class="chat-header">
                 <h3>Chat</h3>
-                <button class="btn-icon" id="closeChat">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                </button>
+                <button class="close-chat" id="closeChat">&times;</button>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-container">
@@ -957,702 +589,283 @@
         </div>
     </div>
 
-    <div class="modal" id="linkModal">
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
         <div class="modal-content">
-            <h2>Share this link</h2>
-            <p>Anyone with this link can join your screen sharing session</p>
-            <div class="link-box">
-                <input type="text" class="link-input" id="shareableLink" readonly>
-                <button class="btn-primary" id="copyLink">Copy</button>
-            </div>
-            <button class="btn-secondary" style="width: 100%;" onclick="document.getElementById('linkModal').classList.remove('active')">Close</button>
-        </div>
-    </div>
-
-    <div class="modal login-modal" id="loginModal">
-        <div class="modal-content">
-            <h2 id="authTitle">Login</h2>
-            <p id="authSubtitle">Sign in to your account</p>
-            <form id="authForm">
-                <div class="form-group">
-                    <label for="authUsername">Username</label>
-                    <input type="text" id="authUsername" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label for="authPassword">Password</label>
-                    <input type="password" id="authPassword" required autocomplete="current-password">
-                </div>
-                <div id="authError" class="error-message" style="display: none;"></div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary" id="authSubmit">Login</button>
-                    <button type="button" class="btn-secondary" id="authToggle">Register</button>
-                </div>
-                <button type="button" class="btn-secondary" id="guestBtn" style="width: 100%; margin-top: 12px;">Continue as Guest</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <h2>Profile Settings</h2>
-            <div class="profile-settings">
-                <div class="profile-picture-upload">
-                    <div class="profile-picture-large" id="profilePicLarge">
-                        <span id="profileInitial">?</span>
-                    </div>
-                    <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
-                    <button class="btn-secondary" onclick="document.getElementById('profilePicInput').click()">Change Picture</button>
-                </div>
+            <h2>Welcome to ShareView</h2>
+            <p>Sign in or create an account to continue</p>
+            <div id="loginForm">
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" id="profileUsername" disabled>
+                    <input type="text" id="loginUsername" placeholder="Enter username">
                 </div>
-                <div class="form-actions">
-                    <button class="btn-primary" id="saveProfile">Save Changes</button>
-                    <button class="btn-secondary" id="logoutBtn">Logout</button>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
                 </div>
-                <button class="btn-secondary" style="width: 100%;" onclick="document.getElementById('profileModal').classList.remove('active')">Close</button>
+                <div id="loginError" class="error-message"></div>
+                <button class="btn-primary" id="loginBtn" style="width: 100%; margin-top: 8px;">Sign In</button>
+                <div class="switch-mode">
+                    Don't have an account? <a id="showRegister">Register</a>
+                </div>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="registerUsername" placeholder="Choose username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Choose password">
+                </div>
+                <div id="registerError" class="error-message"></div>
+                <button class="btn-primary" id="registerBtn" style="width: 100%; margin-top: 8px;">Create Account</button>
+                <div class="switch-mode">
+                    Already have an account? <a id="showLogin">Sign In</a>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Share Link Modal -->
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <h2>Share Link</h2>
+            <p>Share this link with others to join your room</p>
+            <input type="text" class="link-input" id="shareableLink" readonly>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="copyLink">Copy</button>
+                <button class="btn-secondary" onclick="document.getElementById('linkModal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sharing Users Panel -->
+    <div class="sharing-users-panel" id="sharingUsersPanel">
+        <div class="sharing-users-header">Active Sharers</div>
+        <div id="sharingUsersList"></div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" id="connectionStatus">
+        <div class="connection-message" id="connectionMessage">Connecting...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <button class="cancel-connection" id="cancelConnection">Cancel</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        // Configuration
+        let socket;
+        let roomId;
+        let username;
+        let userProfile = null;
+        let screenStream = null;
+        let isSharing = false;
+        let isChatOpen = false;
+        const peerConnections = new Map();
+        const sharingUsers = new Map();
+        let currentlyViewing = null;
+        let pendingConnection = null;
+        let connectionTimeout = null;
+        let connectionInterval = null;
+        let connectionProgress = 0;
+
         const ICE_SERVERS = {
             iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' }
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' }
             ]
         };
 
-        // App State
-        let isSharing = false;
-        let isChatOpen = false;
-        let screenStream = null;
-        let roomId = null;
-        let username = null;
-        let userProfile = null;
-        let socket = null;
-        let peerConnections = new Map();
-        let sharingUsers = new Map();
-        let currentlyViewing = null;
-        let isAuthMode = 'login';
-        let connectionTimeout = null;
-        let connectionProgress = 0;
-        let connectionInterval = null;
-        let pendingConnection = null;
-
-        // Drawing Mode State
-        let isDrawingMode = false;
-        let canvas, ctx;
-        let isDrawing = false;
-        let currentTool = 'pen';
-        let currentColor = '#000000';
-        let brushSize = 3;
-        let lastX = 0;
-        let lastY = 0;
-
-        // Initialize room ID from URL or create new one
         const urlParams = new URLSearchParams(window.location.search);
         roomId = urlParams.get('room') || generateRoomId();
 
-        // DOM Elements
         const mainContent = document.getElementById('mainContent');
-        const chatPanel = document.getElementById('chatPanel');
-        const chatToggle = document.getElementById('chatToggle');
-        const closeChat = document.getElementById('closeChat');
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
+        const videoContainer = document.getElementById('videoContainer');
+        const screenVideo = document.getElementById('screenVideo');
         const startShareBtn = document.getElementById('startShare');
         const stopShareBtn = document.getElementById('stopShare');
         const shareLinkBtn = document.getElementById('shareLink');
-        const screenVideo = document.getElementById('screenVideo');
-        const videoContainer = document.getElementById('videoContainer');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatPanel = document.getElementById('chatPanel');
+        const closeChat = document.getElementById('closeChat');
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendMessageBtn = document.getElementById('sendMessage');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const loginModal = document.getElementById('loginModal');
         const linkModal = document.getElementById('linkModal');
         const shareableLink = document.getElementById('shareableLink');
         const copyLinkBtn = document.getElementById('copyLink');
-        const sharingUsersPanel = document.getElementById('sharingUsers');
+        const sharingUsersPanel = document.getElementById('sharingUsersPanel');
         const sharingUsersList = document.getElementById('sharingUsersList');
-
-        // Profile elements
-        const profileBtn = document.getElementById('profileBtn');
-        const headerUsername = document.getElementById('headerUsername');
-        const headerProfilePic = document.getElementById('headerProfilePic');
-        const headerInitial = document.getElementById('headerInitial');
-        const loginModal = document.getElementById('loginModal');
-        const profileModal = document.getElementById('profileModal');
-        const authForm = document.getElementById('authForm');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
-        const authUsername = document.getElementById('authUsername');
-        const authPassword = document.getElementById('authPassword');
-        const authSubmit = document.getElementById('authSubmit');
-        const authToggle = document.getElementById('authToggle');
-        const authError = document.getElementById('authError');
-        const profileUsername = document.getElementById('profileUsername');
-        const profilePicLarge = document.getElementById('profilePicLarge');
-        const profileInitial = document.getElementById('profileInitial');
-        const profilePicInput = document.getElementById('profilePicInput');
-        const saveProfile = document.getElementById('saveProfile');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const guestBtn = document.getElementById('guestBtn');
         const connectionStatus = document.getElementById('connectionStatus');
         const connectionMessage = document.getElementById('connectionMessage');
         const progressFill = document.getElementById('progressFill');
         const cancelConnection = document.getElementById('cancelConnection');
+        const userCount = document.getElementById('userCount');
 
-        // Drawing Mode Elements
-        const toggleDrawingModeBtn = document.getElementById('toggleDrawingMode');
-        const drawingCanvas = document.getElementById('drawingCanvas');
-        const drawingToolbar = document.getElementById('drawingToolbar');
-        const toolPen = document.getElementById('toolPen');
-        const toolEraser = document.getElementById('toolEraser');
-        const brushSizeSlider = document.getElementById('brushSize');
-        const brushPreview = document.getElementById('brushPreview');
-        const clearCanvasBtn = document.getElementById('clearCanvas');
-        const colorOptions = document.querySelectorAll('.color-option');
-        const modeIndicator = document.getElementById('modeIndicator');
-        const modeText = document.getElementById('modeText');
-
-        // Continue as guest function...
-        function continueAsGuest() {
-            const guestName = 'Guest' + Math.floor(Math.random() * 10000);
-            userProfile = {
-                username: guestName,
-                profilePicture: null,
-                theme: 'light',
-                isGuest: true
-            };
-            username = guestName;
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            loginModal.classList.remove('active');
-            updateProfileUI();
-            initSocket();
-        }
-
-        guestBtn.addEventListener('click', () => {
-            continueAsGuest();
+        document.getElementById('showRegister').addEventListener('click', () => {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('registerError').textContent = '';
         });
 
-        function updateProfileUI() {
-            if (userProfile) {
-                headerUsername.textContent = userProfile.username;
-                const initial = userProfile.username.charAt(0).toUpperCase();
-                headerInitial.textContent = initial;
-                profileInitial.textContent = initial;
-                profileUsername.value = userProfile.username;
-
-                if (userProfile.profilePicture) {
-                    headerProfilePic.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
-                    profilePicLarge.innerHTML = `<img src="${userProfile.profilePicture}" alt="Profile">`;
-                } else {
-                    headerProfilePic.innerHTML = `<span id="headerInitial">${initial}</span>`;
-                    profilePicLarge.innerHTML = `<span id="profileInitial">${initial}</span>`;
-                }
-
-                if (userProfile.theme === 'dark') {
-                    document.body.classList.add('dark-theme');
-                    updateThemeIcon(true);
-                }
-            }
-        }
-
-        profileBtn.addEventListener('click', () => {
-            if (userProfile) {
-                if (userProfile.isGuest) {
-                    loginModal.classList.add('active');
-                } else {
-                    profileModal.classList.add('active');
-                }
-            } else {
-                loginModal.classList.add('active');
-            }
+        document.getElementById('showLogin').addEventListener('click', () => {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('loginError').textContent = '';
         });
 
-        authToggle.addEventListener('click', () => {
-            isAuthMode = isAuthMode === 'login' ? 'register' : 'login';
-            if (isAuthMode === 'login') {
-                authTitle.textContent = 'Login';
-                authSubtitle.textContent = 'Sign in to your account';
-                authSubmit.textContent = 'Login';
-                authToggle.textContent = 'Register';
-            } else {
-                authTitle.textContent = 'Register';
-                authSubtitle.textContent = 'Create a new account';
-                authSubmit.textContent = 'Register';
-                authToggle.textContent = 'Login';
-            }
-            authError.style.display = 'none';
-        });
-
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            authError.style.display = 'none';
-
-            const user = authUsername.value.trim();
-            const pass = authPassword.value;
-
-            if (!user || !pass) {
-                authError.textContent = 'Please fill in all fields';
-                authError.style.display = 'block';
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const usernameInput = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!usernameInput || !password) {
+                document.getElementById('loginError').textContent = 'Please fill in all fields';
                 return;
             }
 
-            const endpoint = isAuthMode === 'login' ? '/api/login' : '/api/register';
-            authSubmit.disabled = true;
-            authSubmit.textContent = 'Please wait...';
-
             try {
-                const response = await fetch(endpoint, {
+                const response = await fetch('/api/login', {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ username: user, password: pass })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: usernameInput, password })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    if (isAuthMode === 'register') {
-                        userProfile = {
-                            username: user,
-                            profilePicture: null,
-                            theme: 'light',
-                            isGuest: false
-                        };
-                    } else {
-                        userProfile = data.profile;
-                        userProfile.isGuest = false;
-                    }
-
-                    username = userProfile.username;
+                    username = data.profile.username;
+                    userProfile = data.profile;
                     localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     loginModal.classList.remove('active');
-                    updateProfileUI();
-
-                    if (!socket || !socket.connected) {
-                        initSocket();
-                    }
-
-                    authForm.reset();
+                    initSocket();
                 } else {
-                    authError.textContent = data.error || 'An error occurred';
-                    authError.style.display = 'block';
+                    document.getElementById('loginError').textContent = data.error;
                 }
             } catch (error) {
-                console.error('Fetch error:', error);
-                authError.textContent = 'Server connection error. Make sure the server is running.';
-                authError.style.display = 'block';
-            } finally {
-                authSubmit.disabled = false;
-                authSubmit.textContent = isAuthMode === 'login' ? 'Login' : 'Register';
+                document.getElementById('loginError').textContent = 'Connection error';
             }
         });
 
-        profilePicInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const dataUrl = event.target.result;
-                    userProfile.profilePicture = dataUrl;
-                    headerProfilePic.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
-                    profilePicLarge.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        saveProfile.addEventListener('click', async () => {
-            if (userProfile.isGuest) {
-                alert('Guest users cannot save profiles. Please create an account.');
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            const usernameInput = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!usernameInput || !password) {
+                document.getElementById('registerError').textContent = 'Please fill in all fields';
                 return;
             }
 
             try {
-                const response = await fetch('/api/update-profile', {
+                const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: userProfile.username,
-                        profilePicture: userProfile.profilePicture,
-                        theme: document.body.classList.contains('dark-theme') ? 'dark' : 'light'
-                    })
+                    body: JSON.stringify({ username: usernameInput, password })
                 });
 
+                const data = await response.json();
+
                 if (response.ok) {
-                    userProfile.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                    alert('Profile updated!');
+                    document.getElementById('registerError').textContent = '';
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                    addSystemMessage('Account created! Please sign in.');
                 } else {
-                    alert('Error updating profile');
+                    document.getElementById('registerError').textContent = data.error;
                 }
             } catch (error) {
-                console.error('Profile update error:', error);
-                alert('Error updating profile. Make sure the server is running.');
+                document.getElementById('registerError').textContent = 'Connection error';
             }
         });
 
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('userProfile');
-            userProfile = null;
-            username = null;
-            profileModal.classList.remove('active');
-
-            if (socket) {
-                socket.disconnect();
-            }
-            window.location.reload();
-        });
-
-        // ===== DRAWING MODE FUNCTIONS =====
-        
-        function initDrawingCanvas() {
-            canvas = drawingCanvas;
-            ctx = canvas.getContext('2d');
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-        }
-
-        function resizeCanvas() {
-            const container = videoContainer.getBoundingClientRect();
-            canvas.width = container.width - 48;
-            canvas.height = container.height - 48;
-            
-            const isDark = document.body.classList.contains('dark-theme');
-            ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function updateModeIndicator(mode, text) {
-            modeIndicator.className = 'mode-indicator ' + mode;
-            modeText.textContent = text;
-            modeIndicator.style.display = 'inline-flex';
-        }
-
-        function hideModeIndicator() {
-            modeIndicator.style.display = 'none';
-        }
-
-        function toggleDrawingModeOn() {
-            isDrawingMode = true;
-            
-            if (isSharing) {
-                stopSharing();
-            }
-            
-            videoContainer.querySelector('.placeholder').style.display = 'none';
-            drawingCanvas.style.display = 'block';
-            drawingToolbar.classList.add('active');
-            
-            toggleDrawingModeBtn.textContent = 'Exit Drawing';
-            toggleDrawingModeBtn.classList.remove('btn-secondary');
-            toggleDrawingModeBtn.classList.add('btn-primary');
-            
-            updateModeIndicator('drawing', 'Drawing Mode');
-            
-            initDrawingCanvas();
-            
-            socket.emit('drawing-mode-start', { roomId });
-            
-            addSystemMessage('Drawing mode activated');
-        }
-
-        function toggleDrawingModeOff() {
-            isDrawingMode = false;
-            
-            drawingCanvas.style.display = 'none';
-            drawingToolbar.classList.remove('active');
-            videoContainer.querySelector('.placeholder').style.display = 'block';
-            
-            toggleDrawingModeBtn.textContent = 'Drawing Mode';
-            toggleDrawingModeBtn.classList.remove('btn-primary');
-            toggleDrawingModeBtn.classList.add('btn-secondary');
-            
-            hideModeIndicator();
-            
-            socket.emit('drawing-mode-stop', { roomId });
-            
-            addSystemMessage('Drawing mode deactivated');
-        }
-
-        toggleDrawingModeBtn.addEventListener('click', () => {
-            if (isDrawingMode) {
-                toggleDrawingModeOff();
-            } else {
-                toggleDrawingModeOn();
-            }
-        });
-
-        function startDrawing(e) {
-            if (!isDrawingMode) return;
-            isDrawing = true;
-            const rect = canvas.getBoundingClientRect();
-            lastX = e.clientX - rect.left;
-            lastY = e.clientY - rect.top;
-        }
-
-        function draw(e) {
-            if (!isDrawing || !isDrawingMode) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(x, y);
-            
-            if (currentTool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.lineWidth = brushSize * 3;
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = currentColor;
-                ctx.lineWidth = brushSize;
-            }
-            
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.stroke();
-            
-            socket.emit('drawing-data', {
-                roomId,
-                x0: lastX,
-                y0: lastY,
-                x1: x,
-                y1: y,
-                color: currentColor,
-                size: brushSize,
-                tool: currentTool
-            });
-            
-            lastX = x;
-            lastY = y;
-        }
-
-        function stopDrawing() {
-            isDrawing = false;
-        }
-
-        drawingCanvas.addEventListener('mousedown', startDrawing);
-        drawingCanvas.addEventListener('mousemove', draw);
-        drawingCanvas.addEventListener('mouseup', stopDrawing);
-        drawingCanvas.addEventListener('mouseout', stopDrawing);
-
-        drawingCanvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            drawingCanvas.dispatchEvent(mouseEvent);
-        });
-
-        drawingCanvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            drawingCanvas.dispatchEvent(mouseEvent);
-        });
-
-        drawingCanvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const mouseEvent = new MouseEvent('mouseup', {});
-            drawingCanvas.dispatchEvent(mouseEvent);
-        });
-
-        toolPen.addEventListener('click', () => {
-            currentTool = 'pen';
-            toolPen.classList.add('active');
-            toolEraser.classList.remove('active');
-            drawingCanvas.style.cursor = 'crosshair';
-        });
-
-        toolEraser.addEventListener('click', () => {
-            currentTool = 'eraser';
-            toolEraser.classList.add('active');
-            toolPen.classList.remove('active');
-            drawingCanvas.style.cursor = 'grab';
-        });
-
-        colorOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                colorOptions.forEach(opt => opt.classList.remove('active'));
-                option.classList.add('active');
-                currentColor = option.dataset.color;
-                brushPreview.style.background = currentColor;
-            });
-        });
-
-        brushSizeSlider.addEventListener('input', (e) => {
-            brushSize = parseInt(e.target.value);
-            brushPreview.style.width = brushSize * 2 + 'px';
-            brushPreview.style.height = brushSize * 2 + 'px';
-        });
-
-        brushPreview.style.width = brushSize * 2 + 'px';
-        brushPreview.style.height = brushSize * 2 + 'px';
-        brushPreview.style.background = currentColor;
-
-        clearCanvasBtn.addEventListener('click', () => {
-            if (confirm('Clear the entire canvas? This will clear it for everyone.')) {
-                const isDark = document.body.classList.contains('dark-theme');
-                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                socket.emit('clear-canvas', { roomId });
-                addSystemMessage('Canvas cleared');
-            }
-        });
-
-        // Initialize Socket.IO connection
         function initSocket() {
-            if (socket && socket.connected) {
-                console.log('Socket already connected');
-                return;
-            }
-
-            socket = io({
-                reconnection: true,
-                reconnectionDelay: 1000,
-                reconnectionDelayMax: 5000,
-                reconnectionAttempts: Infinity
-            });
+            socket = io();
 
             socket.on('connect', () => {
-                console.log('Connected to server');
-                socket.emit('join-room', { roomId, username });
-                localStorage.setItem('lastRoom', roomId);
-            });
-
-            socket.on('reconnect', (attemptNumber) => {
-                console.log('Reconnected after', attemptNumber, 'attempts');
-                addSystemMessage('Reconnected to server');
+                console.log('✅ Connected to server');
+                addSystemMessage('Connected to server');
                 socket.emit('join-room', { roomId, username });
             });
 
-            socket.on('disconnect', (reason) => {
-                console.log('Disconnected:', reason);
-                if (reason === 'io server disconnect') {
-                    socket.connect();
-                }
+            socket.on('room-info', (data) => {
+                console.log('📍 Room info:', data);
+                userCount.textContent = data.userCount + ' user' + (data.userCount !== 1 ? 's' : '');
             });
 
             socket.on('existing-users', (users) => {
-                console.log('Existing users:', users);
+                console.log('👥 Existing users:', users);
                 users.forEach(user => {
-                    addSystemMessage(`${user.username} is in the room`);
+                    if (user.isSharing) {
+                        sharingUsers.set(user.id, user.username);
+                    }
                 });
-            });
-
-            socket.on('user-joined', (user) => {
-                console.log('👤 User joined:', user.username);
-                addSystemMessage(`${user.username} joined the room`);
-
-                // CRITICAL: If we're currently sharing, immediately create peer connection for the new user
-                if (isSharing && screenStream) {
-                    console.log('📤 We are sharing! Creating peer for new user:', user.id);
-                    // Small delay to ensure they're ready
-                    setTimeout(() => {
-                        createPeerConnection(user.id, true);
-                    }, 500);
-                }
-            });
-
-            socket.on('user-left', (user) => {
-                console.log('User left:', user);
-                addSystemMessage(`${user.username} left the room`);
-
-                sharingUsers.delete(user.id);
                 updateSharingUsersList();
+            });
 
-                if (peerConnections.has(user.id)) {
-                    peerConnections.get(user.id).close();
-                    peerConnections.delete(user.id);
+            socket.on('user-joined', ({ id, username: newUsername }) => {
+                console.log('👋 User joined:', newUsername);
+                addSystemMessage(`${newUsername} joined the room`);
+            });
+
+            socket.on('user-left', ({ id, username: leftUsername }) => {
+                console.log('👋 User left:', leftUsername);
+                addSystemMessage(`${leftUsername} left the room`);
+                
+                sharingUsers.delete(id);
+                updateSharingUsersList();
+                
+                const pc = peerConnections.get(id);
+                if (pc) {
+                    pc.close();
+                    peerConnections.delete(id);
                 }
-
-                if (currentlyViewing === user.id) {
+                
+                if (currentlyViewing === id) {
+                    screenVideo.srcObject = null;
                     screenVideo.style.display = 'none';
                     videoContainer.querySelector('.placeholder').style.display = 'block';
                     currentlyViewing = null;
+                    hideConnectionStatus();
                 }
             });
 
-            socket.on('chat-message', ({ id, username, message, timestamp }) => {
-                const isSent = id === socket.id;
-                addMessage(message, username, isSent);
-            });
-
-            socket.on('user-sharing', ({ id, username, isSharing: userIsSharing }) => {
-                console.log('📢 User sharing event:', username, 'sharing:', userIsSharing);
+            socket.on('user-sharing', ({ id, username: sharerUsername, isSharing: sharing }) => {
+                console.log('📢 User sharing update:', sharerUsername, sharing);
                 
-                if (userIsSharing) {
-                    addSystemMessage(`${username} started sharing their screen`);
-                    sharingUsers.set(id, username);
-                    updateSharingUsersList();
-
-                    // If it's NOT us sharing, prepare to receive their stream
-                    if (id !== socket.id) {
-                        console.log('👀 Someone else is sharing, will receive their stream');
-                        
-                        // Wait a bit for them to set up, then request stream
-                        setTimeout(() => {
-                            console.log('📞 Requesting stream from:', id);
-                            socket.emit('request-stream', { roomId, targetId: id });
-                        }, 300);
-
-                        // Auto-view the first person who shares
-                        if (sharingUsers.size === 1 && !currentlyViewing && !isSharing) {
-                            console.log('🎯 Auto-viewing first sharer');
-                            setTimeout(() => {
-                                viewUserStream(id);
-                            }, 500);
-                        }
-                    }
+                if (sharing) {
+                    sharingUsers.set(id, sharerUsername);
+                    addSystemMessage(`${sharerUsername} started sharing`);
                 } else {
-                    addSystemMessage(`${username} stopped sharing`);
                     sharingUsers.delete(id);
-                    updateSharingUsersList();
-
-                    // If we were viewing this user, clear the video
-                    if (id !== socket.id && currentlyViewing === id) {
-                        console.log('❌ User we were viewing stopped sharing');
+                    addSystemMessage(`${sharerUsername} stopped sharing`);
+                    
+                    if (currentlyViewing === id) {
+                        screenVideo.srcObject = null;
                         screenVideo.style.display = 'none';
                         videoContainer.querySelector('.placeholder').style.display = 'block';
                         currentlyViewing = null;
-                        hideConnectionStatus();
-                    }
-
-                    // Clean up peer connection
-                    if (peerConnections.has(id)) {
-                        peerConnections.get(id).close();
-                        peerConnections.delete(id);
                     }
                 }
+                
+                updateSharingUsersList();
             });
 
-            socket.on('room-info', ({ roomId, userCount }) => {
-                console.log(`Room ${roomId} has ${userCount} user(s)`);
+            socket.on('chat-message', ({ id, username: sender, message }) => {
+                addMessage(message, sender, id === socket.id);
             });
 
+            // FIXED: When someone requests our stream, WE initiate the offer
             socket.on('stream-requested', ({ fromId }) => {
                 console.log('📞 Stream requested by:', fromId);
-                console.log('   Am I sharing?', isSharing);
-                console.log('   Do I have screenStream?', !!screenStream);
                 
                 if (isSharing && screenStream) {
-                    console.log('   ✅ Creating peer connection for requester');
+                    console.log('   ✅ Creating peer connection and sending offer');
                     createPeerConnection(fromId, true);
                 } else {
                     console.warn('   ❌ Cannot send stream - not sharing or no stream');
@@ -1661,7 +874,6 @@
 
             socket.on('webrtc-offer', async ({ fromId, offer }) => {
                 console.log('📥 Received offer from:', fromId);
-                console.log('   Offer type:', offer?.type);
                 updateConnectionProgress(50, 'Received offer, creating answer...');
 
                 try {
@@ -1672,40 +884,14 @@
                         pc = createPeerConnection(fromId, false);
                     }
 
-                    console.log('   Current signaling state:', pc.signalingState);
-                    
-                    // Set remote description
                     await pc.setRemoteDescription(new RTCSessionDescription(offer));
                     console.log('   ✅ Remote description set');
 
-                    // If we're sharing, add our tracks to the answer
-                    if (screenStream && isSharing) {
-                        console.log('   📤 Adding our stream to answer');
-                        screenStream.getTracks().forEach(track => {
-                            const senders = pc.getSenders();
-                            const trackExists = senders.some(sender => sender.track === track);
-                            if (!trackExists) {
-                                try {
-                                    pc.addTrack(track, screenStream);
-                                    console.log('     ✅ Added', track.kind, 'track');
-                                } catch (e) {
-                                    console.error('     ❌ Error adding track:', e);
-                                }
-                            }
-                        });
-                    }
-
-                    // Create answer
-                    console.log('   Creating answer...');
                     const answer = await pc.createAnswer();
-                    console.log('   ✅ Answer created');
-                    
                     await pc.setLocalDescription(answer);
-                    console.log('   ✅ Local description set');
                     
                     updateConnectionProgress(60, 'Sending answer...');
 
-                    // Send answer back
                     socket.emit('webrtc-answer', {
                         roomId,
                         targetId: fromId,
@@ -1722,7 +908,6 @@
 
             socket.on('webrtc-answer', async ({ fromId, answer }) => {
                 console.log('📥 Received answer from:', fromId);
-                console.log('   Answer type:', answer?.type);
                 updateConnectionProgress(70, 'Received answer, connecting...');
 
                 try {
@@ -1733,9 +918,6 @@
                         return;
                     }
                     
-                    console.log('   Current signaling state:', pc.signalingState);
-                    
-                    // Only set remote description if we're in the right state
                     if (pc.signalingState === 'have-local-offer') {
                         await pc.setRemoteDescription(new RTCSessionDescription(answer));
                         console.log('   ✅ Remote description set from answer');
@@ -1753,62 +935,21 @@
                 if (pc && candidate) {
                     try {
                         await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                        console.log('❄️  Added ICE candidate from:', fromId);
                     } catch (error) {
                         console.error('Error adding ICE candidate:', error);
                     }
                 }
             });
-
-            // Drawing mode handlers
-            socket.on('drawing-data', (data) => {
-                if (!isDrawingMode || !ctx) return;
-                
-                const { x0, y0, x1, y1, color, size, tool } = data;
-                
-                ctx.beginPath();
-                ctx.moveTo(x0, y0);
-                ctx.lineTo(x1, y1);
-                
-                if (tool === 'eraser') {
-                    ctx.globalCompositeOperation = 'destination-out';
-                    ctx.lineWidth = size * 3;
-                } else {
-                    ctx.globalCompositeOperation = 'source-over';
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = size;
-                }
-                
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.stroke();
-            });
-
-            socket.on('clear-canvas', () => {
-                if (!isDrawingMode || !ctx) return;
-                const isDark = document.body.classList.contains('dark-theme');
-                ctx.fillStyle = isDark ? '#2c2c2e' : '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                addSystemMessage('Canvas was cleared');
-            });
-
-            socket.on('user-drawing-mode', ({ username, isActive }) => {
-                if (isActive) {
-                    addSystemMessage(`${username} started drawing mode`);
-                } else {
-                    addSystemMessage(`${username} left drawing mode`);
-                }
-            });
         }
 
         function createPeerConnection(userId, isInitiator) {
-            // Check if connection already exists and is working
             if (peerConnections.has(userId)) {
                 const existing = peerConnections.get(userId);
                 if (existing.connectionState === 'connected' || existing.connectionState === 'connecting') {
                     console.log('✅ Reusing existing peer connection:', userId);
                     return existing;
                 }
-                // Close broken connection
                 console.log('🔄 Closing old connection for:', userId);
                 existing.close();
                 peerConnections.delete(userId);
@@ -1821,20 +962,17 @@
             pc.userId = userId;
             pc.hasReceivedTrack = false;
 
-            // If we're sharing, add OUR stream immediately
+            // FIXED: If we're sharing, add OUR stream immediately
             if (isSharing && screenStream) {
                 console.log('📤 Adding OUR stream to peer:', userId);
-                const senders = [];
                 screenStream.getTracks().forEach(track => {
                     try {
-                        const sender = pc.addTrack(track, screenStream);
-                        senders.push(sender);
+                        pc.addTrack(track, screenStream);
                         console.log('  ✅ Added', track.kind, 'track');
                     } catch (e) {
                         console.error('  ❌ Failed to add track:', e);
                     }
                 });
-                pc.senders = senders;
             }
 
             // Handle INCOMING stream (when viewing others)
@@ -1844,7 +982,7 @@
                 
                 if (event.streams && event.streams[0]) {
                     pc.remoteStream = event.streams[0];
-                    console.log('  📺 Got remote stream');
+                    console.log('  📺 Got remote stream with', event.streams[0].getTracks().length, 'tracks');
 
                     // If we're currently viewing this user, show their stream
                     if (currentlyViewing === userId) {
@@ -1853,22 +991,20 @@
                         screenVideo.style.display = 'block';
                         videoContainer.querySelector('.placeholder').style.display = 'none';
                         
-                        // Play the video
                         screenVideo.play().then(() => {
                             console.log('  ✅ Video playing');
                             updateConnectionProgress(100, 'Connected!');
                             setTimeout(hideConnectionStatus, 500);
                         }).catch(e => {
                             console.error('  ❌ Error playing video:', e);
+                            addSystemMessage('Click the video to play');
                         });
                     }
                 }
             };
 
-            // Handle ICE candidates
             pc.onicecandidate = (event) => {
                 if (event.candidate) {
-                    console.log('📡 Sending ICE candidate to:', userId);
                     socket.emit('webrtc-ice-candidate', {
                         roomId,
                         targetId: userId,
@@ -1877,13 +1013,11 @@
                 }
             };
 
-            // Monitor connection state
             pc.onconnectionstatechange = () => {
                 console.log('🔗 Connection state for', userId, ':', pc.connectionState);
                 
                 if (pc.connectionState === 'connected') {
                     console.log('  ✅ Peer connected successfully');
-                    pc.hasReceivedTrack = true;
                 } else if (pc.connectionState === 'failed') {
                     console.error('  ❌ Connection FAILED for', userId);
                     peerConnections.delete(userId);
@@ -1892,11 +1026,6 @@
                 } else if (pc.connectionState === 'disconnected') {
                     console.warn('  ⚠️  Peer disconnected:', userId);
                 }
-            };
-
-            // Log ICE connection state
-            pc.oniceconnectionstatechange = () => {
-                console.log('❄️  ICE state for', userId, ':', pc.iceConnectionState);
             };
 
             // If we're the initiator, create and send offer
@@ -1927,131 +1056,55 @@
             return pc;
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-            updateThemeIcon(true);
-        }
-
-        themeToggle.addEventListener('click', () => {
-            const isDark = document.body.classList.toggle('dark-theme');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateThemeIcon(isDark);
-        });
-
-        function updateThemeIcon(isDark) {
-            if (isDark) {
-                themeIcon.innerHTML = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>';
-            } else {
-                themeIcon.innerHTML = '<path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>';
-            }
-        }
-
-        function generateRoomId() {
-            return Math.random().toString(36).substring(2, 10);
-        }
-
-        function updateURL() {
-            try {
-                const newURL = window.location.origin + window.location.pathname + '?room=' + roomId;
-                window.history.replaceState({}, '', newURL);
-            } catch (e) {
-                console.log('Cannot update URL in this environment');
-            }
-        }
-
-        updateURL();
-
-        chatToggle.addEventListener('click', () => {
-            isChatOpen = !isChatOpen;
-            if (isChatOpen) {
-                chatPanel.classList.add('open');
-                mainContent.classList.add('chat-open');
-            } else {
-                chatPanel.classList.remove('open');
-                mainContent.classList.remove('chat-open');
-            }
-        });
-
-        closeChat.addEventListener('click', () => {
-            isChatOpen = false;
-            chatPanel.classList.remove('open');
-            mainContent.classList.remove('chat-open');
-        });
-
         startShareBtn.addEventListener('click', async () => {
             try {
-                // Request screen share with audio
+                console.log('🎬 Requesting screen share with audio...');
+                
+                // FIXED: Proper audio constraints for system audio
                 screenStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { 
-                        mediaSource: 'screen',
-                        cursor: 'always'
+                    video: {
+                        cursor: 'always',
+                        displaySurface: 'monitor'
                     },
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true,
-                        sampleRate: 44100
-                    }
+                        autoGainControl: false
+                    },
+                    preferCurrentTab: false
                 });
 
                 console.log('✅ Got screen stream');
+                console.log('   Video tracks:', screenStream.getVideoTracks().length);
+                console.log('   Audio tracks:', screenStream.getAudioTracks().length);
 
-                // Exit drawing mode if active
-                if (isDrawingMode) {
-                    toggleDrawingModeOff();
-                }
-
-                // Display the video locally
                 screenVideo.srcObject = screenStream;
+                screenVideo.muted = true; // Don't echo our own audio
                 screenVideo.style.display = 'block';
-                screenVideo.muted = false; // Unmute to hear audio
                 videoContainer.querySelector('.placeholder').style.display = 'none';
+                
+                await screenVideo.play();
 
-                // Update UI
                 startShareBtn.style.display = 'none';
                 stopShareBtn.style.display = 'inline-block';
                 isSharing = true;
 
-                // Add to sharing users list
                 sharingUsers.set(socket.id, username);
                 updateSharingUsersList();
 
-                // Show mode indicator
-                updateModeIndicator('screen-sharing', 'Screen Sharing');
-
-                // Notify server first
-                socket.emit('start-sharing', { roomId });
-
-                console.log('📤 Notified server of sharing');
-
-                // Add tracks to ALL peer connections (for users already in room)
-                peerConnections.forEach((pc, userId) => {
-                    console.log('Adding stream to existing peer:', userId);
-                    screenStream.getTracks().forEach(track => {
-                        try {
-                            const sender = pc.addTrack(track, screenStream);
-                            console.log('✅ Added track:', track.kind, 'to peer:', userId);
-                        } catch (e) {
-                            console.error('Error adding track:', e);
-                        }
-                    });
-                });
-
-                // Handle when user stops sharing via browser UI
-                screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-                    console.log('Screen sharing ended by user');
+                // Handle stream ending
+                screenStream.getVideoTracks()[0].onended = () => {
+                    console.log('📺 Screen share ended by user');
                     stopSharing();
-                });
+                };
 
-                addSystemMessage('Screen sharing started (with audio)');
-                console.log('🎉 Screen sharing fully initialized');
+                socket.emit('start-sharing', { roomId });
+                addSystemMessage('Screen sharing started');
 
             } catch (err) {
                 console.error('❌ Error starting screen share:', err);
                 if (err.name === 'NotAllowedError') {
                     addSystemMessage('Screen sharing permission denied');
-                } else if (err.name === 'NotFoundError') {
-                    addSystemMessage('No screen source found');
                 } else {
                     addSystemMessage('Failed to start screen sharing: ' + err.message);
                 }
@@ -2067,6 +1120,7 @@
                 screenStream.getTracks().forEach(track => track.stop());
                 screenStream = null;
             }
+            
             screenVideo.srcObject = null;
             screenVideo.style.display = 'none';
             videoContainer.querySelector('.placeholder').style.display = 'block';
@@ -2080,15 +1134,12 @@
             peerConnections.forEach(pc => pc.close());
             peerConnections.clear();
 
-            hideModeIndicator();
-
             socket.emit('stop-sharing', { roomId });
-
             addSystemMessage('Screen sharing stopped');
         }
 
         shareLinkBtn.addEventListener('click', () => {
-            const link = window.location.origin + window.location.pathname + '?room=' + roomId;
+            const link = window.location.origin + '?room=' + roomId;
             shareableLink.value = link;
             linkModal.classList.add('active');
         });
@@ -2195,10 +1246,6 @@
                 clearTimeout(connectionTimeout);
                 connectionTimeout = null;
             }
-            if (connectionInterval) {
-                clearInterval(connectionInterval);
-                connectionInterval = null;
-            }
             connectionProgress = 0;
             progressFill.style.width = '0%';
         }
@@ -2216,74 +1263,30 @@
             addSystemMessage('Connection cancelled');
         });
 
+        // FIXED: Proper viewer connection flow
         function viewUserStream(userId) {
             console.log('👁️  Viewing stream from:', userId);
             currentlyViewing = userId;
             pendingConnection = userId;
             updateSharingUsersList();
-
-            const pc = peerConnections.get(userId);
             
-            if (pc) {
-                console.log('  ✅ Peer connection exists, state:', pc.connectionState);
-                
-                // If we already have the remote stream, display it immediately
-                if (pc.remoteStream) {
-                    console.log('  📺 Remote stream already available!');
-                    updateConnectionProgress(80, 'Loading video...');
-                    
-                    screenVideo.srcObject = pc.remoteStream;
-                    screenVideo.style.display = 'block';
-                    videoContainer.querySelector('.placeholder').style.display = 'none';
-                    
-                    screenVideo.play().then(() => {
-                        console.log('  ✅ Video playing');
-                        updateConnectionProgress(100, 'Connected!');
-                        setTimeout(hideConnectionStatus, 1000);
-                    }).catch(e => {
-                        console.error('  ❌ Error playing video:', e);
-                        addSystemMessage('Error playing video. Try again.');
-                        hideConnectionStatus();
-                    });
-                } else {
-                    // Stream not ready yet, wait for it
-                    console.log('  ⏳ Waiting for stream...');
-                    updateConnectionProgress(30, 'Waiting for video stream...');
-                    
-                    // Set timeout in case stream never arrives
-                    connectionTimeout = setTimeout(() => {
-                        if (!pc.hasReceivedTrack) {
-                            console.error('  ❌ Timeout - no stream received');
-                            hideConnectionStatus();
-                            addSystemMessage('Connection timeout. The user may have stopped sharing.');
-                            currentlyViewing = null;
-                            pendingConnection = null;
-                            updateSharingUsersList();
-                        }
-                    }, 15000);
+            updateConnectionProgress(10, 'Requesting stream...');
+
+            // Request the stream from the sharer
+            socket.emit('request-stream', { targetId: userId });
+
+            // Set timeout
+            connectionTimeout = setTimeout(() => {
+                const pc = peerConnections.get(userId);
+                if (!pc || !pc.hasReceivedTrack) {
+                    console.error('  ❌ Failed to establish connection');
+                    hideConnectionStatus();
+                    addSystemMessage('Unable to connect. Make sure they are sharing.');
+                    currentlyViewing = null;
+                    pendingConnection = null;
+                    updateSharingUsersList();
                 }
-            } else {
-                // No peer connection yet, create one
-                console.log('  🔄 No peer connection, creating one...');
-                updateConnectionProgress(10, 'Initiating connection...');
-                
-                // Create peer connection and wait for offer
-                createPeerConnection(userId, false);
-                
-                // The peer connection will be established when we receive an offer
-                // Set timeout
-                connectionTimeout = setTimeout(() => {
-                    const newPc = peerConnections.get(userId);
-                    if (!newPc || !newPc.hasReceivedTrack) {
-                        console.error('  ❌ Failed to establish connection');
-                        hideConnectionStatus();
-                        addSystemMessage('Unable to connect. Make sure they are sharing.');
-                        currentlyViewing = null;
-                        pendingConnection = null;
-                        updateSharingUsersList();
-                    }
-                }, 15000);
-            }
+            }, 15000);
         }
 
         function checkAuth() {
@@ -2292,7 +1295,6 @@
                 try {
                     userProfile = JSON.parse(savedProfile);
                     username = userProfile.username;
-                    updateProfileUI();
                     initSocket();
                 } catch (e) {
                     localStorage.removeItem('userProfile');
@@ -2303,9 +1305,59 @@
             }
         }
 
-        addSystemMessage('Room ID: ' + roomId);
-        addSystemMessage('Connecting to server...');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            updateThemeIcon(true);
+        }
 
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        });
+
+        function updateThemeIcon(isDark) {
+            if (isDark) {
+                themeIcon.innerHTML = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>';
+            } else {
+                themeIcon.innerHTML = '<path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>';
+            }
+        }
+
+        function generateRoomId() {
+            return Math.random().toString(36).substring(2, 10);
+        }
+
+        function updateURL() {
+            try {
+                const newURL = window.location.origin + '?room=' + roomId;
+                window.history.replaceState({}, '', newURL);
+            } catch (e) {
+                console.log('Cannot update URL');
+            }
+        }
+
+        updateURL();
+
+        chatToggle.addEventListener('click', () => {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatPanel.classList.add('open');
+                mainContent.classList.add('chat-open');
+            } else {
+                chatPanel.classList.remove('open');
+                mainContent.classList.remove('chat-open');
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            isChatOpen = false;
+            chatPanel.classList.remove('open');
+            mainContent.classList.remove('chat-open');
+        });
+
+        addSystemMessage('Room ID: ' + roomId);
         checkAuth();
     </script>
 </body>
